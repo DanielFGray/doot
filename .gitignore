@@ -1,0 +1,5 @@
+node_modules
+.cache
+.env
+public/build
+server/build
