@@ -1,17 +1,18 @@
-import type { ActionFunction, LinksFunction } from "remix";
-import { Form, useActionData, json, Link, useSearchParams } from "remix";
+import type { ActionFunction } from "remix";
+import { Form, useActionData, json, useSearchParams } from "remix";
+import { Header } from "~/components/Header";
+import { Input, Button } from "~/components/Forms";
 import { createUserSession, login } from "~/utils/session.server";
-import { db } from "~/utils/db.server";
 
 function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
-    return `Usernames must be at least 3 characters long`;
+    return "Usernames must be at least 3 characters long";
   }
 }
 
 function validatePassword(password: unknown) {
   if (typeof password !== "string" || password.length < 6) {
-    return `Passwords must be at least 6 characters long`;
+    return "Passwords must be at least 6 characters long";
   }
 }
 
@@ -29,6 +30,91 @@ type ActionData = {
 
 const badRequest = (data: ActionData) => json(data, { status: 400 });
 
+export default function Login() {
+  const actionData = useActionData<ActionData>();
+  const [searchParams] = useSearchParams();
+  return (
+    <>
+      <Header user={null} />
+      <Form
+        method="post"
+        className="p-8 space-y-8 divide-y divide-gray-200"
+        aria-describedby={
+          actionData?.formError ? "form-error-message" : undefined
+        }
+      >
+        <h3 className="text-lg font-medium text-gray-900 leading-6">Log in</h3>
+        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+          <label
+            htmlFor="username-input"
+            className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+          >
+            Username or Email
+          </label>
+          <div className="mt-1 sm:mt-0 sm:col-span-2">
+            <div className="relative mt-1 rounded-md shadow-sm">
+              <Input
+                type="text"
+                id="username-input"
+                name="username"
+                defaultValue={actionData?.fields?.username}
+                hasError={Boolean(actionData?.fieldErrors?.username)}
+              />
+            </div>
+            {actionData?.fieldErrors?.username && (
+              <p className="mt-2 text-sm text-red-600" id="username-error">
+                {actionData?.fieldErrors.username}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+          <label
+            htmlFor="password-input"
+            className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+          >
+            Password
+          </label>
+          <div className="mt-1 sm:mt-0 sm:col-span-2">
+            <div className="relative mt-1 rounded-md shadow-sm">
+              <Input
+                type="password"
+                id="password-input"
+                name="password"
+                defaultValue={actionData?.fields?.password}
+                hasError={Boolean(actionData?.fieldErrors?.password)}
+              />
+            </div>
+            {actionData?.fieldErrors?.password && (
+              <p className="mt-2 text-sm text-red-600" id="password-error">
+                {actionData?.fieldErrors.password}
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="pt-5">
+          <div id="form-error-message">
+            {actionData?.formError ? (
+              <p className="form-validation-error" role="alert">
+                {actionData?.formError}
+              </p>
+            ) : null}
+          </div>{" "}
+          <div className="flex justify-end">
+            <Button type="submit">Submit</Button>
+            <input
+              type="hidden"
+              name="redirectTo"
+              value={searchParams.get("redirectTo") ?? undefined}
+            />
+          </div>
+        </div>
+      </Form>
+    </>
+  );
+}
+
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
   const username = form.get("username");
@@ -40,7 +126,7 @@ export const action: ActionFunction = async ({ request }) => {
     typeof redirectTo !== "string"
   ) {
     return badRequest({
-      formError: `Form not submitted correctly.`,
+      formError: "Form not submitted correctly.",
     });
   }
 
@@ -56,95 +142,8 @@ export const action: ActionFunction = async ({ request }) => {
   if (!user) {
     return badRequest({
       fields,
-      formError: `Username/Password combination is incorrect`,
+      formError: "Username/Password combination is incorrect",
     });
   }
   return createUserSession(user.id, redirectTo);
 };
-
-export default function Login() {
-  const actionData = useActionData<ActionData>();
-  const [searchParams] = useSearchParams();
-  return (
-    <div>
-      <header>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-        </ul>
-      </header>
-      <div>
-        <h1>Login</h1>
-        <Form
-          method="post"
-          aria-describedby={
-            actionData?.formError ? "form-error-message" : undefined
-          }
-        >
-          <input
-            type="hidden"
-            name="redirectTo"
-            value={searchParams.get("redirectTo") ?? undefined}
-          />
-          <div>
-            <label htmlFor="username-input">Username or Email</label>
-            <input
-              type="text"
-              id="username-input"
-              name="username"
-              defaultValue={actionData?.fields?.username}
-              aria-invalid={Boolean(actionData?.fieldErrors?.username)}
-              aria-describedby={
-                actionData?.fieldErrors?.username ? "username-error" : undefined
-              }
-            />
-            {actionData?.fieldErrors?.username ? (
-              <p
-                className="form-validation-error"
-                role="alert"
-                id="username-error"
-              >
-                {actionData?.fieldErrors.username}
-              </p>
-            ) : null}
-          </div>
-          <div>
-            <label htmlFor="password-input">Password</label>
-            <input
-              id="password-input"
-              name="password"
-              defaultValue={actionData?.fields?.password}
-              type="password"
-              aria-invalid={
-                Boolean(actionData?.fieldErrors?.password) || undefined
-              }
-              aria-describedby={
-                actionData?.fieldErrors?.password ? "password-error" : undefined
-              }
-            />
-            {actionData?.fieldErrors?.password ? (
-              <p
-                className="form-validation-error"
-                role="alert"
-                id="password-error"
-              >
-                {actionData?.fieldErrors.password}
-              </p>
-            ) : null}
-          </div>
-          <div id="form-error-message">
-            {actionData?.formError ? (
-              <p className="form-validation-error" role="alert">
-                {actionData?.formError}
-              </p>
-            ) : null}
-          </div>
-          <button type="submit">
-            Submit
-          </button>
-        </Form>
-      </div>
-    </div>
-  );
-}

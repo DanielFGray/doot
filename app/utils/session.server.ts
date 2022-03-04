@@ -1,23 +1,27 @@
 import argon from "argon2";
-import { createSessionStorage, redirect, SessionData } from "remix";
-
+import { createSessionStorage, json, redirect, SessionData } from "remix";
 import { db, sql } from "./db.server";
 
-type RegisterForm = {
+const sessionSecret = process.env.SECRET;
+if (!sessionSecret) {
+  throw new Error("environment variable SECRET must be set");
+}
+
+export async function register({
+  username,
+  email,
+  password,
+}: {
   username: string;
   email: string;
   password: string;
-};
-
-type LoginForm = {
+}): Promise<{
+  user_id: string;
   username: string;
-  password: string;
-};
-
-export async function register({ username, email, password }: RegisterForm) {
+}> {
   const passwordHash = await argon.hash(password);
   try {
-    const user = await db.one(sql`
+    const user = await db.one<{ user_id: string; username: string }>(sql`
       insert into users (username, email, password)
       values (${username}, ${email}, ${passwordHash})
       returning user_id, username
@@ -25,54 +29,59 @@ export async function register({ username, email, password }: RegisterForm) {
     return user;
   } catch (err) {
     if (err.originalError?.code === "23505") {
-      return null;
+      throw new Response(
+        { formError: "username or email already exists" },
+        { status: 409 }
+      );
     }
     throw err;
   }
 }
 
-export async function login({ username, password }: LoginForm) {
-  const user = await db.maybeOne(
+export async function login({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) {
+  const user = await db.maybeOne<{
+    user_id: string;
+    password: string;
+    username: string;
+  }>(
     username.includes("@")
-      ? sql`select * from users where email = ${username}`
-      : sql`select * from users where username = ${username}`
+      ? sql`select user_id, username, password from users where email = ${username}`
+      : sql`select user_id, username, password from users where username = ${username}`
   );
   if (!user) return null;
-  if (!(await argon.verify(user.password as string, password))) return null;
+  if (!(await argon.verify(user.password, password))) return null;
   return { id: user.user_id, username };
-}
-
-const sessionSecret = process.env.SECRET;
-if (!sessionSecret) {
-  throw new Error("environment variable SECRET must be set");
 }
 
 const storage = createSessionStorage({
   async createData(data, expires) {
-    try {
-      const {
-        rows: [session],
-      } = await db.query(sql`
-        insert into sessions (data, expires)
-        values (${JSON.stringify(data)}, ${expires?.toJSON() ?? null})
-        returning session_id
-      `);
-      return session.session_id as string;
-    } catch (err) {
-      throw err;
-    }
+    const result = await db.maybeOne<{ session_id: string }>(sql`
+      insert into sessions (data, expires)
+      values (${JSON.stringify(data)}, ${expires?.toJSON() ?? null})
+      returning session_id
+    `);
+    return result?.session_id;
   },
   async readData(sessionId) {
-    const result = await db.maybeOne(sql`
-      select data from sessions
+    const data = await db.maybeOne<{ data: SessionData }>(sql`
+      select data
+      from sessions
       where session_id = ${sessionId}
+        and expires > now()
     `);
-    return result?.data as SessionData
+    return data?.data ?? null;
   },
   async updateData(id, data, expires) {
     await db.query(sql`
       update sessions
-      set data = ${JSON.stringify(data)}, expires = ${expires?.toJSON() ?? null}
+        set data = ${JSON.stringify(data)},
+        expires = ${expires?.toJSON() ?? null}
       where session_id = ${id}
     `);
   },
@@ -96,36 +105,6 @@ const storage = createSessionStorage({
   },
 });
 
-export async function getUser(request: Request) {
-  const userId = await getUserId(request);
-  if (typeof userId !== "string") {
-    return null;
-  }
-
-  try {
-    const user = await db.one(sql`
-      select
-        user_id,
-        username
-      from users
-      where user_id = ${userId}
-    `);
-    return user;
-  } catch (err) {
-    console.log(err);
-    throw logout(request);
-  }
-}
-
-export async function logout(request: Request) {
-  const session = await storage.getSession(request.headers.get("Cookie"));
-  return redirect("/", {
-    headers: {
-      "Set-Cookie": await storage.destroySession(session),
-    },
-  });
-}
-
 export function getUserSession(request: Request) {
   return storage.getSession(request.headers.get("Cookie"));
 }
@@ -137,17 +116,32 @@ export async function getUserId(request: Request) {
   return userId;
 }
 
+export async function getUser(request: Request) {
+  const userId = await getUserId(request);
+  if (typeof userId !== "string") {
+    return null;
+  }
+  const user = await db.one<{ user_id: string; username: string }>(sql`
+    select
+      user_id,
+      username
+    from users
+    where user_id = ${userId}
+  `);
+  return user;
+}
+
 export async function requireUserId(
   request: Request,
   redirectTo: string = new URL(request.url).pathname
 ) {
-  const session = await getUserSession(request);
-  const userId = session.get("userId");
-  if (!userId || typeof userId !== "string") {
+  const session = await getUser(request);
+  if (!session?.user_id || typeof session.user_id !== "string") {
     const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
     throw redirect(`/login?${searchParams}`);
   }
-  return userId;
+  debugger;
+  return session.user_id;
 }
 
 export async function createUserSession(userId: string, redirectTo: string) {
@@ -156,6 +150,15 @@ export async function createUserSession(userId: string, redirectTo: string) {
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await storage.commitSession(session),
+    },
+  });
+}
+
+export async function logout(request: Request) {
+  const session = await storage.getSession(request.headers.get("Cookie"));
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await storage.destroySession(session),
     },
   });
 }

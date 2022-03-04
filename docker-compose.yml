@@ -6,10 +6,10 @@ services:
     environment:
       - POSTGRES_USER=${ROOT_DATABASE_USER}
       - POSTGRES_PASSWORD=${ROOT_DATABASE_PASSWORD}
-    # volumes:
+    volumes:
+      - /var/run/postgresql:/var/run/postgresql
     #   - ./pgscripts:/docker-entrypoint-initdb.d
     #   - ./data:/var/lib/postgresql/data
-    #   - /var/run/postgresql:/var/run/postgresql
     networks:
       - appnet
     ports:

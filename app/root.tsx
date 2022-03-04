@@ -6,9 +6,11 @@ import {
   Scripts,
   ScrollRestoration,
   LinksFunction,
+  ErrorBoundaryComponent,
 } from "remix";
 import type { MetaFunction } from "remix";
 import tailwindUrl from "./styles/tailwind.css";
+import {Header} from "./components/Header";
 
 export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwindUrl }];
@@ -32,6 +34,23 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
+      </body>
+    </html>
+  );
+}
+
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  console.error(error);
+  return (
+    <html>
+      <head>
+        <title>Oh no!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <Header user={null}/>
+        <Scripts />
       </body>
     </html>
   );

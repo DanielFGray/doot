@@ -4,8 +4,9 @@ const compression = require("compression");
 const morgan = require("morgan");
 const { createRequestHandler } = require("@remix-run/express");
 
+const port = process.env.PORT;
 const MODE = process.env.NODE_ENV;
-const BUILD_DIR = path.join(process.cwd(), "server/build");
+const BUILD_DIR = path.join(process.cwd(), "server", "build");
 
 const app = express();
 app.use(compression());
@@ -28,7 +29,6 @@ app.all(
       }
 );
 
-const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Express server listening on port ${port}`);
 });
