@@ -7,6 +7,7 @@ export type BoardListing = {
   score: number
   comment_count: number
   created_at: string
+  updated_at: string
   popularity: number
   current_user_voted: null | 'up' | 'down'
 };
@@ -25,4 +26,5 @@ export type CommentInfo = {
   comment_id: string
   current_user_voted: null | 'up' | 'down'
   created_at: string
+  updated_at: string
 }

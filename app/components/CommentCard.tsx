@@ -45,9 +45,7 @@ export function Comment({
                   <ThumbUpOutline className="w-5 h-5 text-gray-400" />
                 </button>
               )}
-
               {score}
-
               {current_user_voted === "down" ? (
                 <button name="vote" value="null" type="submit">
                   <ThumbDownSolid className="w-5 h-5 text-red-700" />

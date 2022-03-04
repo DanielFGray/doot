@@ -42,40 +42,48 @@ export const loader: LoaderFunction = async ({ request, params }) => {
           from boards b
           where board_id = ${params.board!}
         ),
-        'post', get_post_with_comments(${params.post!}, ${user?.user_id ?? null})
+        'post', get_post_with_comments(${params.post!}, ${
+      user?.user_id ?? null
+    })
       ) as data
-    `);
+    `
+  );
   return json<LoaderData>({ user, ...data });
 };
 
 export default function Index() {
   const data = useLoaderData<LoaderData>();
 
-  if (!data.post) return <div>post not found</div>;
-
   const {
     board_info,
     post: { comments, ...post },
   } = data;
+  console.log(comments)
   return (
     <>
       <Header user={data.user} />
       <div className="mx-16">
-        <Link to={`/b/${board_info.board_id}`}>
-          <BoardCard {...board_info} />
-        </Link>
-        <Post {...post} />
-        <div className="flex flex-col mt-4 gap-4">
-          {comments?.map((c) => (
-            <Comment key={c.comment_id} {...c} />
-          ))}
-        </div>
-        <Form method="post" className="mt-4">
-          <PostInput name="body" placeholder="Body" />
-          <div className="flex justify-end mt-2">
-            <Button type="submit">Post</Button>
-          </div>
-        </Form>
+        {data.post ? (
+          <>
+            <Link to={`/b/${board_info.board_id}`}>
+              <BoardCard {...board_info} />
+            </Link>
+            <Post {...post} />
+            <div className="flex flex-col mt-4 gap-4">
+              {comments?.map((c) => (
+                <Comment key={c.comment_id} {...c} />
+              ))}
+            </div>
+            <Form method="post" className="mt-4">
+              <PostInput name="body" placeholder="Body" />
+              <div className="flex justify-end mt-2">
+                <Button type="submit">Post</Button>
+              </div>
+            </Form>
+          </>
+        ) : (
+          <div>post not found</div>
+        )}
       </div>
     </>
   );

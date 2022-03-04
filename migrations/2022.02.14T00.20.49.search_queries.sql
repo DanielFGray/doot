@@ -35,6 +35,7 @@ create type board_listing as (
   score int,
   comment_count int,
   created_at timestamptz,
+  updated_at timestamptz,
   popularity float,
   current_user_voted vote_type
 );
@@ -48,6 +49,7 @@ create function new_posts(v_current_user uuid default null) returns setof board_
     score,
     comment_count,
     p.created_at,
+    p.updated_at,
     post_popularity(comment_count, score, p.created_at) as popularity,
     vote as current_user_voted
   from
@@ -69,6 +71,7 @@ create function top_posts(v_current_user uuid default null) returns setof board_
     score,
     comment_count,
     p.created_at,
+    p.updated_at,
     post_popularity(comment_count, score, p.created_at) as popularity,
     vote as current_user_voted
   from
@@ -90,6 +93,7 @@ create function board_listing(board_name text, v_current_user uuid default null)
     score,
     comment_count,
     p.created_at,
+    p.updated_at,
     post_popularity(comment_count, score, p.created_at) as popularity,
     vote as current_user_voted
   from
@@ -111,6 +115,7 @@ create type search_results as (
   score int,
   comment_count int,
   created_at timestamptz,
+  updated_at timestamptz,
   rank float,
   popularity float
 );
@@ -125,6 +130,7 @@ create function search_posts(query text) returns setof search_results as $$
     points,
     comment_count,
     p.created_at,
+    p.updated_at,
     ts_rank(search, q) as rank,
     post_popularity(comment_count, points, p.created_at) as popularity
   from
@@ -145,6 +151,7 @@ create type post_with_comments as (
   username citext,
   score bigint,
   created_at timestamptz,
+  updated_at timestamptz,
   current_user_voted vote_type,
   comment_count bigint,
   comments jsonb
@@ -159,6 +166,7 @@ create function get_post_with_comments(v_post_id uuid, v_current_user uuid defau
     username,
     score,
     p.created_at,
+    p.updated_at,
     vote as current_user_voted,
     comment_count,
     comments
@@ -187,7 +195,8 @@ create function get_post_with_comments(v_post_id uuid, v_current_user uuid defau
               where cv.comment_id = pc.comment_id
             ),
             'created_at', pc.created_at,
-            'voted', cv.vote
+            'updated_at', pc.updated_at,
+            'current_user_voted', cv.vote
           ) as comments
         from
           posts_comments pc
