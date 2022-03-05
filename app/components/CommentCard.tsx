@@ -29,46 +29,41 @@ export function Comment({
 }) {
   const fetcher = useFetcher();
   return (
-    <div>
-      <div className="flex flex-row">
-        <div>
-          <div>
-            <fetcher.Form method="post" action="/vote">
-              <input type="hidden" name="id" value={comment_id} />
-              <input type="hidden" name="type" value="comment" />
+    <div className="flex flex-row ">
+      <fetcher.Form
+        method="post"
+        action="/vote"
+        className="mr-2 flex flex-col text-center"
+      >
+        <input type="hidden" name="id" value={comment_id} />
+        <input type="hidden" name="type" value="comment" />
 
-              {current_user_voted === "up" ? (
-                <button name="vote" value="null" type="submit">
-                  <ThumbUpSolid className="w-5 h-5 text-blue-700" />
-                </button>
-              ) : (
-                <button name="vote" value="up" type="submit">
-                  <ThumbUpOutline className="w-5 h-5 text-gray-400" />
-                </button>
-              )}
-              {score}
-              {current_user_voted === "down" ? (
-                <button name="vote" value="null" type="submit">
-                  <ThumbDownSolid className="w-5 h-5 text-red-700" />
-                </button>
-              ) : (
-                <button name="vote" value="down" type="submit">
-                  <ThumbDownOutline className="w-5 h-5 text-gray-400" />
-                </button>
-              )}
-            </fetcher.Form>
-          </div>
-          <div>
-            <a href={`/user/${username}`}>{username}</a>
-          </div>
-        </div>
-        <div>
-          <div>{ago(new Date(created_at))}</div>
-          {updated_at !== created_at && <div>edited {ago(new Date(updated_at))}</div>}
-        </div>
-      </div>
-      <div className="Comment-body">
-        <div className="Comment-body-text">{body}</div>
+        {current_user_voted === "up" ? (
+          <button name="vote" value="null" type="submit">
+            <ThumbUpSolid className="h-5 w-5 text-blue-700" />
+          </button>
+        ) : (
+          <button name="vote" value="up" type="submit">
+            <ThumbUpOutline className="h-5 w-5 text-gray-400" />
+          </button>
+        )}
+        {score}
+        {current_user_voted === "down" ? (
+          <button name="vote" value="null" type="submit">
+            <ThumbDownSolid className="h-5 w-5 text-red-700" />
+          </button>
+        ) : (
+          <button name="vote" value="down" type="submit">
+            <ThumbDownOutline className="h-5 w-5 text-gray-400" />
+          </button>
+        )}
+      </fetcher.Form>
+      <div>
+        <span className="text-sm">
+          {ago(new Date(created_at))} <span className="text-gray-500">by</span>{" "}
+          <a href={`/user/${username}`}>{username}</a>
+        </span>
+        <div className="prose">{body}</div>
       </div>
     </div>
   );
