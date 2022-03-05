@@ -74,12 +74,14 @@ export default function Index() {
                 <Comment key={c.comment_id} {...c} />
               ))}
             </div>
-            <Form method="post" className="mt-4">
+            {user && (
+              <Form method="post" className="mt-4">
               <PostInput name="body" placeholder="Body" />
-              <div className="flex justify-end mt-2">
+                <div className="flex justify-end mt-2">
                 <Button type="submit">Post</Button>
-              </div>
-            </Form>
+                </div>
+              </Form>
+            )}
           </>
         ) : (
           <div>post not found</div>
