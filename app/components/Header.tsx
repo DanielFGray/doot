@@ -180,9 +180,9 @@ export function Header({ user }: { user: { username: string } | null }) {
                       <Disclosure.Button
                         as="button"
                         onClick={() => setCreateBoardModalVisible(true)}
-                        className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                        className="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                       >
-                        Create Board
+                        Create post
                       </Disclosure.Button>
                     </div>
                   </>
