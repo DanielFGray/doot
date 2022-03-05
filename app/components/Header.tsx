@@ -1,9 +1,15 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "remix";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { PlusIcon, BellIcon, MenuIcon, XIcon, UserIcon } from "@heroicons/react/outline";
+import {
+  PlusIcon,
+  BellIcon,
+  MenuIcon,
+  XIcon,
+  UserIcon,
+} from "@heroicons/react/outline";
 import { classNames } from "~/utils/classNames";
-import {CreatePostSlider} from "./CreatePost";
+import { CreatePostSlider } from "./CreatePost";
 
 const navigation = [{ name: "Home", href: "/" }];
 const userNavigation = [
@@ -13,16 +19,16 @@ const userNavigation = [
 ];
 
 export function Header({ user }: { user: { username: string } | null }) {
-  const [createBoardModalVisible, setCreateBoardModalVisible] = useState(false)
+  const [createBoardModalVisible, setCreateBoardModalVisible] = useState(false);
   return (
     <div className="min-h-full">
       <Disclosure as="nav" className="bg-white shadow-sm">
         {({ open }) => (
           <>
-            <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-              <div className="flex justify-between h-16">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="flex h-16 justify-between">
                 <div className="flex">
-                  <div className="flex items-center flex-shrink-0">
+                  <div className="flex flex-shrink-0 items-center">
                     <h1 className="text-3xl font-bold text-indigo-600">doot</h1>
                   </div>
                   <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
@@ -34,8 +40,8 @@ export function Header({ user }: { user: { username: string } | null }) {
                           classNames(
                             isActive
                               ? "border-indigo-500 text-gray-900"
-                              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
-                            "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                              : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                            "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium"
                           )
                         }
                       >
@@ -50,25 +56,25 @@ export function Header({ user }: { user: { username: string } | null }) {
                       <button
                         type="button"
                         onClick={() => setCreateBoardModalVisible(true)}
-                        className="p-1 text-gray-400 bg-white rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       >
                         <span className="sr-only">Create post</span>
-                        <PlusIcon className="w-6 h-6" aria-hidden="true" />
+                        <PlusIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
                       <button
                         type="button"
-                        className="p-1 ml-3 text-gray-400 bg-white rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="ml-3 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       >
                         <span className="sr-only">View notifications</span>
-                        <BellIcon className="w-6 h-6" aria-hidden="true" />
+                        <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
 
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
-                          <Menu.Button className="flex text-sm bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                          <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                             <span className="sr-only">Open user menu</span>
-                            <UserIcon className="w-6 h-6 text-gray-400" />
+                            <UserIcon className="h-6 w-6 text-gray-400" />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -80,7 +86,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="absolute right-0 w-48 py-1 mt-2 bg-white shadow-lg origin-top-right rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             {userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
@@ -103,20 +109,30 @@ export function Header({ user }: { user: { username: string } | null }) {
                   ) : (
                     <>
                       <div className="flex flex-row gap-2">
-                        <Link to="/login" className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Log in</Link>
-                        <Link to="/register" className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Register</Link>
+                        <Link
+                          to="/login"
+                          className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                          Log in
+                        </Link>
+                        <Link
+                          to="/register"
+                          className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                          Register
+                        </Link>
                       </div>
                     </>
                   )}
                 </div>
-                <div className="flex items-center -mr-2 sm:hidden">
+                <div className="-mr-2 flex items-center sm:hidden">
                   {/* Mobile menu button */}
-                  <Disclosure.Button className="inline-flex items-center justify-center p-2 text-gray-400 bg-white rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
-                      <XIcon className="block w-6 h-6" aria-hidden="true" />
+                      <XIcon className="block h-6 w-6" aria-hidden="true" />
                     ) : (
-                      <MenuIcon className="block w-6 h-6" aria-hidden="true" />
+                      <MenuIcon className="block h-6 w-6" aria-hidden="true" />
                     )}
                   </Disclosure.Button>
                 </div>
@@ -124,7 +140,7 @@ export function Header({ user }: { user: { username: string } | null }) {
             </div>
 
             <Disclosure.Panel className="sm:hidden">
-              <div className="pt-2 pb-3 space-y-1">
+              <div className="space-y-1 pt-2 pb-3">
                 {navigation.map((item) => (
                   <Disclosure.Button
                     key={item.name}
@@ -133,9 +149,9 @@ export function Header({ user }: { user: { username: string } | null }) {
                     className={({ isActive }) =>
                       classNames(
                         isActive
-                          ? "bg-indigo-50 border-indigo-500 text-indigo-700"
-                          : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800",
-                        "block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                          ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                          : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800",
+                        "block border-l-4 py-2 pl-3 pr-4 text-base font-medium"
                       )
                     }
                   >
@@ -143,13 +159,13 @@ export function Header({ user }: { user: { username: string } | null }) {
                   </Disclosure.Button>
                 ))}
               </div>
-              <div className="pt-4 pb-3 border-t border-gray-200">
+              <div className="border-t border-gray-200 pt-4 pb-3">
                 {user ? (
                   <>
                     <div className="flex items-center px-4">
                       <div className="flex-shrink-0">
                         <UserIcon
-                          className="w-10 h-10 text-gray-500"
+                          className="h-10 w-10 text-gray-500"
                           aria-hidden="true"
                         />
                       </div>
@@ -160,10 +176,10 @@ export function Header({ user }: { user: { username: string } | null }) {
                       </div>
                       <button
                         type="button"
-                        className="flex-shrink-0 p-1 ml-auto text-gray-400 bg-white rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       >
                         <span className="sr-only">View notifications</span>
-                        <BellIcon className="w-6 h-6" aria-hidden="true" />
+                        <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
                     </div>
                     <div className="mt-3 space-y-1">
@@ -172,7 +188,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                           key={item.name}
                           as={NavLink}
                           to={item.href}
-                          className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                          className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                         >
                           {item.name}
                         </Disclosure.Button>
@@ -191,14 +207,14 @@ export function Header({ user }: { user: { username: string } | null }) {
                     <Disclosure.Button
                       as={NavLink}
                       to="/login"
-                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                     >
                       Log in
                     </Disclosure.Button>
                     <Disclosure.Button
                       as={NavLink}
                       to="/register"
-                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                     >
                       Register
                     </Disclosure.Button>
@@ -209,7 +225,10 @@ export function Header({ user }: { user: { username: string } | null }) {
           </>
         )}
       </Disclosure>
-      <CreatePostSlider open={createBoardModalVisible} setOpen={setCreateBoardModalVisible} />
+      <CreatePostSlider
+        open={createBoardModalVisible}
+        setOpen={setCreateBoardModalVisible}
+      />
     </div>
   );
 }

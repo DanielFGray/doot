@@ -42,9 +42,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
           from boards b
           where board_id = ${params.board!}
         ),
-        'post', get_post_with_comments(${params.post!}, ${
-      user?.user_id ?? null
-    })
+        'post', get_post_with_comments(
+          ${params.post!},
+          ${user?.user_id ?? null}
+        )
       ) as data
     `
   );
