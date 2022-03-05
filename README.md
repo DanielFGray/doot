@@ -6,13 +6,10 @@ a reddit clone built with remix.run, tailwind, and postgres
 
 Make sure you have `docker` and `docker-compose` installed
 
-```
-yarn setup
-```
-Will start and initialize the database, then run migrations
+1. `yarn setup`
 
-```
-yarn start
-```
+    Will start and initialize the database, then run migrations
 
-Will start the development server
+2. `yarn start`
+
+    Will start the development server
