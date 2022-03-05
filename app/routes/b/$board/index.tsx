@@ -7,7 +7,7 @@ import type { BoardInfo, BoardListing } from "~/types";
 import { Header } from "~/components/Header";
 
 type LoaderData = {
-  board_info: BoardInfo;
+  board_info: null | BoardInfo;
   posts: BoardListing[];
   user: {
     user_id: string;
@@ -17,36 +17,48 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUser(request);
-  const result = await db.one<{
-    data: { board_info: BoardInfo; posts: BoardListing[] };
-  }>(sql`
-    select jsonb_build_object(
-      'board_info', (
-        select to_jsonb(b.*)
-        from boards b
-        where board_id = ${params.board!}
-      ),
-      'posts', (
-        select coalesce(jsonb_agg(p.*), '[]')
-        from (
-          select *
-          from board_listing(${params.board!}, ${user?.user_id ?? null})
-          order by popularity desc
-        ) p
-      )
-    ) as data
-  `);
-  return json<LoaderData>({ user, ...result.data });
+  try {
+    const { data } = await db.one<{
+      data: { board_info: BoardInfo; posts: BoardListing[] };
+    }>(sql`
+       select jsonb_build_object(
+         'board_info', (
+           select to_jsonb(b.*)
+           from boards b
+           where board_id = ${params.board!}
+         ),
+         'posts', (
+           select coalesce(jsonb_agg(p.*), '[]')
+           from (
+             select *
+             from board_listing(${params.board!}, ${user?.user_id ?? null})
+             order by popularity desc
+           ) p
+         )
+       ) as data
+    `);
+    return json<LoaderData>({ user, ...data });
+  } catch (e) {
+    return json<LoaderData>({ user: null, board_info: null, posts: [] });
+  }
 };
 
 export default function Index() {
-  const data = useLoaderData<LoaderData>();
+  const { user, board_info, posts } = useLoaderData<LoaderData>();
   return (
     <>
-      <Header user={data.user} />
+      <Header user={user} />
       <div className="mx-16">
-        <BoardCard {...data.board_info} />
-        {data.posts.map((p) => <Post key={p.post_id} {...p} />)}
+        {board_info ? (
+          <>
+            <BoardCard {...board_info} />
+            {posts.map((p) => (
+              <Post key={p.post_id} {...p} />
+            ))}
+          </>
+        ) : (
+          "board does not exist"
+        )}
       </div>
     </>
   );
