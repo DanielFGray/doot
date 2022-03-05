@@ -6,8 +6,9 @@
   "scripts": {
     "build": "remix build",
     "postinstall": "remix setup node",
-    "setup": "run-s start:db setup:db 'migrate up'",
+    "setup": "run-s setup:env start:db setup:db 'migrate up'",
     "setup:db": "node -r dotenv/config scripts/setup.js",
+    "setup:env": "node -r dotenv/config scripts/generateEnvFile.js",
     "migrate": "node -r dotenv/config migrate.js",
     "start": "run-p watch:*",
     "watch:build": "remix watch",
