@@ -1,4 +1,5 @@
 import { useFetcher } from "remix";
+import ago from "s-ago";
 import {
   ThumbDownIcon as ThumbDownOutline,
   ThumbUpIcon as ThumbUpOutline,
@@ -62,8 +63,8 @@ export function Comment({
           </div>
         </div>
         <div>
-          <div>{created_at}</div>
-          {updated_at !== created_at && <div>{updated_at}</div>}
+          <div>{ago(new Date(created_at))}</div>
+          {updated_at !== created_at && <div>edited {ago(new Date(updated_at))}</div>}
         </div>
       </div>
       <div className="Comment-body">
