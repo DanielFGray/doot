@@ -3,7 +3,7 @@ import { Link, NavLink } from "remix";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { PlusIcon, BellIcon, MenuIcon, XIcon, UserIcon } from "@heroicons/react/outline";
 import { classNames } from "~/utils/classNames";
-import {CreateBoardModal} from "./CreateBoard";
+import {CreatePostSlider} from "./CreatePost";
 
 const navigation = [{ name: "Home", href: "/" }];
 const userNavigation = [
@@ -52,7 +52,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                         onClick={() => setCreateBoardModalVisible(true)}
                         className="p-1 text-gray-400 bg-white rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
-                        <span className="sr-only">View notifications</span>
+                        <span className="sr-only">Create post</span>
                         <PlusIcon className="w-6 h-6" aria-hidden="true" />
                       </button>
                       <button
@@ -209,7 +209,7 @@ export function Header({ user }: { user: { username: string } | null }) {
           </>
         )}
       </Disclosure>
-      <CreateBoardModal open={createBoardModalVisible} setOpen={setCreateBoardModalVisible} />
+      <CreatePostSlider open={createBoardModalVisible} setOpen={setCreateBoardModalVisible} />
     </div>
   );
 }
