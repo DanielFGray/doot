@@ -23,7 +23,6 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUser(request);
-  console.log({ user, params });
   try {
     const posts = await db.any<UserPost>(
       sql`

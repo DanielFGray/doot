@@ -58,7 +58,6 @@ export default function Index() {
     board_info,
     post: { comments, ...post },
   } = data;
-  console.log(comments)
   return (
     <>
       <Header user={data.user} />
