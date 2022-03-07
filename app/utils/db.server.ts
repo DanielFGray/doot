@@ -13,5 +13,6 @@ export const db = createPool(process.env.DATABASE_URL, {
   typeParsers: [
     ...createTypeParserPreset({ transformFieldNames: false }),
     { name: "timestamptz", parse: (value) => new Date(value) },
+    { name: "citext", parse: (value) => String(value) }
   ],
 });

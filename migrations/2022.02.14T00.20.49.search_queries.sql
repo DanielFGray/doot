@@ -10,7 +10,7 @@ create function score_post(v_post_id uuid) returns int as $$
     posts_votes v
   where
     v.post_id = v_post_id
-$$ language sql;
+$$ language sql stable;
 
 create function post_popularity(comments bigint, score int, created_at timestamptz) returns float as $$
   select
@@ -25,13 +25,13 @@ create function comment_count(v_post_id uuid) returns bigint as $$
     posts_comments
   where
     post_id = v_post_id
-$$ language sql;
+$$ language sql stable;
 
-create type board_listing as (
+create type tag_listing as (
   post_id uuid,
   title text,
   username citext,
-  board_id citext,
+  tags citext[],
   score int,
   comment_count int,
   created_at timestamptz,
@@ -40,12 +40,12 @@ create type board_listing as (
   current_user_voted vote_type
 );
 
-create function new_posts(v_current_user uuid default null) returns setof board_listing as $$
+create function new_posts(v_current_user uuid default null) returns setof tag_listing as $$
   select
     p.post_id,
     title,
     username,
-    board_id,
+    tags,
     score,
     comment_count,
     p.created_at,
@@ -60,14 +60,14 @@ create function new_posts(v_current_user uuid default null) returns setof board_
     lateral comment_count(p.post_id) as comment_count
   order by
     p.created_at
-$$ language sql;
+$$ language sql stable;
 
-create function top_posts(v_current_user uuid default null) returns setof board_listing as $$
+create function top_posts(v_current_user uuid default null) returns setof tag_listing as $$
   select
     p.post_id,
     title,
     username,
-    board_id,
+    tags,
     score,
     comment_count,
     p.created_at,
@@ -82,14 +82,14 @@ create function top_posts(v_current_user uuid default null) returns setof board_
     lateral comment_count(p.post_id) as comment_count
   order by
     popularity desc
-$$ language sql;
+$$ language sql stable;
 
-create function board_listing(board_name text, v_current_user uuid default null) returns setof board_listing as $$
+create function tag_listing(v_tags citext[], v_current_user uuid default null) returns setof tag_listing as $$
   select
     p.post_id,
     title,
     username,
-    board_id,
+    tags,
     score,
     comment_count,
     p.created_at,
@@ -103,15 +103,15 @@ create function board_listing(board_name text, v_current_user uuid default null)
     lateral score_post(p.post_id) as score,
     lateral comment_count(p.post_id) as comment_count
   where
-    board_id = board_name
-$$ language sql;
+    tags && v_tags
+$$ language sql stable;
 
 create type search_results as (
   post_id uuid,
   title text,
   body text,
   username citext,
-  board_id citext,
+  tags citext[],
   score int,
   comment_count int,
   created_at timestamptz,
@@ -126,7 +126,7 @@ create function search_posts(query text) returns setof search_results as $$
     ts_headline(title, q, 'StartSel = <i>, StopSel = </i>') as title,
     ts_headline(body, q, 'StartSel = <i>, StopSel = </i>') as body,
     username,
-    board_id,
+    tags,
     points,
     comment_count,
     p.created_at,
@@ -145,7 +145,7 @@ $$ language sql;
 
 create type post_with_comments as (
   post_id uuid,
-  board_id citext,
+  tags citext[],
   title text,
   body text,
   username citext,
@@ -160,7 +160,7 @@ create type post_with_comments as (
 create function get_post_with_comments(v_post_id uuid, v_current_user uuid default null) returns setof post_with_comments as $$
   select
     p.post_id,
-    board_id,
+    tags,
     title,
     p.body,
     username,
@@ -208,4 +208,27 @@ create function get_post_with_comments(v_post_id uuid, v_current_user uuid defau
     ) as comments
   where
     p.post_id = v_post_id
-$$ language sql;
+$$ language sql stable;
+
+create function users_posts(v_username text, v_current_user uuid default null) returns setof tag_listing as $$
+  select
+    p.post_id,
+    title,
+    username,
+    tags,
+    score,
+    comment_count,
+    p.created_at,
+    p.updated_at,
+    post_popularity(comment_count, score, p.created_at) as popularity,
+    vote as current_user_voted
+  from posts p
+    join users u using(user_id)
+    left join posts_votes pv on (pv.post_id = p.post_id and pv.user_id = v_current_user),
+  lateral score_post(p.post_id) score,
+  lateral comment_count(p.post_id)
+  where
+    u.username = v_username
+  order by
+    p.created_at desc
+$$ language sql stable;

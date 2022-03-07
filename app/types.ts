@@ -3,19 +3,12 @@ export type BoardListing = {
   title: string
   body?: string
   username: string
-  board_id: string
+  tags: string[]
   score: number
   comment_count: number
   created_at: string
   updated_at: string
-  popularity: number
   current_user_voted: null | 'up' | 'down'
-};
-
-export type BoardInfo = {
-  board_id: string
-  created_at: Date
-  description: string
 };
 
 export type CommentInfo = {

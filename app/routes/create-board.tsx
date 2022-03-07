@@ -7,7 +7,7 @@ import {
   json,
   useLoaderData,
 } from "remix";
-import { Header } from "~/components/Header";
+import { Layout } from "~/components/Layout";
 import { db, sql } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
 
@@ -63,8 +63,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function NewBoard() {
   const { user } = useLoaderData();
   return (
-    <div>
-      <Header user={user} />
+    <Layout user={user} >
       <h1>Board</h1>
       <Form method="post">
         <div>
@@ -80,6 +79,6 @@ export default function NewBoard() {
         </div>
         <button type="submit">Submit</button>
       </Form>
-    </div>
+    </Layout>
   );
 }

@@ -1,16 +1,19 @@
 import { useLoaderData, LoaderFunction, json, useParams } from "remix";
 import { db, sql } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
-import { Header } from "~/components/Header";
+import { Layout } from "~/components/Layout";
+import {Post} from "~/components/PostCard";
 
 type UserPost = {
   post_id: string;
   title: string;
   username: string;
-  board_id: string;
+  tags: string[];
   score: number;
   comment_count: number;
   created_at: string;
+  updated_at: string;
+  current_user_voted: null | 'up' | 'down';
 };
 
 type LoaderData = {
@@ -26,22 +29,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   try {
     const posts = await db.any<UserPost>(
       sql`
-        select
-          post_id,
-          title,
-          username,
-          board_id,
-          score,
-          comment_count,
-          p.created_at
-        from posts p
-          join users u using(user_id),
-        lateral score_post(p.post_id) score,
-        lateral comment_count(p.post_id)
-        where
-          u.username = ${params.user_id ?? user?.username ?? null}
+        select *
+        from
+          users_posts(${params.username}, ${user?.user_id ?? null})
         order by
-          p.created_at desc
+          created_at desc
       `
     );
     return json<LoaderData>({ user, posts });
@@ -52,23 +44,22 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export default function Index() {
-  const { user_id } = useParams();
   const { user, posts } = useLoaderData<LoaderData>();
+  const { username } = useParams();
   return (
-    <>
-      <Header user={user} />
+    <Layout user={user}>
       <div className="mx-16">
         {posts && posts.length > 0 ? (
           <>
-            <h1 className="text-xl font-bold">posts by {user_id}</h1>
+            <h1 className="text-xl font-bold">posts by {username}</h1>
             {posts.map((post) => (
-              <pre key={post.post_id}>{JSON.stringify(post, null, 2)}</pre>
+              <Post key={post.post_id} currentUser={user} {...post}/>
             ))}
           </>
         ) : (
-          <div>no posts by {user_id}</div>
+          <div>no posts by {username}</div>
         )}
       </div>
-    </>
+    </Layout>
   );
 }

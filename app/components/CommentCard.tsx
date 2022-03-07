@@ -1,4 +1,4 @@
-import { useFetcher } from "remix";
+import { Link, useFetcher } from "remix";
 import ago from "s-ago";
 import {
   ThumbDownIcon as ThumbDownOutline,
@@ -17,6 +17,7 @@ export function Comment({
   created_at,
   updated_at,
   current_user_voted,
+  currentUser,
 }: {
   comment_id: string;
   body: string;
@@ -26,10 +27,11 @@ export function Comment({
   created_at: string;
   updated_at: string;
   current_user_voted: null | "up" | "down";
+  currentUser: null | { username: string; user_id: string };
 }) {
   const fetcher = useFetcher();
   return (
-    <div className="flex flex-row ">
+    <div className="flex flex-row">
       <fetcher.Form
         method="post"
         action="/vote"
@@ -60,10 +62,43 @@ export function Comment({
       </fetcher.Form>
       <div>
         <span className="text-sm">
-          {ago(new Date(created_at))} <span className="text-gray-500">by</span>{" "}
-          <a href={`/user/${username}`}>{username}</a>
+          {ago(new Date(created_at))}
+          {updated_at !== created_at && (
+            <span className="text-sm text-gray-500">
+              (updated {ago(new Date(updated_at))})
+            </span>
+          )}
+          <span className="text-gray-500"> by </span>
+          <Link to={`/user/${username}`}>{username}</Link>
         </span>
-        <div className="prose">{body}</div>
+        <div>{body}</div>
+        {currentUser && currentUser.username === username && (
+          <div className="text-sm">
+            <fetcher.Form
+              method="post"
+              action="/post/edit"
+              className="inline"
+            >
+              <input type="hidden" name="id" value={comment_id} />
+              <button type="submit" className="rounded-md px-1">
+                Edit
+              </button>
+            </fetcher.Form>
+            <fetcher.Form
+              method="post"
+              action="/post/delete"
+              className="inline"
+            >
+              <input type="hidden" name="id" value={comment_id} />
+              <button
+                type="submit"
+                className="ml-2 rounded-md text-red-700"
+              >
+                Delete
+              </button>
+            </fetcher.Form>
+          </div>
+        )}
       </div>
     </div>
   );

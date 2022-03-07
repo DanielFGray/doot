@@ -3,7 +3,7 @@ import { db, sql } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
 import type { BoardListing } from "~/types";
 import { Post } from "~/components/PostCard";
-import { Header } from "~/components/Header";
+import { Layout } from "~/components/Layout";
 
 type LoaderData = {
   posts: readonly BoardListing[];
@@ -24,13 +24,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Index() {
   const { user, posts } = useLoaderData<LoaderData>();
   return (
-    <>
-      <Header user={user} />
-      <div className="mx-16 my-8">
-        {posts.map((p) => (
-          <Post key={p.post_id} {...p} />
-        ))}
-      </div>
-    </>
+    <Layout user={user}>
+      {posts.map((p) => (
+        <Post key={p.post_id} currentUser={user} {...p} />
+      ))}
+    </Layout>
   );
 }

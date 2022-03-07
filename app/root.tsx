@@ -10,7 +10,6 @@ import {
 } from "remix";
 import type { MetaFunction } from "remix";
 import tailwindUrl from "./styles/tailwind.css";
-import {Header} from "./components/Header";
 
 export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwindUrl }];
@@ -22,14 +21,14 @@ export const meta: MetaFunction = () => {
 
 export default function App() {
   return (
-    <html lang="en">
+    <html lang="en" className="">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-gray-100 dark:bg-gray-900 dark:text-gray-300">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
@@ -49,8 +48,9 @@ export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
         <Links />
       </head>
       <body>
-        <Header user={null}/>
         <Scripts />
+        an error occured
+        {error?.message || error.toString()}
       </body>
     </html>
   );

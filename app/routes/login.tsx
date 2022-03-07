@@ -1,6 +1,6 @@
 import type { ActionFunction } from "remix";
 import { Form, useActionData, json, useSearchParams } from "remix";
-import { Header } from "~/components/Header";
+import { Layout } from "~/components/Layout";
 import { Input, Button } from "~/components/Forms";
 import { createUserSession, login } from "~/utils/session.server";
 
@@ -34,24 +34,23 @@ export default function Login() {
   const actionData = useActionData<ActionData>();
   const [searchParams] = useSearchParams();
   return (
-    <>
-      <Header user={null} />
+    <Layout user={null}>
       <Form
         method="post"
-        className="p-8 space-y-8 divide-y divide-gray-200"
+        className="space-y-8 divide-y dark:divide-gray-800 divide-gray-200 p-8"
         aria-describedby={
           actionData?.formError ? "form-error-message" : undefined
         }
       >
-        <h3 className="text-lg font-medium text-gray-900 leading-6">Log in</h3>
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+        <h3 className="text-lg dark:text-gray-50 font-medium leading-6 text-gray-900">Log in</h3>
+        <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
           <label
             htmlFor="username-input"
-            className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+            className="block text-sm font-medium dark:text-gray-300 text-gray-700 sm:mt-px sm:pt-2"
           >
             Username or Email
           </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
+          <div className="mt-1 sm:col-span-2 sm:mt-0">
             <div className="relative mt-1 rounded-md shadow-sm">
               <Input
                 type="text"
@@ -69,14 +68,14 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+        <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
           <label
             htmlFor="password-input"
-            className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+            className="block text-sm font-medium dark:text-gray-300 text-gray-700 sm:mt-px sm:pt-2"
           >
             Password
           </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
+          <div className="mt-1 sm:col-span-2 sm:mt-0">
             <div className="relative mt-1 rounded-md shadow-sm">
               <Input
                 type="password"
@@ -111,7 +110,7 @@ export default function Login() {
           </div>
         </div>
       </Form>
-    </>
+    </Layout>
   );
 }
 

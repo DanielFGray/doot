@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, NavLink } from "remix";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
@@ -11,18 +11,20 @@ import {
 import { classNames } from "~/utils/classNames";
 import { CreatePostSlider } from "./CreatePost";
 
-const navigation = [{ name: "Home", href: "/" }];
-const userNavigation = [
-  { name: "Your Profile", href: "/user" },
-  // { name: "Settings", href: "#" },
-  { name: "Sign out", href: "/logout" },
-];
-
 export function Header({ user }: { user: { username: string } | null }) {
-  const [createBoardModalVisible, setCreateBoardModalVisible] = useState(false);
+  const [createBoardModalVisible, setCreatePostModalVisible] = React.useState(false);
+  const navigation = React.useMemo(() => [{ name: "Home", href: "/" }], []);
+  const userNavigation = React.useMemo(() => [
+    { name: "Your Profile", as: NavLink, to: "/user" },
+    // { name: "Settings", href: "#" },
+    { name: "Create Post", as: "button", onClick: () => setCreatePostModalVisible(true) },
+    { name: "Create board", as: NavLink, to: "/create-board" },
+    { name: "Sign out", as: NavLink, to: "/logout" },
+  ], []);
+
   return (
-    <div className="min-h-full">
-      <Disclosure as="nav" className="bg-white shadow-sm">
+    <div className="mb-4 min-h-full">
+      <Disclosure as="nav" className="bg-white shadow-sm dark:bg-gray-800">
         {({ open }) => (
           <>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -39,8 +41,8 @@ export function Header({ user }: { user: { username: string } | null }) {
                         className={({ isActive }) =>
                           classNames(
                             isActive
-                              ? "border-indigo-500 text-gray-900"
-                              : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                              ? "border-indigo-500 text-gray-900 dark:text-gray-300"
+                              : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-300 hover:text-gray-700 dark:text-gray-400",
                             "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium"
                           )
                         }
@@ -55,15 +57,15 @@ export function Header({ user }: { user: { username: string } | null }) {
                     <>
                       <button
                         type="button"
-                        onClick={() => setCreateBoardModalVisible(true)}
-                        className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        onClick={() => setCreatePostModalVisible(true)}
+                        className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800"
                       >
                         <span className="sr-only">Create post</span>
                         <PlusIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
                       <button
                         type="button"
-                        className="ml-3 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="ml-3 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800"
                       >
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -72,7 +74,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
-                          <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                          <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800">
                             <span className="sr-only">Open user menu</span>
                             <UserIcon className="h-6 w-6 text-gray-400" />
                           </Menu.Button>
@@ -86,22 +88,24 @@ export function Header({ user }: { user: { username: string } | null }) {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
-                              <Menu.Item key={item.name}>
-                                {({ active }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-4 py-2 text-sm text-gray-700"
-                                    )}
-                                  >
-                                    {item.name}
-                                  </a>
-                                )}
-                              </Menu.Item>
-                            ))}
+                          <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-800">
+                            {userNavigation.map(
+                              ({ name, as: As, ...props }) => (
+                                <Menu.Item key={name}>
+                                  {({ active }) => (
+                                    <As
+                                      {...props}
+                                      className={classNames(
+                                        active ? "bg-gray-100" : "",
+                                        "block w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-gray-50"
+                                      )}
+                                    >
+                                      {name}
+                                    </As>
+                                  )}
+                                </Menu.Item>
+                              )
+                            )}
                           </Menu.Items>
                         </Transition>
                       </Menu>
@@ -127,7 +131,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                 </div>
                 <div className="-mr-2 flex items-center sm:hidden">
                   {/* Mobile menu button */}
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
                       <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -150,7 +154,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                       classNames(
                         isActive
                           ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                          : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800",
+                          : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-800 hover:bg-gray-50 hover:text-gray-800 dark:hover:border-gray-700 dark:hover:text-gray-300",
                         "block border-l-4 py-2 pl-3 pr-4 text-base font-medium"
                       )
                     }
@@ -170,36 +174,28 @@ export function Header({ user }: { user: { username: string } | null }) {
                         />
                       </div>
                       <div className="ml-3">
-                        <div className="text-base font-medium text-gray-800">
+                        <div className="text-base font-medium dark:text-gray-200 text-gray-800">
                           {user.username}
                         </div>
                       </div>
                       <button
                         type="button"
-                        className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="ml-auto flex-shrink-0 rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       >
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
                     </div>
                     <div className="mt-3 space-y-1">
-                      {userNavigation.map((item) => (
+                      {userNavigation.map(({ name, ...props }) => (
                         <Disclosure.Button
-                          key={item.name}
-                          as={NavLink}
-                          to={item.href}
-                          className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                          key={name}
+                          className="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+                          {...props}
                         >
-                          {item.name}
+                          {name}
                         </Disclosure.Button>
                       ))}
-                      <Disclosure.Button
-                        as="button"
-                        onClick={() => setCreateBoardModalVisible(true)}
-                        className="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                      >
-                        Create post
-                      </Disclosure.Button>
                     </div>
                   </>
                 ) : (
@@ -227,8 +223,23 @@ export function Header({ user }: { user: { username: string } | null }) {
       </Disclosure>
       <CreatePostSlider
         open={createBoardModalVisible}
-        setOpen={setCreateBoardModalVisible}
+        setOpen={setCreatePostModalVisible}
       />
     </div>
+  );
+}
+
+export function Layout({
+  children,
+  user,
+}: {
+  user: { username: string } | null;
+  children: React.ReactNode;
+}): React.ReactElement {
+  return (
+    <>
+      <Header user={user} />
+      <div className="mx-auto p-8 max-w-7xl">{children}</div>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import type { ActionFunction } from "remix";
 import { Form, useActionData, json, useSearchParams } from "remix";
-import { Header } from "~/components/Header";
+import { Layout } from "~/components/Layout";
 import { Input, Button } from "~/components/Forms";
 import { createUserSession, register } from "~/utils/session.server";
 
@@ -22,99 +22,96 @@ export default function Register() {
   const actionData = useActionData<ActionData>();
   const [searchParams] = useSearchParams();
   return (
-    <>
-      <Header user={null} />
+    <Layout user={null}>
       <Form
         method="post"
-        className="p-8 space-y-8 divide-y divide-gray-200"
+        className="space-y-8 divide-y divide-gray-200 p-8 dark:divide-gray-800"
         aria-describedby={
           actionData?.formError ? "form-error-message" : undefined
         }
       >
-        <div className="space-y-6 sm:space-y-5">
-          <h3 className="text-lg font-medium text-gray-900 leading-6">
-            Register
-          </h3>
-          <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-            <label
-              htmlFor="email-input"
-              className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-            >
-              Email
-            </label>
-            <div className="mt-1 sm:col-span-2 sm:mt-0">
-              <div className="relative mt-1 rounded-md shadow-sm">
-                <Input
-                  type="text"
-                  id="email-input"
-                  name="email"
-                  defaultValue={actionData?.fields?.email}
-                  hasError={Boolean(actionData?.fieldErrors?.email)}
-                />
-              </div>
-              {actionData?.fieldErrors?.email && (
-                <p className="mt-2 text-sm text-red-600" id="email-error">
-                  {actionData?.fieldErrors.email}
-                </p>
-              )}
+        <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50">
+          Register
+        </h3>
+        <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+          <label
+            htmlFor="email-input"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2"
+          >
+            Email
+          </label>
+          <div className="mt-1 sm:col-span-2 sm:mt-0">
+            <div className="relative mt-1 rounded-md shadow-sm">
+              <Input
+                type="text"
+                id="email-input"
+                name="email"
+                defaultValue={actionData?.fields?.email}
+                hasError={Boolean(actionData?.fieldErrors?.email)}
+              />
             </div>
-          </div>
-          <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-            <label
-              htmlFor="username-input"
-              className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-            >
-              Username
-            </label>
-            <div className="mt-1 sm:col-span-2 sm:mt-0">
-              <div className="relative mt-1 rounded-md shadow-sm">
-                <Input
-                  type="text"
-                  id="username-input"
-                  name="username"
-                  defaultValue={actionData?.fields?.username}
-                  hasError={Boolean(actionData?.fieldErrors?.username)}
-                />
-              </div>
-              {actionData?.fieldErrors?.username && (
-                <p className="mt-2 text-sm text-red-600" id="username-error">
-                  {actionData?.fieldErrors.username}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-            <label
-              htmlFor="password-input"
-              className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-            >
-              Password
-            </label>
-            <div className="mt-1 sm:col-span-2 sm:mt-0">
-              <div className="relative mt-1 rounded-md shadow-sm">
-                <Input
-                  type="password"
-                  id="password-input"
-                  name="password"
-                  defaultValue={actionData?.fields?.password}
-                  hasError={Boolean(actionData?.fieldErrors?.password)}
-                />
-              </div>
-              {actionData?.fieldErrors?.password && (
-                <p className="mt-2 text-sm text-red-600" id="password-error">
-                  {actionData?.fieldErrors.password}
-                </p>
-              )}
-            </div>
-          </div>
-          <div id="form-error-message">
-            {actionData?.formError ? (
-              <p className="form-validation-error" role="alert">
-                {actionData?.formError}
+            {actionData?.fieldErrors?.email && (
+              <p className="mt-2 text-sm text-red-600" id="email-error">
+                {actionData?.fieldErrors.email}
               </p>
-            ) : null}
+            )}
           </div>
         </div>
+        <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+          <label
+            htmlFor="username-input"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2"
+          >
+            Username
+          </label>
+          <div className="mt-1 sm:col-span-2 sm:mt-0">
+            <div className="relative mt-1 rounded-md shadow-sm">
+              <Input
+                type="text"
+                id="username-input"
+                name="username"
+                defaultValue={actionData?.fields?.username}
+                hasError={Boolean(actionData?.fieldErrors?.username)}
+              />
+            </div>
+            {actionData?.fieldErrors?.username && (
+              <p className="mt-2 text-sm text-red-600" id="username-error">
+                {actionData?.fieldErrors.username}
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+          <label
+            htmlFor="password-input"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2"
+          >
+            Password
+          </label>
+          <div className="mt-1 sm:col-span-2 sm:mt-0">
+            <div className="relative mt-1 rounded-md shadow-sm">
+              <Input
+                type="password"
+                id="password-input"
+                name="password"
+                defaultValue={actionData?.fields?.password}
+                hasError={Boolean(actionData?.fieldErrors?.password)}
+              />
+            </div>
+            {actionData?.fieldErrors?.password && (
+              <p className="mt-2 text-sm text-red-600" id="password-error">
+                {actionData?.fieldErrors.password}
+              </p>
+            )}
+          </div>
+        </div>
+        {actionData?.formError ? (
+          <div id="form-error-message">
+            <p className="form-validation-error" role="alert">
+              {actionData?.formError}
+            </p>
+          </div>
+        ) : null}
 
         <div className="pt-5">
           <div className="flex justify-end">
@@ -128,7 +125,7 @@ export default function Register() {
           </div>
         </div>
       </Form>
-    </>
+    </Layout>
   );
 }
 

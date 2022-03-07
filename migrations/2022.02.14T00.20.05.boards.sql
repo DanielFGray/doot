@@ -1,22 +1,9 @@
-create table boards (
-  board_id citext primary key,
-  description text,
-  created_at timestamptz not null default now()
-);
-
-create table board_admins (
-  board_id citext not null references boards,
-  user_id uuid not null references users,
-  created_at timestamptz not null default now(),
-  primary key (board_id, user_id)
-);
-
 create table posts (
   post_id uuid primary key default gen_random_uuid(),
-  board_id citext not null references boards,
   user_id uuid not null references users,
   title text,
   body text,
+  tags citext[] not null,
   search tsvector not null
     generated always as (
         setweight(to_tsvector('english', coalesce(title, '')), 'A') ||
@@ -28,7 +15,7 @@ create table posts (
 );
 
 create index on posts (user_id);
-create index on posts (board_id);
+create index on posts using gin (tags);
 create index on posts (created_at desc);
 
 create type vote_type as enum ('down', 'up');

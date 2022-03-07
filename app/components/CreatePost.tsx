@@ -1,7 +1,8 @@
-import { Form } from "remix"
+import { Form } from "remix";
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
+import {Input} from "./Forms";
 
 export function CreatePostSlider({
   open,
@@ -27,10 +28,10 @@ export function CreatePostSlider({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <Dialog.Overlay className="absolute inset-0 bg-black bg-opacity-50 transition-opacity" />
           </Transition.Child>
 
-          <div className="fixed inset-y-0 right-0 flex max-w-full pl-10 pointer-events-none sm:pl-16">
+          <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
             <Transition.Child
               as={React.Fragment}
               enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -40,65 +41,52 @@ export function CreatePostSlider({
               leaveFrom="translate-x-0"
               leaveTo="translate-x-full"
             >
-              <div className="w-screen max-w-md pointer-events-auto">
-                <Form method="post" action="/newPost" className="flex flex-col h-full bg-white shadow-xl divide-y divide-gray-200">
-                  <div className="flex-1 h-0 overflow-y-auto">
-                    <div className="px-4 py-6 bg-indigo-700 sm:px-6">
+              <div className="pointer-events-auto w-screen max-w-md">
+                <Form
+                  method="post"
+                  action="/create-post"
+                  className="flex h-full flex-col divide-y dark:divide-gray-800 divide-gray-200 bg-white shadow-xl dark:bg-gray-900"
+                >
+                  <div className="h-0 flex-1 overflow-y-auto">
+                    <div className="bg-indigo-700 px-4 py-6 sm:px-6">
                       <div className="flex items-center justify-between">
                         <Dialog.Title className="text-lg font-medium text-white">
                           New Post
                         </Dialog.Title>
-                        <div className="flex items-center ml-3 h-7">
+                        <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="text-indigo-200 bg-indigo-700 rounded-md hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                            className="rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                             onClick={() => setOpen(false)}
                           >
                             <span className="sr-only">Close panel</span>
-                            <XIcon className="w-6 h-6" aria-hidden="true" />
+                            <XIcon className="h-6 w-6" aria-hidden="true" />
                           </button>
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col justify-between flex-1">
-                      <div className="px-4 divide-y divide-gray-200 sm:px-6">
-                        <div className="pt-6 pb-5 space-y-6">
-                          <div>
-                            <label
-                              htmlFor="board-name"
-                              className="block text-sm font-medium text-gray-900"
-                            >
-                              Board
-                            </label>
-                            <div className="mt-1">
-                              <input
-                                type="text"
-                                name="board_id"
-                                id="board-name"
-                                className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                              />
-                            </div>
-                          </div>
+                    <div className="flex flex-1 flex-col justify-between">
+                      <div className="divide-y divide-gray-200 px-4 sm:px-6">
+                        <div className="space-y-6 pt-6 pb-5">
                           <div>
                             <label
                               htmlFor="post-title"
-                              className="block text-sm font-medium text-gray-900"
+                              className="block text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Post title
                             </label>
                             <div className="mt-1">
-                              <input
+                              <Input
                                 type="text"
                                 name="title"
                                 id="post-title"
-                                className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                               />
                             </div>
                           </div>
                           <div>
                             <label
                               htmlFor="body"
-                              className="block text-sm font-medium text-gray-900"
+                              className="block text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Body
                             </label>
@@ -107,8 +95,23 @@ export function CreatePostSlider({
                                 id="post-body"
                                 name="body"
                                 rows={4}
-                                className="block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                className="block w-full dark:bg-gray-800 dark:border-gray-700 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 defaultValue={""}
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <label
+                              htmlFor="tags"
+                              className="block text-sm font-medium text-gray-900 dark:text-gray-300"
+                            >
+                              Tags
+                            </label>
+                            <div className="mt-1">
+                              <Input
+                                type="text"
+                                name="tags"
+                                id="tags"
                               />
                             </div>
                           </div>
@@ -116,17 +119,17 @@ export function CreatePostSlider({
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-end flex-shrink-0 px-4 py-4">
+                  <div className="flex flex-shrink-0 justify-end gap-2 px-4 py-4">
                     <button
                       type="submit"
-                      className="inline-flex justify-center px-4 py-2 ml-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       onClick={() => setOpen(false)}
                     >
                       Save
                     </button>
                     <button
                       type="button"
-                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       onClick={() => setOpen(false)}
                     >
                       Cancel
