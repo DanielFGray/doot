@@ -84,7 +84,7 @@ create function top_posts(v_current_user uuid default null) returns setof tag_li
     popularity desc
 $$ language sql stable;
 
-create function tag_listing(v_tags citext[], v_current_user uuid default null) returns setof tag_listing as $$
+create function tag_listing(v_tags tag[], v_current_user uuid default null) returns setof tag_listing as $$
   select
     p.post_id,
     title,

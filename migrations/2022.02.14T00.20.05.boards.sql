@@ -1,4 +1,4 @@
-create domain tag as citext check(length(tag) between 1 and 64);
+create domain tag as citext check(length(value) between 1 and 64);
 create table posts (
   post_id uuid primary key default gen_random_uuid(),
   user_id uuid not null references users,
