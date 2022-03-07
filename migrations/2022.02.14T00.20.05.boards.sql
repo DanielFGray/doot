@@ -1,9 +1,9 @@
 create table posts (
   post_id uuid primary key default gen_random_uuid(),
   user_id uuid not null references users,
-  title text check (length(title) > 0 && length(title) < 140),
+  title text check (length(title) between 1 and 140),
   body text,
-  tags citext[] not null check(array_length(tags, 1), between 1 and 5),
+  tags citext[] not null check(array_length(tags, 1) between 1 and 5),
   search tsvector not null
     generated always as (
         setweight(to_tsvector('english', coalesce(title, '')), 'A') ||
