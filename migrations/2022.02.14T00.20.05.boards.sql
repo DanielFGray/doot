@@ -1,9 +1,10 @@
+create domain tag as citext check(length(tag) between 1 and 64);
 create table posts (
   post_id uuid primary key default gen_random_uuid(),
   user_id uuid not null references users,
   title text check (length(title) between 1 and 140),
-  body text,
-  tags citext[] not null check(array_length(tags, 1) between 1 and 5),
+  body text check (length (body) between 1 and 2000),
+  tags tag[] not null check(array_length(tags, 1) between 1 and 5),
   search tsvector not null
     generated always as (
         setweight(to_tsvector('english', coalesce(title, '')), 'A') ||
