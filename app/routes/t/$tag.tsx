@@ -16,7 +16,6 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUser(request);
   const tags = params.tag!.split('+')
-  console.log({ tags })
   try {
     const posts = await db.any<BoardListing>(sql`
        select *
