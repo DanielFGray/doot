@@ -4,7 +4,9 @@
   "description": "",
   "license": "",
   "scripts": {
-    "build": "remix build",
+    "build": "run-s build:styles build:server",
+    "build:server": "remix build",
+    "build:styles": "tailwindcss --output ./app/styles/tailwind.css",
     "postinstall": "remix setup node",
     "setup": "run-s setup:env start:db setup:db 'migrate up'",
     "setup:db": "node -r dotenv/config scripts/setup.js",
@@ -13,7 +15,7 @@
     "start": "run-p watch:*",
     "watch:build": "remix watch",
     "watch:server": "node -r dotenv/config server/index.js",
-    "watch:styles": "tailwindcss --output ./app/styles/tailwind.css --watch",
+    "watch:styles": "run-s 'build:styles --watch'",
     "prestart": "run-s start:db",
     "start:db": "docker-compose up -d db"
   },
