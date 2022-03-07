@@ -18,7 +18,6 @@ export function Header({ user }: { user: { username: string } | null }) {
     { name: "Your Profile", as: NavLink, to: "/user" },
     // { name: "Settings", href: "#" },
     { name: "Create Post", as: "button", onClick: () => setCreatePostModalVisible(true) },
-    { name: "Create board", as: NavLink, to: "/create-board" },
     { name: "Sign out", as: NavLink, to: "/logout" },
   ], []);
 
