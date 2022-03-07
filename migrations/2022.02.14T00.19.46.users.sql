@@ -1,6 +1,6 @@
 create table users (
   user_id uuid primary key default gen_random_uuid(),
-  username citext unique not null,
+  username citext unique not null check (length(username) between 3 and 64),
   password text not null,
   email citext unique not null,
   last_login_at timestamptz not null default now(),
