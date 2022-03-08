@@ -89,7 +89,7 @@ export function Post({
               </Link>
             </span>
           </div>
-          {body && <div>{formatter(body)}</div>}
+          {body && <div className="prose dark:prose-invert">{formatter(body)}</div>}
           <div>
             {body && currentUser && currentUser.username === username && (
               <div>
