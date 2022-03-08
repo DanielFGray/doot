@@ -92,7 +92,7 @@ export function Comment({
               <input type="hidden" name="id" value={comment_id} />
               <button
                 type="submit"
-                className="ml-2 rounded-md text-red-700"
+                className="rounded-md text-red-700"
               >
                 Delete
               </button>

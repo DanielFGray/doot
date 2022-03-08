@@ -41,7 +41,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                           classNames(
                             isActive
                               ? "border-indigo-500 text-gray-900 dark:text-gray-300"
-                              : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-300 hover:text-gray-700 dark:text-gray-400",
+                              : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 hover:dark:text-gray-200",
                             "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium"
                           )
                         }
@@ -57,14 +57,14 @@ export function Header({ user }: { user: { username: string } | null }) {
                       <button
                         type="button"
                         onClick={() => setCreatePostModalVisible(true)}
-                        className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800"
+                        className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:text-gray-300"
                       >
                         <span className="sr-only">Create post</span>
                         <PlusIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
                       <button
                         type="button"
-                        className="ml-3 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800"
+                        className="ml-3 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:text-gray-300"
                       >
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -73,9 +73,9 @@ export function Header({ user }: { user: { username: string } | null }) {
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
-                          <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800">
+                          <Menu.Button className="flex rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:text-gray-300">
                             <span className="sr-only">Open user menu</span>
-                            <UserIcon className="h-6 w-6 text-gray-400" />
+                            <UserIcon className="h-6 w-6" />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -130,7 +130,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                 </div>
                 <div className="-mr-2 flex items-center sm:hidden">
                   {/* Mobile menu button */}
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-900 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
                       <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -179,7 +179,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                       </div>
                       <button
                         type="button"
-                        className="ml-auto flex-shrink-0 rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="ml-auto flex-shrink-0 rounded-full p-1 text-gray-400 text-gray-400 dark:hover:text-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       >
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />

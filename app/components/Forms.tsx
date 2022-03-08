@@ -43,7 +43,7 @@ export const Input = ({
           hasError
             ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
             : "focus:border-indigo-500 focus:ring-indigo-500",
-            "block w-full rounded-md pr-10 focus:outline-none sm:text-sm bg-white dark:bg-gray-800 dark:border-gray-700"
+            "block w-full rounded-md pr-10 focus:outline-none border-gray-300 sm:text-sm bg-white dark:bg-gray-800 dark:border-gray-700"
         )}
         aria-invalid={hasError}
         aria-describedby={hasError ? `${name}-error` : undefined}

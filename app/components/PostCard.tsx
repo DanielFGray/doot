@@ -26,7 +26,7 @@ export function Post({
 }) {
   const fetcher = useFetcher();
   return (
-    <div className="-mx-2 mb-4 rounded-lg bg-gray-50 p-2 p-4 shadow dark:bg-gray-800">
+    <div className="-mx-2 mb-4 overflow-clip rounded-lg bg-gray-50 p-2 p-4 shadow dark:bg-gray-800">
       <div className="flex flex-row dark:text-gray-50">
         <fetcher.Form
           method="post"
@@ -101,7 +101,7 @@ export function Post({
                   <input type="hidden" name="id" value={post_id} />
                   <button
                     type="submit"
-                    className="rounded-md px-1 text-red-700"
+                    className="rounded-md text-red-700"
                   >
                     Delete
                   </button>
@@ -111,19 +111,18 @@ export function Post({
           </div>
         </div>
       </div>
-      {body && <div>{body}</div>}
     </div>
   );
 }
 
 function TagList({ tags }: { tags: string[] }) {
   return (
-    <div className="inline-flex flex-row gap-0.5">
+    <div className="inline-flex flex-row flex-wrap gap-0.5">
       {tags.map((tag) => (
         <Link
           key={tag}
           to={`/t/${tag}`}
-          className="inline rounded-lg bg-gray-200 px-2 text-gray-900 dark:bg-gray-700 dark:text-gray-50"
+          className="inline rounded-lg bg-gray-200 px-2 text-gray-900 dark:bg-gray-700 dark:text-gray-50 border border-gray-200 dark:border-gray-700 hover:border-gray-500"
         >
           {tag}
         </Link>
