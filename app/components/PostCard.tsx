@@ -9,6 +9,7 @@ import {
   ThumbUpIcon as ThumbUpSolid,
 } from "@heroicons/react/solid";
 import type { BoardListing } from "~/types";
+import {Linkify} from '~/utils/Linkify'
 
 export function Post({
   post_id,
@@ -91,7 +92,7 @@ export function Post({
               </Link>
             </span>
           </div>
-          {body && <div>{body}</div>}
+          {body && <div>{Linkify(body)}</div>}
           <div>
             {body && currentUser && currentUser.username === username && (
               <div>
