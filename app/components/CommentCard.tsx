@@ -81,10 +81,7 @@ export function Comment({
               className="inline"
             >
               <input type="hidden" name="id" value={comment_id} />
-              <button
-                type="submit"
-                className="rounded-md text-red-700"
-              >
+              <button type="submit" className="rounded-md text-red-700">
                 Delete
               </button>
             </fetcher.Form>

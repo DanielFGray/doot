@@ -73,9 +73,7 @@ export function Post({
                 {username}
               </Link>
             </span>
-            <span>
-              {ago(new Date(created_at))}
-            </span>
+            <span>{ago(new Date(created_at))}</span>
             <span>
               {" tagged "}
               <TagList tags={tags} />
@@ -86,8 +84,7 @@ export function Post({
                 to={`/p/${post_id}`}
                 className="text-gray-900 dark:text-gray-50"
               >
-                {comment_count === 0 ? "no" : comment_count}
-                {" "}
+                {comment_count === 0 ? "no" : comment_count}{" "}
                 {comment_count === 1 ? "comment" : "comments"}
               </Link>
             </span>
@@ -102,10 +99,7 @@ export function Post({
                   className="inline"
                 >
                   <input type="hidden" name="id" value={post_id} />
-                  <button
-                    type="submit"
-                    className="rounded-md text-red-700"
-                  >
+                  <button type="submit" className="rounded-md text-red-700">
                     Delete
                   </button>
                 </fetcher.Form>
@@ -125,7 +119,7 @@ function TagList({ tags }: { tags: string[] }) {
         <Link
           key={tag}
           to={`/t/${tag}`}
-          className="inline rounded-lg bg-gray-200 px-2 text-gray-900 dark:bg-gray-700 dark:text-gray-50 border border-gray-200 dark:border-gray-700 hover:border-gray-500"
+          className="inline rounded-lg border border-gray-200 bg-gray-200 px-2 text-gray-900 hover:border-gray-500 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-50"
         >
           {tag}
         </Link>

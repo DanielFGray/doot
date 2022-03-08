@@ -44,7 +44,7 @@ export const Input = ({
           hasError
             ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
             : "focus:border-indigo-500 focus:ring-indigo-500",
-            "block w-full rounded-md pr-10 focus:outline-none border-gray-300 sm:text-sm bg-white dark:bg-gray-800 dark:border-gray-700"
+          "block w-full rounded-md border-gray-300 bg-white pr-10 focus:outline-none dark:border-gray-700 dark:bg-gray-800 sm:text-sm"
         )}
         aria-invalid={hasError}
         aria-describedby={hasError ? `${name}-error` : undefined}
@@ -75,7 +75,7 @@ export function PostInput({
       {({ selectedIndex }) => (
         <>
           <Tab.List className="flex items-center gap-2">
-            {[{label: "Write"}, {label: "Preview"}].map(({ label }) => (
+            {[{ label: "Write" }, { label: "Preview" }].map(({ label }) => (
               <Tab
                 key={label}
                 className={({ selected }) =>
@@ -83,7 +83,7 @@ export function PostInput({
                     selected
                       ? "bg-gray-100 text-gray-900 hover:bg-gray-200 dark:text-gray-200"
                       : "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-900",
-                      "rounded-md border border-transparent px-3 py-1.5 text-sm font-medium dark:bg-gray-800"
+                    "rounded-md border border-transparent px-3 py-1.5 text-sm font-medium dark:bg-gray-800"
                   )
                 }
               >
@@ -142,8 +142,8 @@ export function PostInput({
             </Tab.Panel>
             <Tab.Panel className="-m-0.5 rounded-lg p-0.5">
               <div className="border-b">
-                <div className="mx-px mt-px px-3 pt-2 pb-12 text-sm leading-5 text-gray-800">
-                  {/* FIXME */ "Preview content will render here."}
+                <div className="prose mx-px mt-px px-3 pt-2 pb-12 leading-5 dark:prose-invert">
+                  {formatter(textinput)}
                 </div>
               </div>
             </Tab.Panel>

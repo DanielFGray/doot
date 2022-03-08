@@ -2,7 +2,7 @@ import { useFetcher } from "remix";
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
-import {Input} from "./Forms";
+import { Input } from "./Forms";
 
 export function CreatePostSlider({
   open,
@@ -11,7 +11,7 @@ export function CreatePostSlider({
   open: boolean;
   setOpen: (b: boolean) => void;
 }): JSX.Element {
-  const postFetcher = useFetcher()
+  const postFetcher = useFetcher();
   return (
     <Transition.Root show={open} as={React.Fragment}>
       <Dialog
@@ -46,7 +46,7 @@ export function CreatePostSlider({
                 <postFetcher.Form
                   method="post"
                   action="/create-post"
-                  className="flex h-full flex-col divide-y dark:divide-gray-800 divide-gray-200 bg-white shadow-xl dark:bg-gray-900"
+                  className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl dark:divide-gray-800 dark:bg-gray-900"
                 >
                   <div className="h-0 flex-1 overflow-y-auto">
                     <div className="bg-indigo-700 px-4 py-6 sm:px-6">
@@ -77,11 +77,7 @@ export function CreatePostSlider({
                               Post title
                             </label>
                             <div className="mt-1">
-                              <Input
-                                type="text"
-                                name="title"
-                                id="post-title"
-                              />
+                              <Input type="text" name="title" id="post-title" />
                             </div>
                           </div>
                           <div>
@@ -96,7 +92,7 @@ export function CreatePostSlider({
                                 id="post-body"
                                 name="body"
                                 rows={4}
-                                className="block w-full dark:bg-gray-800 dark:border-gray-700 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 sm:text-sm"
                                 defaultValue={""}
                               />
                             </div>
@@ -113,10 +109,15 @@ export function CreatePostSlider({
                                 type="text"
                                 name="tags"
                                 id="tags"
-                                hasError={Boolean(postFetcher.data?.fieldErrors?.tags)}
+                                hasError={Boolean(
+                                  postFetcher.data?.fieldErrors?.tags
+                                )}
                               />
                               {postFetcher.data?.fieldErrors?.tags && (
-                                <p className="mt-2 text-sm text-red-600" id="tags-error">
+                                <p
+                                  className="mt-2 text-sm text-red-600"
+                                  id="tags-error"
+                                >
                                   {postFetcher.data?.fieldErrors.tags}
                                 </p>
                               )}
