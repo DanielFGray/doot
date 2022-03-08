@@ -65,7 +65,6 @@ export const action: ActionFunction = async ({ request }) => {
         ${user_id}
       ) as post_id
     `);
-    console.log({post})
     if (!post) throw badRequest({ formError: "Something went wrong." });
     return redirect(`/p/${post.post_id}`);
   } catch (e) {
