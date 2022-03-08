@@ -74,8 +74,9 @@ export function PostInput({
       {({ selectedIndex }) => (
         <>
           <Tab.List className="flex items-center gap-2">
-            {["Write", "Preview"].map((label) => (
+            {[{label: "Write"}, {label: "Preview"}].map(({ label }) => (
               <Tab
+                key={label}
                 className={({ selected }) =>
                   classNames(
                     selected
