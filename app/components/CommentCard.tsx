@@ -8,7 +8,7 @@ import {
   ThumbDownIcon as ThumbDownSolid,
   ThumbUpIcon as ThumbUpSolid,
 } from "@heroicons/react/solid";
-import {Linkify} from '~/utils/Linkify'
+import { formatter } from "~/utils/postFormatter";
 
 export function Comment({
   comment_id,
@@ -72,7 +72,7 @@ export function Comment({
           <span className="text-gray-500"> by </span>
           <Link to={`/user/${username}`}>{username}</Link>
         </span>
-        <div>{Linkify(body)}</div>
+        <div>{formatter(body)}</div>
         {currentUser && currentUser.username === username && (
           <div className="text-sm">
             <fetcher.Form

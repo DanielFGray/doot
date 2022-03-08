@@ -7,6 +7,7 @@ import {
   LinkIcon,
 } from "@heroicons/react/solid";
 import { classNames } from "~/utils/classNames";
+import { formatter } from "~/utils/postFormatter";
 
 export const Button = ({
   children,
