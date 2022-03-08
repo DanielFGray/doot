@@ -10,3 +10,5 @@ drop type tag_listing;
 drop function post_popularity;
 drop function score_post;
 drop function comment_count;
+drop function create_comment;
+drop function create_post;

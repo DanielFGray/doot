@@ -49,22 +49,23 @@ export const action: ActionFunction = async ({ request }) => {
     });
   }
 
+  const tagList = tags.split(/,\s*/)
+  if (tagList.length > 5 || tagList.length < 1) {
+    return json({ fieldErrors: { tags: 'post must have between 1 and 5 tags' } })
+  }
+
   // const fields = { title, body, user_id, tags };
 
   try {
     const post = await db.maybeOne<{ post_id: string }>(sql`
-      with create_post as (
-        insert into posts (tags, title, body, user_id)
-        values (${sql.array(tags.split(/,\s*/), sql`citext[]`)}, ${title}, ${body}, ${user_id})
-        returning post_id
-      )
-      insert into posts_votes (vote, user_id, post_id)
-      values (
-        'up',
-        ${user_id},
-        (select post_id from create_post)
-      ) returning post_id
+      select * from create_post(
+        ${title},
+        ${body},
+        ${sql.array(tagList, sql`citext[]`)},
+        ${user_id}
+      ) as post_id
     `);
+    console.log({post})
     if (!post) throw badRequest({ formError: "Something went wrong." });
     return redirect(`/p/${post.post_id}`);
   } catch (e) {
@@ -72,45 +73,3 @@ export const action: ActionFunction = async ({ request }) => {
     throw badRequest({ formError: "Something went wrong." });
   }
 };
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const user = await getUser(request);
-  if (!user)
-    throw badRequest({
-      message: "You must be logged in to create a new post",
-    });
-  return { user };
-};
-
-export default function NewPost() {
-  const { user } = useLoaderData();
-  return (
-    <Layout user={user}>
-      <h1 className="text-xl font-bold">New Post</h1>
-      <Form method="post" className="p-4">
-        <div>
-          <label>
-            Board <input type="text" name="board_id" />
-          </label>
-        </div>
-        <div>
-          <label>
-            Title <input type="text" name="title" />
-          </label>
-        </div>
-        <div>
-          <label>
-            Body
-            <PostInput name="body" />
-          </label>
-        </div>
-        <button
-          type="submit"
-          className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          Submit
-        </button>
-      </Form>
-    </Layout>
-  );
-}

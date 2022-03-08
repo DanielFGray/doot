@@ -62,40 +62,42 @@ export function Post({
           >
             {title}
           </Link>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {"by "}
-            <Link
-              to={`/user/${username}`}
-              className="text-gray-900 dark:text-gray-50"
-            >
-              {username}
-            </Link>
-            {" tagged "}
-            <TagList tags={tags} />
-            {ago(new Date(created_at))}
-            {" has "}
-            <Link
-              to={`/p/${post_id}`}
-              className="text-gray-900 dark:text-gray-50"
-            >
-              {comment_count === 0 ? "no" : comment_count}{" "}
-              {comment_count === 1 ? "comment" : "comments"}
-            </Link>
+          <div className="flex flex-row flex-wrap gap-1 text-sm text-gray-600 dark:text-gray-400">
+            <span>
+              {"by "}
+              <Link
+                to={`/user/${username}`}
+                className="text-gray-900 dark:text-gray-50"
+              >
+                {username}
+              </Link>
+            </span>
+            <span>
+              {ago(new Date(created_at))}
+            </span>
+            <span>
+              {" tagged "}
+              <TagList tags={tags} />
+            </span>
+            <span>
+              {" has "}
+              <Link
+                to={`/p/${post_id}`}
+                className="text-gray-900 dark:text-gray-50"
+              >
+                {comment_count === 0 ? "no" : comment_count}
+                {" "}
+                {comment_count === 1 ? "comment" : "comments"}
+              </Link>
+            </span>
+          </div>
+          {body && <div>{body}</div>}
+          <div>
             {body && currentUser && currentUser.username === username && (
               <div>
                 <fetcher.Form
                   method="post"
-                  action="/post/edit"
-                  className="inline"
-                >
-                  <input type="hidden" name="id" value={post_id} />
-                  <button type="submit" className="rounded-md px-1">
-                    Edit
-                  </button>
-                </fetcher.Form>
-                <fetcher.Form
-                  method="post"
-                  action="/post/delete"
+                  action="/delete-post"
                   className="inline"
                 >
                   <input type="hidden" name="id" value={post_id} />

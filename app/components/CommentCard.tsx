@@ -76,17 +76,7 @@ export function Comment({
           <div className="text-sm">
             <fetcher.Form
               method="post"
-              action="/post/edit"
-              className="inline"
-            >
-              <input type="hidden" name="id" value={comment_id} />
-              <button type="submit" className="rounded-md px-1">
-                Edit
-              </button>
-            </fetcher.Form>
-            <fetcher.Form
-              method="post"
-              action="/post/delete"
+              action="/delete-comment"
               className="inline"
             >
               <input type="hidden" name="id" value={comment_id} />

@@ -1,4 +1,4 @@
-import { Form } from "remix";
+import { useFetcher } from "remix";
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
@@ -11,6 +11,7 @@ export function CreatePostSlider({
   open: boolean;
   setOpen: (b: boolean) => void;
 }): JSX.Element {
+  const postFetcher = useFetcher()
   return (
     <Transition.Root show={open} as={React.Fragment}>
       <Dialog
@@ -42,7 +43,7 @@ export function CreatePostSlider({
               leaveTo="translate-x-full"
             >
               <div className="pointer-events-auto w-screen max-w-md">
-                <Form
+                <postFetcher.Form
                   method="post"
                   action="/create-post"
                   className="flex h-full flex-col divide-y dark:divide-gray-800 divide-gray-200 bg-white shadow-xl dark:bg-gray-900"
@@ -85,7 +86,7 @@ export function CreatePostSlider({
                           </div>
                           <div>
                             <label
-                              htmlFor="body"
+                              htmlFor="post-body"
                               className="block text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Body
@@ -112,7 +113,13 @@ export function CreatePostSlider({
                                 type="text"
                                 name="tags"
                                 id="tags"
+                                hasError={Boolean(postFetcher.data?.fieldErrors?.tags)}
                               />
+                              {postFetcher.data?.fieldErrors?.tags && (
+                                <p className="mt-2 text-sm text-red-600" id="tags-error">
+                                  {postFetcher.data?.fieldErrors.tags}
+                                </p>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -122,8 +129,8 @@ export function CreatePostSlider({
                   <div className="flex flex-shrink-0 justify-end gap-2 px-4 py-4">
                     <button
                       type="submit"
+                      disabled={postFetcher.state === "submitting"}
                       className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                      onClick={() => setOpen(false)}
                     >
                       Save
                     </button>
@@ -135,7 +142,7 @@ export function CreatePostSlider({
                       Cancel
                     </button>
                   </div>
-                </Form>
+                </postFetcher.Form>
               </div>
             </Transition.Child>
           </div>

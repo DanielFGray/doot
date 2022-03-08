@@ -21,7 +21,7 @@ create index on posts (created_at desc);
 
 create type vote_type as enum ('down', 'up');
 create table posts_votes (
-  post_id uuid not null references posts,
+  post_id uuid not null references posts on delete cascade,
   user_id uuid not null references users,
   vote vote_type not null,
   created_at timestamptz not null default now(),
@@ -30,7 +30,7 @@ create table posts_votes (
 
 create table posts_comments (
   comment_id uuid primary key default gen_random_uuid(),
-  post_id uuid not null references posts,
+  post_id uuid not null references posts on delete cascade,
   user_id uuid not null references users,
   body text not null,
   search tsvector not null generated always as (to_tsvector('english', body)) stored,
@@ -42,7 +42,7 @@ create index on posts_comments (user_id);
 create index on posts_comments (created_at desc);
 
 create table comments_votes (
-  comment_id uuid not null references posts_comments,
+  comment_id uuid not null references posts_comments on delete cascade,
   user_id uuid not null references users,
   vote vote_type not null,
   created_at timestamptz not null default now(),

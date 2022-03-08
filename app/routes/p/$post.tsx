@@ -85,17 +85,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   const comment = await db.one<{ comment_id: string }>(sql`
-    with create_comment as (
-      insert into posts_comments (user_id, post_id, body)
-      values (${user.user_id}, ${params.post!}, ${body})
-      returning comment_id
-    )
-    insert into comments_votes (vote, user_id, comment_id)
-    values (
-      'up',
-      ${user.user_id},
-      (select comment_id from create_comment)
-    ) returning comment_id
+    select * from create_comment(${params.post!}, ${body}, ${user.user_id})
   `);
   return json(comment);
 };

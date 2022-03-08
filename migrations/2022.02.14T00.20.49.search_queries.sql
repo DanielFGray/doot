@@ -1,3 +1,25 @@
+create function create_post(v_title text, v_body text, v_tags tag[], v_user_id uuid) returns uuid as $$
+  with create_post as (
+    insert into posts (title, body, tags, user_id)
+    values (v_title, v_body, v_tags, v_user_id)
+    returning post_id
+  )
+  insert into posts_votes (vote, user_id, post_id)
+  values ('up', v_user_id, (select post_id from create_post))
+  returning post_id
+$$ language sql volatile;
+
+create function create_comment(v_post_id uuid, v_body text, v_user_id uuid) returns uuid as $$
+  with create_comment as (
+    insert into posts_comments (post_id, body, user_id)
+    values (v_post_id, v_body, v_user_id)
+    returning comment_id
+  )
+  insert into comments_votes (vote, user_id, comment_id)
+  values ('up', v_user_id, (select comment_id from create_comment))
+  returning comment_id
+$$ language sql volatile;
+
 create function score_post(v_post_id uuid) returns int as $$
   select
     coalesce(sum(
