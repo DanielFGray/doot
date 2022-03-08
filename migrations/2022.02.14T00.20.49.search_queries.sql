@@ -139,14 +139,15 @@ create type search_results as (
   created_at timestamptz,
   updated_at timestamptz,
   rank float,
-  popularity float
+  popularity float,
+  current_user_voted vote_type
 );
 
-create function search_posts(query text) returns setof search_results as $$
+create function search_posts(query text, v_current_user uuid default null) returns setof search_results as $$
   select
-    post_id,
-    ts_headline(title, q, 'StartSel = <i>, StopSel = </i>') as title,
-    ts_headline(body, q, 'StartSel = <i>, StopSel = </i>') as body,
+    p.post_id,
+    ts_headline(title, q, 'StartSel = {{{, StopSel = }}}') as title,
+    ts_headline(body, q, 'StartSel = {{{, StopSel = }}}') as body,
     username,
     tags,
     points,
@@ -154,13 +155,15 @@ create function search_posts(query text) returns setof search_results as $$
     p.created_at,
     p.updated_at,
     ts_rank(search, q) as rank,
-    post_popularity(comment_count, points, p.created_at) as popularity
+    post_popularity(comment_count, points, p.created_at) as popularity,
+    vote as current_user_voted
   from
     posts p
-      join users u using (user_id),
+      join users u using (user_id)
+      left join posts_votes v on (p.post_id = v.post_id and v.user_id = v_current_user),
     to_tsquery(query) q,
-    lateral score_post(post_id) as points,
-    lateral comment_count(post_id) as comment_count
+    lateral score_post(p.post_id) as points,
+    lateral comment_count(p.post_id) as comment_count
   where
     search @@ q
 $$ language sql;
