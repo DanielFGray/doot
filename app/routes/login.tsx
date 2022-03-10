@@ -37,16 +37,14 @@ export default function Login() {
     <Layout user={null}>
       <Form
         method="post"
-        className="space-y-8 divide-y dark:divide-gray-800 divide-gray-200 p-8"
-        aria-describedby={
-          actionData?.formError ? "form-error-message" : undefined
-        }
+        className="space-y-8 divide-y divide-gray-200 px-8 dark:divide-gray-800"
+        aria-describedby={actionData?.formError ? "form-error-message" : undefined}
       >
-        <h3 className="text-lg dark:text-gray-50 font-medium leading-6 text-gray-900">Log in</h3>
+        <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50">Log in</h3>
         <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
           <label
             htmlFor="username-input"
-            className="block text-sm font-medium dark:text-gray-300 text-gray-700 sm:mt-px sm:pt-2"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2"
           >
             Username or Email
           </label>

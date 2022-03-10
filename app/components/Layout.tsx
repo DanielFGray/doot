@@ -31,7 +31,7 @@ export function Header({ user }: { user: { username: string } | null }) {
               <div className="flex h-16 justify-between">
                 <div className="flex">
                   <div className="flex flex-shrink-0 items-center">
-                    <h1 className="text-3xl font-bold text-indigo-600">doot</h1>
+                    <h1 className="text-3xl font-bold text-brand-600">doot</h1>
                   </div>
                   <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                     {navigation.map((item) => (
@@ -41,7 +41,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                         className={({ isActive }) =>
                           classNames(
                             isActive
-                              ? "border-indigo-500 text-gray-900 dark:text-gray-300"
+                              ? "border-brand-500 text-gray-900 dark:text-gray-300"
                               : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 hover:dark:text-gray-200",
                             "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium"
                           )
@@ -67,7 +67,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                       <input
                         id="search"
                         name="q"
-                        className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50 sm:text-sm"
+                        className="block w-full rounded-md border border-brand-300 bg-white bg-opacity-80 py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-brand-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50 sm:text-sm"
                         placeholder="Search"
                         type="search"
                       />
@@ -80,14 +80,14 @@ export function Header({ user }: { user: { username: string } | null }) {
                       <button
                         type="button"
                         onClick={() => setCreatePostModalVisible(true)}
-                        className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:text-gray-300"
+                        className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:text-gray-300"
                       >
                         <span className="sr-only">Create post</span>
                         <PlusIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
                       <button
                         type="button"
-                        className="ml-3 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:text-gray-300"
+                        className="ml-3 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:text-gray-300"
                       >
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -96,7 +96,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
-                          <Menu.Button className="flex rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:text-gray-300">
+                          <Menu.Button className="flex rounded-full bg-white p-1 text-sm text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:text-gray-300">
                             <span className="sr-only">Open user menu</span>
                             <UserIcon className="h-6 w-6" />
                           </Menu.Button>
@@ -137,13 +137,13 @@ export function Header({ user }: { user: { username: string } | null }) {
                       <div className="flex flex-row gap-2">
                         <Link
                           to="/login"
-                          className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                          className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
                         >
                           Log in
                         </Link>
                         <Link
                           to="/register"
-                          className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                          className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
                         >
                           Register
                         </Link>
@@ -153,7 +153,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                 </div>
                 <div className="-mr-2 flex items-center sm:hidden">
                   {/* Mobile menu button */}
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-900 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:bg-gray-900 dark:hover:text-gray-200">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
                       <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -165,9 +165,9 @@ export function Header({ user }: { user: { username: string } | null }) {
               </div>
             </div>
 
-            <Disclosure.Panel className="sm:hidden">
+            <Disclosure.Panel className="bg-white bg-opacity-75 dark:bg-opacity-10 sm:hidden">
               <div className="space-y-1 pt-2 pb-3">
-                {navigation.map((item) => (
+                {navigation.map(item => (
                   <Disclosure.Button
                     key={item.name}
                     as={NavLink}
@@ -175,9 +175,9 @@ export function Header({ user }: { user: { username: string } | null }) {
                     className={({ isActive }) =>
                       classNames(
                         isActive
-                          ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                          : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-800 hover:bg-gray-50 hover:text-gray-800 dark:hover:border-gray-700 dark:hover:text-gray-300",
-                        "block border-l-4 py-2 pl-3 pr-4 text-base font-medium"
+                          ? "border-brand-500 bg-brand-50 text-brand-700"
+                          : "border-transparent bg-opacity-25 text-gray-800 hover:border-gray-300 hover:text-gray-800 dark:hover:border-gray-700 dark:hover:text-gray-300",
+                        "block border-l-4 py-2 pl-3 pr-4 text-base font-medium",
                       )
                     }
                   >
@@ -196,13 +196,13 @@ export function Header({ user }: { user: { username: string } | null }) {
                         />
                       </div>
                       <div className="ml-3">
-                        <div className="text-base font-medium dark:text-gray-200 text-gray-800">
+                        <div className="text-base font-medium text-gray-800 dark:text-gray-200">
                           {user.username}
                         </div>
                       </div>
                       <button
                         type="button"
-                        className="ml-auto flex-shrink-0 rounded-full p-1 text-gray-400 text-gray-400 dark:hover:text-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="ml-auto flex-shrink-0 rounded-full p-1 text-gray-400 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:hover:text-gray-300"
                       >
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -212,7 +212,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                       {userNavigation.map(({ name, ...props }) => (
                         <Disclosure.Button
                           key={name}
-                          className="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+                          className="block w-full px-4 py-2 text-left text-base font-medium text-gray-400 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-300"
                           {...props}
                         >
                           {name}
@@ -261,7 +261,7 @@ export function Layout({
   return (
     <>
       <Header user={user} />
-      <div className="mx-auto p-8 max-w-7xl">{children}</div>
+      <div className="mx-auto max-w-7xl p-8">{children}</div>
     </>
   );
 }

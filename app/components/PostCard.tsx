@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/solid";
 import type { BoardListing } from "~/types";
 import { formatter } from "~/utils/postFormatter";
+import { Button } from "./Forms";
 
 export function Post({
   post_id,
@@ -89,23 +90,22 @@ export function Post({
               </Link>
             </span>
           </div>
-          {body && <div className="prose dark:prose-invert">{formatter(body)}</div>}
-          <div>
-            {body && currentUser && currentUser.username === username && (
-              <div>
-                <fetcher.Form
-                  method="post"
-                  action="/delete-post"
-                  className="inline"
+          {body && <div className="prose prose-lg dark:prose-invert">{formatter(body)}</div>}
+          {body && currentUser && currentUser.username === username && (
+            <div className="pt-1">
+              <fetcher.Form method="post" action="/delete-post" className="inline">
+                <input type="hidden" name="id" value={post_id} />
+                <Button
+                  type="submit"
+                  size="sm"
+                  primary={false}
+                  className="bg-red-100 text-red-700 hover:bg-red-200 hover:bg-opacity-100"
                 >
-                  <input type="hidden" name="id" value={post_id} />
-                  <button type="submit" className="rounded-md text-red-700">
-                    Delete
-                  </button>
-                </fetcher.Form>
-              </div>
-            )}
-          </div>
+                  Delete
+                </Button>
+              </fetcher.Form>
+            </div>
+          )}
         </div>
       </div>
     </div>

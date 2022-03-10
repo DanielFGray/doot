@@ -12,14 +12,24 @@ import { formatter } from "~/utils/postFormatter";
 export const Button = ({
   children,
   className,
+  primary = true,
+  size,
   ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  primary?: boolean;
+  size?: "sm" | "md" | "lg";
+}) => {
   return (
     <button
       {...props}
       className={classNames(
-        "inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800 dark:text-gray-200",
-        className
+        "dark:bg-gray-800 dark:text-gray-200",
+        primary
+          ? "bg-brand-600 text-white hover:bg-brand-700"
+          : "text-primary bg-transparent bg-opacity-20 hover:bg-white",
+        size === "sm" ? "px-2 py-1 text-sm" : size === "lg" ? "px-6 py-3 text-lg" : "px-4 py-2",
+        "inline-flex items-center rounded-md border border-transparent text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2",
+        className,
       )}
     >
       {children}
@@ -30,21 +40,23 @@ export const Button = ({
 export const Input = ({
   name,
   hasError,
+  className,
   ...props
 }: Omit<React.InputHTMLAttributes<HTMLInputElement>, "name"> & {
   name: string;
   hasError?: undefined | boolean;
 }) => {
   return (
-    <div className="relative mt-1 rounded-md shadow-sm">
+    <>
       <input
         name={name}
         {...props}
         className={classNames(
           hasError
             ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
-            : "focus:border-indigo-500 focus:ring-indigo-500",
-          "block w-full rounded-md border-gray-300 bg-white pr-10 focus:outline-none dark:border-gray-700 dark:bg-gray-800 sm:text-sm"
+            : "focus:border-brand-500 focus:ring-brand-500",
+          "block w-full rounded-md border-gray-300 bg-white pr-10 focus:outline-none dark:border-gray-700 dark:bg-gray-800 sm:text-sm",
+          className,
         )}
         aria-invalid={hasError}
         aria-describedby={hasError ? `${name}-error` : undefined}
@@ -57,7 +69,7 @@ export const Input = ({
           />
         </div>
       )}
-    </div>
+    </>
   );
 };
 export function PostInput({

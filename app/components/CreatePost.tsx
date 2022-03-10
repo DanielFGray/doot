@@ -2,7 +2,7 @@ import { useFetcher } from "remix";
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
-import { Input } from "./Forms";
+import { Button, Input } from "./Forms";
 
 export function CreatePostSlider({
   open,
@@ -49,7 +49,7 @@ export function CreatePostSlider({
                   className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl dark:divide-gray-800 dark:bg-gray-900"
                 >
                   <div className="h-0 flex-1 overflow-y-auto">
-                    <div className="bg-indigo-700 px-4 py-6 sm:px-6">
+                    <div className="bg-brand-700 px-4 py-6 sm:px-6">
                       <div className="flex items-center justify-between">
                         <Dialog.Title className="text-lg font-medium text-white">
                           New Post
@@ -57,7 +57,7 @@ export function CreatePostSlider({
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                            className="rounded-md bg-brand-700 text-brand-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                             onClick={() => setOpen(false)}
                           >
                             <span className="sr-only">Close panel</span>
@@ -92,7 +92,7 @@ export function CreatePostSlider({
                                 id="post-body"
                                 name="body"
                                 rows={4}
-                                className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 sm:text-sm"
+                                className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 sm:text-sm"
                                 defaultValue={""}
                               />
                             </div>
@@ -128,20 +128,12 @@ export function CreatePostSlider({
                     </div>
                   </div>
                   <div className="flex flex-shrink-0 justify-end gap-2 px-4 py-4">
-                    <button
-                      type="submit"
-                      disabled={postFetcher.state === "submitting"}
-                      className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
+                    <Button type="submit" disabled={postFetcher.state === "submitting"}>
                       Save
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                      onClick={() => setOpen(false)}
-                    >
+                    </Button>
+                    <Button type="button" primary={false} onClick={() => setOpen(false)}>
                       Cancel
-                    </button>
+                    </Button>
                   </div>
                 </postFetcher.Form>
               </div>

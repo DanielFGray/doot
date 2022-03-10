@@ -8,6 +8,7 @@ module.exports = {
       colors: {
         coolGray: colors.slate,
         gray: colors.neutral,
+        brand: colors.emerald,
       },
     },
   },

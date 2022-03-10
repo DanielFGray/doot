@@ -25,10 +25,8 @@ export default function Register() {
     <Layout user={null}>
       <Form
         method="post"
-        className="space-y-8 divide-y divide-gray-200 p-8 dark:divide-gray-800"
-        aria-describedby={
-          actionData?.formError ? "form-error-message" : undefined
-        }
+        className="space-y-8 divide-y divide-gray-200 px-8 dark:divide-gray-800"
+        aria-describedby={actionData?.formError ? "form-error-message" : undefined}
       >
         <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50">
           Register

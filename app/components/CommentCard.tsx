@@ -9,6 +9,7 @@ import {
   ThumbUpIcon as ThumbUpSolid,
 } from "@heroicons/react/solid";
 import { formatter } from "~/utils/postFormatter";
+import { Button } from "./Forms";
 
 export function Comment({
   comment_id,
@@ -81,9 +82,14 @@ export function Comment({
               className="inline"
             >
               <input type="hidden" name="id" value={comment_id} />
-              <button type="submit" className="rounded-md text-red-700">
+              <Button
+                type="submit"
+                size="sm"
+                primary={false}
+                className="bg-red-100 text-red-700 hover:bg-red-200 hover:bg-opacity-100"
+              >
                 Delete
-              </button>
+              </Button>
             </fetcher.Form>
           </div>
         )}
