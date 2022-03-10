@@ -14,11 +14,7 @@ export function CreatePostSlider({
   const postFetcher = useFetcher();
   return (
     <Transition.Root show={open} as={React.Fragment}>
-      <Dialog
-        as="div"
-        className="fixed inset-0 overflow-hidden"
-        onClose={setOpen}
-      >
+      <Dialog as="div" className="fixed inset-0 overflow-hidden" onClose={setOpen}>
         <div className="absolute inset-0 overflow-hidden">
           <Transition.Child
             as={React.Fragment}
@@ -109,15 +105,10 @@ export function CreatePostSlider({
                                 type="text"
                                 name="tags"
                                 id="tags"
-                                hasError={Boolean(
-                                  postFetcher.data?.fieldErrors?.tags
-                                )}
+                                hasError={Boolean(postFetcher.data?.fieldErrors?.tags)}
                               />
                               {postFetcher.data?.fieldErrors?.tags && (
-                                <p
-                                  className="mt-2 text-sm text-red-600"
-                                  id="tags-error"
-                                >
+                                <p className="mt-2 text-sm text-red-600" id="tags-error">
                                   {postFetcher.data?.fieldErrors.tags}
                                 </p>
                               )}

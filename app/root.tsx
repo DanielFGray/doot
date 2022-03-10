@@ -11,7 +11,7 @@ import {
 import type { MetaFunction } from "remix";
 import tailwindUrl from "./styles/tailwind.css";
 
-export let links: LinksFunction = () => {
+export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwindUrl }];
 };
 
@@ -54,4 +54,4 @@ export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
       </body>
     </html>
   );
-}
+};

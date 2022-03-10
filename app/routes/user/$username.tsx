@@ -2,7 +2,7 @@ import { useLoaderData, LoaderFunction, json, useParams } from "remix";
 import { db, sql } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
 import { Layout } from "~/components/Layout";
-import {Post} from "~/components/PostCard";
+import { Post } from "~/components/PostCard";
 
 type UserPost = {
   post_id: string;
@@ -13,7 +13,7 @@ type UserPost = {
   comment_count: number;
   created_at: string;
   updated_at: string;
-  current_user_voted: null | 'up' | 'down';
+  current_user_voted: null | "up" | "down";
 };
 
 type LoaderData = {
@@ -34,7 +34,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
           users_posts(${params.username}, ${user?.user_id ?? null})
         order by
           created_at desc
-      `
+      `,
     );
     return json<LoaderData>({ user, posts });
   } catch (e) {
@@ -52,8 +52,8 @@ export default function Index() {
         {posts && posts.length > 0 ? (
           <>
             <h1 className="text-xl font-bold">posts by {username}</h1>
-            {posts.map((post) => (
-              <Post key={post.post_id} currentUser={user} {...post}/>
+            {posts.map(post => (
+              <Post key={post.post_id} currentUser={user} {...post} />
             ))}
           </>
         ) : (

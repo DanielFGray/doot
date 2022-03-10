@@ -29,22 +29,13 @@ export async function register({
     return user;
   } catch (err) {
     if (err.originalError?.code === "23505") {
-      throw new Response(
-        { formError: "username or email already exists" },
-        { status: 409 }
-      );
+      throw new Response({ formError: "username or email already exists" }, { status: 409 });
     }
     throw err;
   }
 }
 
-export async function login({
-  username,
-  password,
-}: {
-  username: string;
-  password: string;
-}) {
+export async function login({ username, password }: { username: string; password: string }) {
   const user = await db.maybeOne<{
     user_id: string;
     password: string;
@@ -52,7 +43,7 @@ export async function login({
   }>(
     username.includes("@")
       ? sql`select user_id, username, password from users where email = ${username}`
-      : sql`select user_id, username, password from users where username = ${username}`
+      : sql`select user_id, username, password from users where username = ${username}`,
   );
   if (!user) return null;
   if (!(await argon.verify(user.password, password))) return null;
@@ -133,14 +124,13 @@ export async function getUser(request: Request) {
 
 export async function requireUserId(
   request: Request,
-  redirectTo: string = new URL(request.url).pathname
+  redirectTo: string = new URL(request.url).pathname,
 ) {
   const session = await getUser(request);
   if (!session?.user_id || typeof session.user_id !== "string") {
     const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
     throw redirect(`/login?${searchParams}`);
   }
-  debugger;
   return session.user_id;
 }
 

@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { Tab } from "@headlessui/react";
-import {
-  ExclamationCircleIcon,
-  AtSymbolIcon,
-  CodeIcon,
-  LinkIcon,
-} from "@heroicons/react/solid";
+import { ExclamationCircleIcon, AtSymbolIcon, CodeIcon, LinkIcon } from "@heroicons/react/solid";
 import { classNames } from "~/utils/classNames";
 import { formatter } from "~/utils/postFormatter";
 
@@ -63,10 +58,7 @@ export const Input = ({
       />
       {hasError && (
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-          <ExclamationCircleIcon
-            className="h-5 w-5 text-red-500"
-            aria-hidden="true"
-          />
+          <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
         </div>
       )}
     </>
@@ -95,7 +87,7 @@ export function PostInput({
                     selected
                       ? "bg-gray-100 text-gray-900 hover:bg-gray-200 dark:text-gray-200"
                       : "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-900",
-                    "rounded-md border border-transparent px-3 py-1.5 text-sm font-medium dark:bg-gray-800"
+                    "rounded-md border border-transparent px-3 py-1.5 text-sm font-medium dark:bg-gray-800",
                   )
                 }
               >
@@ -147,7 +139,7 @@ export function PostInput({
                   name={name}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 sm:text-sm"
                   value={textinput}
-                  onChange={(e) => changeTextinput(e.target.value)}
+                  onChange={e => changeTextinput(e.target.value)}
                   placeholder={placeholder}
                 />
               </div>

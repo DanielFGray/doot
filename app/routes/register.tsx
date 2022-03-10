@@ -28,9 +28,7 @@ export default function Register() {
         className="space-y-8 divide-y divide-gray-200 px-8 dark:divide-gray-800"
         aria-describedby={actionData?.formError ? "form-error-message" : undefined}
       >
-        <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50">
-          Register
-        </h3>
+        <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50">Register</h3>
         <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
           <label
             htmlFor="email-input"
@@ -129,19 +127,19 @@ export default function Register() {
 
 function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
-    return `Usernames must be at least 3 characters long`;
+    return "Usernames must be at least 3 characters long";
   }
 }
 
 function validatePassword(password: unknown) {
   if (typeof password !== "string" || password.length < 6) {
-    return `Passwords must be at least 6 characters long`;
+    return "Passwords must be at least 6 characters long";
   }
 }
 
 function validateEmail(email: unknown) {
   if (typeof email !== "string" || !email.includes("@")) {
-    return `Please enter a valid email address`;
+    return "Please enter a valid email address";
   }
 }
 
@@ -153,13 +151,9 @@ export const action: ActionFunction = async ({ request }) => {
   const password = form.get("password") as string;
   const email = form.get("email") as string;
   const redirectTo = (form.get("redirectTo") as string) || "/";
-  if (
-    typeof email !== "string" ||
-    typeof username !== "string" ||
-    typeof password !== "string"
-  ) {
+  if (typeof email !== "string" || typeof username !== "string" || typeof password !== "string") {
     return badRequest({
-      formError: `Form not submitted correctly.`,
+      formError: "Form not submitted correctly.",
     });
   }
 
@@ -169,8 +163,7 @@ export const action: ActionFunction = async ({ request }) => {
     password: validatePassword(password),
     email: validateEmail(email),
   };
-  if (Object.values(fieldErrors).some(Boolean))
-    return badRequest({ fieldErrors, fields });
+  if (Object.values(fieldErrors).some(Boolean)) return badRequest({ fieldErrors, fields });
 
   const user = await register({ email, username, password });
   if (!user) {

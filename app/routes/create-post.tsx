@@ -1,28 +1,6 @@
-import {
-  LoaderFunction,
-  ActionFunction,
-  Form,
-  redirect,
-  json,
-  useLoaderData,
-} from "remix";
-import { Layout } from "~/components/Layout";
-import { PostInput } from "~/components/Forms";
+import { ActionFunction, redirect, json } from "remix";
 import { db, sql } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
-
-type ActionData = {
-  formError?: string;
-  fieldErrors?: {
-    username: string | undefined;
-    password: string | undefined;
-  };
-  fields?: {
-    tags: string[];
-    title: string;
-    body: string;
-  };
-};
 
 const badRequest = (data: { formError: string } | { message: string }) =>
   json(data, { status: 400 });
@@ -39,19 +17,17 @@ export const action: ActionFunction = async ({ request }) => {
   const tags = form.get("tags");
   const title = form.get("title");
   const body = form.get("body");
-  if (
-    typeof tags !== "string" ||
-    typeof title !== "string" ||
-    typeof body !== "string"
-  ) {
+  if (typeof tags !== "string" || typeof title !== "string" || typeof body !== "string") {
     throw badRequest({
       formError: "Form not submitted correctly.",
     });
   }
 
-  const tagList = tags.split(/,\s*/)
+  const tagList = tags.split(/,\s*/);
   if (tagList.length > 5 || tagList.length < 1) {
-    return json({ fieldErrors: { tags: 'post must have between 1 and 5 tags' } })
+    return json({
+      fieldErrors: { tags: "post must have between 1 and 5 tags" },
+    });
   }
 
   // const fields = { title, body, user_id, tags };

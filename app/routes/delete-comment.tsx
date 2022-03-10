@@ -8,5 +8,5 @@ export const action: ActionFunction = async ({ request }) => {
     delete from posts_comments
     where comment_id = ${id}
   `);
-  return null
+  return null;
 };

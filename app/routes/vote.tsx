@@ -4,7 +4,7 @@ import { getUser } from "~/utils/session.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const user = await getUser(request);
-  if (!user) throw redirect('/login');
+  if (!user) throw redirect("/login");
   const body = await request.formData();
   const vote = body.get("vote");
   const id = body.get("id");
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ request }) => {
         on conflict (user_id, post_id) do update set vote = ${vote}
       `);
     }
-  } else if (type ===  "comment") {
+  } else if (type === "comment") {
     if (vote === "null") {
       await db.any(sql`
         delete from comments_votes
@@ -39,5 +39,5 @@ export const action: ActionFunction = async ({ request }) => {
       `);
     }
   }
-  return null
+  return null;
 };

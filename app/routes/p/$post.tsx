@@ -1,11 +1,4 @@
-import {
-  Link,
-  useLoaderData,
-  LoaderFunction,
-  Form,
-  ActionFunction,
-  json,
-} from "remix";
+import { Link, useLoaderData, LoaderFunction, Form, ActionFunction, json } from "remix";
 import { Comment } from "~/components/CommentCard";
 import { Post } from "~/components/PostCard";
 import { db, sql } from "~/utils/db.server";
@@ -32,7 +25,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     sql`select * from get_post_with_comments(
       ${params.post!},
       ${user?.user_id ?? null}
-    )`
+    )`,
   );
   return json<LoaderData>({ user, post });
 };
@@ -48,7 +41,7 @@ export default function Index() {
         <>
           <Post {...post} currentUser={user} />
           <div className="mt-4 flex flex-col gap-4">
-            {comments?.map((c) => (
+            {comments?.map(c => (
               <Comment key={c.comment_id} {...c} currentUser={user} />
             ))}
           </div>
@@ -72,10 +65,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const user = await getUser(request);
 
   if (!user) {
-    throw json(
-      { message: "you must be logged in to do that" },
-      { status: 401 }
-    );
+    throw json({ message: "you must be logged in to do that" }, { status: 401 });
   }
   const formData = await request.formData();
   const body = formData.get("body");

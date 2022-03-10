@@ -35,9 +35,13 @@ export default function Search() {
           <h1>
             search results for <b>{data?.q}</b>
           </h1>
-          {data?.results.length === 0 ? <div>no results found</div> : data?.results.map((p) => {
-            return <Post key={p.post_id} currentUser={user} {...p} />;
-          })}
+          {data?.results.length === 0 ? (
+            <div>no results found</div>
+          ) : (
+            data?.results.map(p => {
+              return <Post key={p.post_id} currentUser={user} {...p} />;
+            })
+          )}
         </>
       )}
     </Layout>

@@ -69,7 +69,7 @@ export default function Login() {
         <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
           <label
             htmlFor="password-input"
-            className="block text-sm font-medium dark:text-gray-300 text-gray-700 sm:mt-px sm:pt-2"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2"
           >
             Password
           </label>
@@ -132,8 +132,7 @@ export const action: ActionFunction = async ({ request }) => {
     username: validateUsername(username),
     password: validatePassword(password),
   };
-  if (Object.values(fieldErrors).some(Boolean))
-    return badRequest({ fieldErrors, fields });
+  if (Object.values(fieldErrors).some(Boolean)) return badRequest({ fieldErrors, fields });
 
   const user = await login({ username, password });
   if (!user) {

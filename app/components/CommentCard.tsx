@@ -34,11 +34,7 @@ export function Comment({
   const fetcher = useFetcher();
   return (
     <div className="flex flex-row">
-      <fetcher.Form
-        method="post"
-        action="/vote"
-        className="mr-2 flex flex-col text-center"
-      >
+      <fetcher.Form method="post" action="/vote" className="mr-2 flex flex-col text-center">
         <input type="hidden" name="id" value={comment_id} />
         <input type="hidden" name="type" value="comment" />
 
@@ -66,9 +62,7 @@ export function Comment({
         <span className="text-sm">
           {ago(new Date(created_at))}
           {updated_at !== created_at && (
-            <span className="text-sm text-gray-500">
-              (updated {ago(new Date(updated_at))})
-            </span>
+            <span className="text-sm text-gray-500">(updated {ago(new Date(updated_at))})</span>
           )}
           <span className="text-gray-500"> by </span>
           <Link to={`/user/${username}`}>{username}</Link>
@@ -76,11 +70,7 @@ export function Comment({
         <div className="prose dark:prose-invert">{formatter(body)}</div>
         {currentUser && currentUser.username === username && (
           <div className="text-sm">
-            <fetcher.Form
-              method="post"
-              action="/delete-comment"
-              className="inline"
-            >
+            <fetcher.Form method="post" action="/delete-comment" className="inline">
               <input type="hidden" name="id" value={comment_id} />
               <Button
                 type="submit"

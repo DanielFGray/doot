@@ -58,19 +58,13 @@ export function Post({
           )}
         </fetcher.Form>
         <div className="ml-2 flex flex-col justify-center">
-          <Link
-            to={`/p/${post_id}`}
-            className="text-bold text-xl text-gray-800 dark:text-gray-50"
-          >
+          <Link to={`/p/${post_id}`} className="text-bold text-xl text-gray-800 dark:text-gray-50">
             {title}
           </Link>
           <div className="flex flex-row flex-wrap gap-1 text-sm text-gray-600 dark:text-gray-400">
             <span>
               {"by "}
-              <Link
-                to={`/user/${username}`}
-                className="text-gray-900 dark:text-gray-50"
-              >
+              <Link to={`/user/${username}`} className="text-gray-900 dark:text-gray-50">
                 {username}
               </Link>
             </span>
@@ -81,10 +75,7 @@ export function Post({
             </span>
             <span>
               {" has "}
-              <Link
-                to={`/p/${post_id}`}
-                className="text-gray-900 dark:text-gray-50"
-              >
+              <Link to={`/p/${post_id}`} className="text-gray-900 dark:text-gray-50">
                 {comment_count === 0 ? "no" : comment_count}{" "}
                 {comment_count === 1 ? "comment" : "comments"}
               </Link>
@@ -115,7 +106,7 @@ export function Post({
 function TagList({ tags }: { tags: string[] }) {
   return (
     <div className="inline-flex flex-row flex-wrap gap-0.5">
-      {tags.map((tag) => (
+      {tags.map(tag => (
         <Link
           key={tag}
           to={`/t/${tag}`}

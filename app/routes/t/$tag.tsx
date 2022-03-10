@@ -15,7 +15,7 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUser(request);
-  const tags = params.tag!.split('+')
+  const tags = params.tag!.split("+");
   try {
     const posts = await db.any<BoardListing>(sql`
        select *
@@ -36,7 +36,7 @@ export default function Index() {
     <Layout user={user}>
       {posts?.length ? (
         <>
-          {posts.map((p) => (
+          {posts.map(p => (
             <Post key={p.post_id} currentUser={user} {...p} />
           ))}
         </>

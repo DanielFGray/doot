@@ -34,7 +34,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                     <h1 className="text-3xl font-bold text-brand-600">doot</h1>
                   </div>
                   <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-                    {navigation.map((item) => (
+                    {navigation.map(item => (
                       <NavLink
                         key={item.name}
                         to={item.href}
@@ -43,7 +43,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                             isActive
                               ? "border-brand-500 text-gray-900 dark:text-gray-300"
                               : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 hover:dark:text-gray-200",
-                            "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium"
+                            "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium",
                           )
                         }
                       >
@@ -59,10 +59,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                     </label>
                     <div className="relative">
                       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                        <SearchIcon
-                          className="h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
+                        <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                       </div>
                       <input
                         id="search"
@@ -111,23 +108,21 @@ export function Header({ user }: { user: { username: string } | null }) {
                           leaveTo="transform opacity-0 scale-95"
                         >
                           <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-800">
-                            {userNavigation.map(
-                              ({ name, as: As, ...props }) => (
-                                <Menu.Item key={name}>
-                                  {({ active }) => (
-                                    <As
-                                      {...props}
-                                      className={classNames(
-                                        active ? "bg-gray-100" : "",
-                                        "block w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-gray-50"
-                                      )}
-                                    >
-                                      {name}
-                                    </As>
-                                  )}
-                                </Menu.Item>
-                              )
-                            )}
+                            {userNavigation.map(({ name, as: As, ...props }) => (
+                              <Menu.Item key={name}>
+                                {({ active }) => (
+                                  <As
+                                    {...props}
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-gray-50",
+                                    )}
+                                  >
+                                    {name}
+                                  </As>
+                                )}
+                              </Menu.Item>
+                            ))}
                           </Menu.Items>
                         </Transition>
                       </Menu>
@@ -190,10 +185,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                   <>
                     <div className="flex items-center px-4">
                       <div className="flex-shrink-0">
-                        <UserIcon
-                          className="h-10 w-10 text-gray-500"
-                          aria-hidden="true"
-                        />
+                        <UserIcon className="h-10 w-10 text-gray-500" aria-hidden="true" />
                       </div>
                       <div className="ml-3">
                         <div className="text-base font-medium text-gray-800 dark:text-gray-200">
@@ -243,10 +235,7 @@ export function Header({ user }: { user: { username: string } | null }) {
           </>
         )}
       </Disclosure>
-      <CreatePostSlider
-        open={createBoardModalVisible}
-        setOpen={setCreatePostModalVisible}
-      />
+      <CreatePostSlider open={createBoardModalVisible} setOpen={setCreatePostModalVisible} />
     </div>
   );
 }

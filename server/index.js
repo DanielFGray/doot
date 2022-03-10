@@ -26,7 +26,7 @@ app.all(
         purgeRequireCache();
         const build = require("./build");
         return createRequestHandler({ build, mode: MODE })(req, res, next);
-      }
+      },
 );
 
 app.listen(port, () => {

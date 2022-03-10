@@ -8,5 +8,5 @@ export const action: ActionFunction = async ({ request }) => {
     delete from posts
     where post_id = ${id}
   `);
-  return redirect('/');
+  return redirect("/");
 };
