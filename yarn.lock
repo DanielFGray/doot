@@ -46,6 +46,11 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
+"@danielfgray/tw-heropatterns@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@danielfgray/tw-heropatterns/-/tw-heropatterns-0.1.4.tgz#b667e5112049d702f67036b35a924477ae4f8ebb"
+  integrity sha512-5SFmmHR5wDBopohJWSjFcx5v9tnoPza2qpAkwgk3ibPgqaFcfzIEizX73/qJa0ee2BWJyDCl70RGh+uX7bLdHw==
+
 "@esbuild-plugins/node-modules-polyfill@^0.1.4":
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/@esbuild-plugins/node-modules-polyfill/-/node-modules-polyfill-0.1.4.tgz#eb2f55da11967b2986c913f1a7957d1c868849c0"
