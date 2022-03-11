@@ -1,9 +1,9 @@
-import { useLoaderData, LoaderFunction, json } from "remix";
-import { Post } from "~/components/PostCard";
-import { db, sql } from "~/utils/db.server";
-import { getUser } from "~/utils/session.server";
-import type { BoardListing } from "~/types";
-import { Layout } from "~/components/Layout";
+import { useLoaderData, LoaderFunction, json } from 'remix'
+import { Post } from '~/components/PostCard'
+import { db, sql } from '~/utils/db.server'
+import { getUser } from '~/utils/session.server'
+import type { BoardListing } from '~/types'
+import { Layout } from '~/components/Layout'
 
 type LoaderData = {
   posts: readonly BoardListing[];
@@ -14,8 +14,8 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const user = await getUser(request);
-  const tags = params.tag!.split("+");
+  const user = await getUser(request)
+  const tags = params.tag!.split('+')
   try {
     const posts = await db.any<BoardListing>(sql`
        select *
@@ -23,15 +23,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
          tag_listing(${sql.array(tags, sql`citext[]`)}, ${user?.user_id ?? null})
        order by
          popularity desc
-    `);
-    return json<LoaderData>({ user, posts });
+    `)
+    return json<LoaderData>({ user, posts })
   } catch (e) {
-    return json<LoaderData>({ user: null, posts: [] });
+    return json<LoaderData>({ user: null, posts: [] })
   }
-};
+}
 
 export default function Index() {
-  const { user, posts } = useLoaderData<LoaderData>();
+  const { user, posts } = useLoaderData<LoaderData>()
   return (
     <Layout user={user}>
       {posts?.length ? (
@@ -41,8 +41,8 @@ export default function Index() {
           ))}
         </>
       ) : (
-        "no tags found"
+        'no tags found'
       )}
     </Layout>
-  );
+  )
 }

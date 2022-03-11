@@ -1,9 +1,9 @@
-import { createTypeParserPreset, createPool } from "slonik";
+import { createTypeParserPreset, createPool } from 'slonik'
 // import { createInterceptors } from 'slonik-interceptor-preset';
-export { sql } from "slonik";
+export { sql } from 'slonik'
 
 export const db = createPool(process.env.DATABASE_URL, {
-  type: "postgres",
+  type: 'postgres',
   min: 2,
   max: 10,
   log: true,
@@ -12,7 +12,7 @@ export const db = createPool(process.env.DATABASE_URL, {
   ],
   typeParsers: [
     ...createTypeParserPreset({ transformFieldNames: false }),
-    { name: "timestamptz", parse: value => new Date(value) },
-    { name: "citext", parse: value => String(value) },
+    { name: 'timestamptz', parse: value => new Date(value) },
+    { name: 'citext', parse: value => String(value) },
   ],
-});
+})

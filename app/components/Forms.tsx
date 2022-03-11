@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Tab } from "@headlessui/react";
-import { ExclamationCircleIcon, AtSymbolIcon, CodeIcon, LinkIcon } from "@heroicons/react/solid";
-import { classNames } from "~/utils/classNames";
-import { formatter } from "~/utils/postFormatter";
+import React, { useState } from 'react'
+import { Tab } from '@headlessui/react'
+import { ExclamationCircleIcon, AtSymbolIcon, CodeIcon, LinkIcon } from '@heroicons/react/solid'
+import { classNames } from '~/utils/classNames'
+import { formatter } from '~/utils/postFormatter'
 
 export const Button = ({
   children,
@@ -12,32 +12,32 @@ export const Button = ({
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
   primary?: boolean;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 }) => {
   return (
     <button
       {...props}
       className={classNames(
-        "dark:bg-gray-800 dark:text-gray-200",
+        'dark:bg-gray-800 dark:text-gray-200',
         primary
-          ? "bg-brand-600 text-white hover:bg-brand-700"
-          : "text-primary bg-transparent bg-opacity-20 hover:bg-white",
-        size === "sm" ? "px-2 py-1 text-sm" : size === "lg" ? "px-6 py-3 text-lg" : "px-4 py-2",
-        "inline-flex items-center rounded-md border border-transparent text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2",
+          ? 'bg-brand-600 text-white hover:bg-brand-700'
+          : 'text-primary bg-transparent bg-opacity-20 hover:bg-white',
+        size === 'sm' ? 'px-2 py-1 text-sm' : size === 'lg' ? 'px-6 py-3 text-lg' : 'px-4 py-2',
+        'inline-flex items-center rounded-md border border-transparent text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2',
         className,
       )}
     >
       {children}
     </button>
-  );
-};
+  )
+}
 
 export const Input = ({
   name,
   hasError,
   className,
   ...props
-}: Omit<React.InputHTMLAttributes<HTMLInputElement>, "name"> & {
+}: Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name'> & {
   name: string;
   hasError?: undefined | boolean;
 }) => {
@@ -48,9 +48,9 @@ export const Input = ({
         {...props}
         className={classNames(
           hasError
-            ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
-            : "focus:border-brand-500 focus:ring-brand-500",
-          "block w-full rounded-md border-gray-300 bg-white pr-10 focus:outline-none dark:border-gray-700 dark:bg-gray-800 sm:text-sm",
+            ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500'
+            : 'focus:border-brand-500 focus:ring-brand-500',
+          'block w-full rounded-md border-gray-300 bg-white pr-10 focus:outline-none dark:border-gray-700 dark:bg-gray-800 sm:text-sm',
           className,
         )}
         aria-invalid={hasError}
@@ -62,32 +62,32 @@ export const Input = ({
         </div>
       )}
     </>
-  );
-};
+  )
+}
 export function PostInput({
-  placeholder = "",
-  defaultValue = "",
+  placeholder = '',
+  defaultValue = '',
   name,
 }: {
   placeholder?: string;
   defaultValue?: string;
   name: string;
 }) {
-  const [textinput, changeTextinput] = useState(defaultValue);
+  const [textinput, changeTextinput] = useState(defaultValue)
   return (
     <Tab.Group>
       {({ selectedIndex }) => (
         <>
           <Tab.List className="flex items-center gap-2">
-            {[{ label: "Write" }, { label: "Preview" }].map(({ label }) => (
+            {[{ label: 'Write' }, { label: 'Preview' }].map(({ label }) => (
               <Tab
                 key={label}
                 className={({ selected }) =>
                   classNames(
                     selected
-                      ? "bg-gray-100 text-gray-900 hover:bg-gray-200 dark:text-gray-200"
-                      : "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-900",
-                    "rounded-md border border-transparent px-3 py-1.5 text-sm font-medium dark:bg-gray-800",
+                      ? 'bg-gray-100 text-gray-900 hover:bg-gray-200 dark:text-gray-200'
+                      : 'bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-900',
+                    'rounded-md border border-transparent px-3 py-1.5 text-sm font-medium dark:bg-gray-800',
                   )
                 }
               >
@@ -155,5 +155,5 @@ export function PostInput({
         </>
       )}
     </Tab.Group>
-  );
+  )
 }

@@ -1,18 +1,18 @@
-import type { ActionFunction } from "remix";
-import { Form, useActionData, json, useSearchParams } from "remix";
-import { Layout } from "~/components/Layout";
-import { Input, Button } from "~/components/Forms";
-import { createUserSession, login } from "~/utils/session.server";
+import type { ActionFunction } from 'remix'
+import { Form, useActionData, json, useSearchParams } from 'remix'
+import { Layout } from '~/components/Layout'
+import { Input, Button } from '~/components/Forms'
+import { createUserSession, login } from '~/utils/session.server'
 
 function validateUsername(username: unknown) {
-  if (typeof username !== "string" || username.length < 3) {
-    return "Usernames must be at least 3 characters long";
+  if (typeof username !== 'string' || username.length < 3) {
+    return 'Usernames must be at least 3 characters long'
   }
 }
 
 function validatePassword(password: unknown) {
-  if (typeof password !== "string" || password.length < 6) {
-    return "Passwords must be at least 6 characters long";
+  if (typeof password !== 'string' || password.length < 6) {
+    return 'Passwords must be at least 6 characters long'
   }
 }
 
@@ -28,17 +28,17 @@ type ActionData = {
   };
 };
 
-const badRequest = (data: ActionData) => json(data, { status: 400 });
+const badRequest = (data: ActionData) => json(data, { status: 400 })
 
 export default function Login() {
-  const actionData = useActionData<ActionData>();
-  const [searchParams] = useSearchParams();
+  const actionData = useActionData<ActionData>()
+  const [searchParams] = useSearchParams()
   return (
     <Layout user={null}>
       <Form
         method="post"
         className="space-y-8 divide-y divide-gray-200 px-8 dark:divide-gray-800"
-        aria-describedby={actionData?.formError ? "form-error-message" : undefined}
+        aria-describedby={actionData?.formError ? 'form-error-message' : undefined}
       >
         <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50">Log in</h3>
         <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
@@ -97,49 +97,49 @@ export default function Login() {
                 {actionData?.formError}
               </p>
             ) : null}
-          </div>{" "}
+          </div>{' '}
           <div className="flex justify-end">
             <Button type="submit">Submit</Button>
             <input
               type="hidden"
               name="redirectTo"
-              value={searchParams.get("redirectTo") ?? undefined}
+              value={searchParams.get('redirectTo') ?? undefined}
             />
           </div>
         </div>
       </Form>
     </Layout>
-  );
+  )
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  const form = await request.formData();
-  const username = form.get("username");
-  const password = form.get("password");
-  const redirectTo = form.get("redirectTo") || "/";
+  const form = await request.formData()
+  const username = form.get('username')
+  const password = form.get('password')
+  const redirectTo = form.get('redirectTo') || '/'
   if (
-    typeof username !== "string" ||
-    typeof password !== "string" ||
-    typeof redirectTo !== "string"
+    typeof username !== 'string' ||
+    typeof password !== 'string' ||
+    typeof redirectTo !== 'string'
   ) {
     return badRequest({
-      formError: "Form not submitted correctly.",
-    });
+      formError: 'Form not submitted correctly.',
+    })
   }
 
-  const fields = { username, password };
+  const fields = { username, password }
   const fieldErrors = {
     username: validateUsername(username),
     password: validatePassword(password),
-  };
-  if (Object.values(fieldErrors).some(Boolean)) return badRequest({ fieldErrors, fields });
+  }
+  if (Object.values(fieldErrors).some(Boolean)) return badRequest({ fieldErrors, fields })
 
-  const user = await login({ username, password });
+  const user = await login({ username, password })
   if (!user) {
     return badRequest({
       fields,
-      formError: "Username/Password combination is incorrect",
-    });
+      formError: 'Username/Password combination is incorrect',
+    })
   }
-  return createUserSession(user.id, redirectTo);
-};
+  return createUserSession(user.id, redirectTo)
+}

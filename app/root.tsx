@@ -7,17 +7,17 @@ import {
   ScrollRestoration,
   LinksFunction,
   ErrorBoundaryComponent,
-} from "remix";
-import type { MetaFunction } from "remix";
-import tailwindUrl from "./styles/tailwind.css";
+} from 'remix'
+import type { MetaFunction } from 'remix'
+import tailwindUrl from './styles/tailwind.css'
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: tailwindUrl }];
-};
+  return [{ rel: 'stylesheet', href: tailwindUrl }]
+}
 
 export const meta: MetaFunction = () => {
-  return { title: "doot" };
-};
+  return { title: 'doot' }
+}
 
 export default function App() {
   return (
@@ -32,14 +32,14 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === "development" && <LiveReload />}
+        {process.env.NODE_ENV === 'development' && <LiveReload />}
       </body>
     </html>
-  );
+  )
 }
 
 export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
-  console.error(error);
+  console.error(error)
   return (
     <html>
       <head>
@@ -53,5 +53,5 @@ export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
         {error?.message || error.toString()}
       </body>
     </html>
-  );
-};
+  )
+}

@@ -1,8 +1,8 @@
-import { useLoaderData, LoaderFunction, json, useParams } from "remix";
-import { db, sql } from "~/utils/db.server";
-import { getUser } from "~/utils/session.server";
-import { Layout } from "~/components/Layout";
-import { Post } from "~/components/PostCard";
+import { useLoaderData, LoaderFunction, json, useParams } from 'remix'
+import { db, sql } from '~/utils/db.server'
+import { getUser } from '~/utils/session.server'
+import { Layout } from '~/components/Layout'
+import { Post } from '~/components/PostCard'
 
 type UserPost = {
   post_id: string;
@@ -13,7 +13,7 @@ type UserPost = {
   comment_count: number;
   created_at: string;
   updated_at: string;
-  current_user_voted: null | "up" | "down";
+  current_user_voted: null | 'up' | 'down';
 };
 
 type LoaderData = {
@@ -25,7 +25,7 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const user = await getUser(request);
+  const user = await getUser(request)
   try {
     const posts = await db.any<UserPost>(
       sql`
@@ -35,17 +35,17 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         order by
           created_at desc
       `,
-    );
-    return json<LoaderData>({ user, posts });
+    )
+    return json<LoaderData>({ user, posts })
   } catch (e) {
-    console.error(e);
-    return json<LoaderData>({ user });
+    console.error(e)
+    return json<LoaderData>({ user })
   }
-};
+}
 
 export default function Index() {
-  const { user, posts } = useLoaderData<LoaderData>();
-  const { username } = useParams();
+  const { user, posts } = useLoaderData<LoaderData>()
+  const { username } = useParams()
   return (
     <Layout user={user}>
       <div className="mx-16">
@@ -61,5 +61,5 @@ export default function Index() {
         )}
       </div>
     </Layout>
-  );
+  )
 }

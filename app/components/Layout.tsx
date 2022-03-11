@@ -1,6 +1,6 @@
-import React from "react";
-import { Form, Link, NavLink } from "remix";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
+import React from 'react'
+import { Form, Link, NavLink } from 'remix'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
 import {
   PlusIcon,
   BellIcon,
@@ -8,20 +8,19 @@ import {
   XIcon,
   UserIcon,
   SearchIcon,
-} from "@heroicons/react/outline";
-import { classNames } from "~/utils/classNames";
-import { CreatePostSlider } from "./CreatePost";
+} from '@heroicons/react/outline'
+import { classNames } from '~/utils/classNames'
+import { CreatePostSlider } from './CreatePost'
 
 export function Header({ user }: { user: { username: string } | null }) {
-  const [createBoardModalVisible, setCreatePostModalVisible] = React.useState(false);
-  const navigation = React.useMemo(() => [{ name: "Home", href: "/" }], []);
+  const [createBoardModalVisible, setCreatePostModalVisible] = React.useState(false)
+  const navigation = React.useMemo(() => [{ name: 'Home', href: '/' }], [])
   const userNavigation = React.useMemo(() => [
-    { name: "Your Profile", as: NavLink, to: "/user" },
+    { name: 'Your Profile', as: NavLink, to: '/user' },
     // { name: "Settings", href: "#" },
-    { name: "Create Post", as: "button", onClick: () => setCreatePostModalVisible(true) },
-    { name: "Sign out", as: NavLink, to: "/logout" },
-  ], []);
-
+    { name: 'Create Post', as: 'button', onClick: () => setCreatePostModalVisible(true) },
+    { name: 'Sign out', as: NavLink, to: '/logout' },
+  ], [],)
   return (
     <div className="mb-4 min-h-full">
       <Disclosure
@@ -44,9 +43,9 @@ export function Header({ user }: { user: { username: string } | null }) {
                         className={({ isActive }) =>
                           classNames(
                             isActive
-                              ? "border-brand-500 text-gray-900 dark:text-gray-300"
-                              : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 hover:dark:text-gray-200",
-                            "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium",
+                              ? 'border-brand-500 text-gray-900 dark:text-gray-300'
+                              : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 hover:dark:text-gray-200',
+                            'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium',
                           )
                         }
                       >
@@ -117,8 +116,8 @@ export function Header({ user }: { user: { username: string } | null }) {
                                   <As
                                     {...props}
                                     className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-gray-50",
+                                      active ? 'bg-gray-100' : '',
+                                      'block w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-gray-50',
                                     )}
                                   >
                                     {name}
@@ -173,9 +172,9 @@ export function Header({ user }: { user: { username: string } | null }) {
                     className={({ isActive }) =>
                       classNames(
                         isActive
-                          ? "border-brand-500 bg-brand-50 text-brand-700"
-                          : "border-transparent bg-opacity-25 text-gray-800 hover:border-gray-300 hover:text-gray-800 dark:hover:border-gray-700 dark:hover:text-gray-300",
-                        "block border-l-4 py-2 pl-3 pr-4 text-base font-medium",
+                          ? 'border-brand-500 bg-brand-50 text-brand-700'
+                          : 'border-transparent bg-opacity-25 text-gray-800 hover:border-gray-300 hover:text-gray-800 dark:hover:border-gray-700 dark:hover:text-gray-300',
+                        'block border-l-4 py-2 pl-3 pr-4 text-base font-medium',
                       )
                     }
                   >
@@ -240,7 +239,7 @@ export function Header({ user }: { user: { username: string } | null }) {
       </Disclosure>
       <CreatePostSlider open={createBoardModalVisible} setOpen={setCreatePostModalVisible} />
     </div>
-  );
+  )
 }
 
 export function Layout({
@@ -255,5 +254,5 @@ export function Layout({
       <Header user={user} />
       <div className="mx-auto max-w-7xl p-8">{children}</div>
     </>
-  );
+  )
 }

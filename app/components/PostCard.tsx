@@ -1,16 +1,16 @@
-import { Link, useFetcher } from "remix";
-import ago from "s-ago";
+import { Link, useFetcher } from 'remix'
+import ago from 's-ago'
 import {
   ThumbDownIcon as ThumbDownOutline,
   ThumbUpIcon as ThumbUpOutline,
-} from "@heroicons/react/outline";
+} from '@heroicons/react/outline'
 import {
   ThumbDownIcon as ThumbDownSolid,
   ThumbUpIcon as ThumbUpSolid,
-} from "@heroicons/react/solid";
-import type { BoardListing } from "~/types";
-import { formatter } from "~/utils/postFormatter";
-import { Button } from "./Forms";
+} from '@heroicons/react/solid'
+import type { BoardListing } from '~/types'
+import { formatter } from '~/utils/postFormatter'
+import { Button } from './Forms'
 
 export function Post({
   post_id,
@@ -26,7 +26,7 @@ export function Post({
 }: BoardListing & {
   currentUser: null | { username: string; user_id: string };
 }) {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher()
   return (
     <div className="-mx-2 mb-4 overflow-clip rounded-lg bg-gray-50 p-2 p-4 shadow dark:bg-gray-800">
       <div className="flex flex-row dark:text-gray-50">
@@ -37,7 +37,7 @@ export function Post({
         >
           <input type="hidden" name="id" value={post_id} />
           <input type="hidden" name="type" value="post" />
-          {current_user_voted === "up" ? (
+          {current_user_voted === 'up' ? (
             <button name="vote" value="null" type="submit">
               <ThumbUpSolid className="h-5 w-5 text-blue-600" />
             </button>
@@ -47,7 +47,7 @@ export function Post({
             </button>
           )}
           {score}
-          {current_user_voted === "down" ? (
+          {current_user_voted === 'down' ? (
             <button name="vote" value="null" type="submit">
               <ThumbDownSolid className="h-5 w-5 text-red-600" />
             </button>
@@ -63,21 +63,21 @@ export function Post({
           </Link>
           <div className="flex flex-row flex-wrap gap-1 text-sm text-gray-600 dark:text-gray-400">
             <span>
-              {"by "}
+              {'by '}
               <Link to={`/user/${username}`} className="text-gray-900 dark:text-gray-50">
                 {username}
               </Link>
             </span>
             <span>{ago(new Date(created_at))}</span>
             <span>
-              {" tagged "}
+              {' tagged '}
               <TagList tags={tags} />
             </span>
             <span>
-              {" has "}
+              {' has '}
               <Link to={`/p/${post_id}`} className="text-gray-900 dark:text-gray-50">
-                {comment_count === 0 ? "no" : comment_count}{" "}
-                {comment_count === 1 ? "comment" : "comments"}
+                {comment_count === 0 ? 'no' : comment_count}{' '}
+                {comment_count === 1 ? 'comment' : 'comments'}
               </Link>
             </span>
           </div>
@@ -100,7 +100,7 @@ export function Post({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 function TagList({ tags }: { tags: string[] }) {
@@ -116,5 +116,5 @@ function TagList({ tags }: { tags: string[] }) {
         </Link>
       ))}
     </div>
-  );
+  )
 }

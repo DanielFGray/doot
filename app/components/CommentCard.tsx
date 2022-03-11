@@ -1,15 +1,15 @@
-import { Link, useFetcher } from "remix";
-import ago from "s-ago";
+import { Link, useFetcher } from 'remix'
+import ago from 's-ago'
 import {
   ThumbDownIcon as ThumbDownOutline,
   ThumbUpIcon as ThumbUpOutline,
-} from "@heroicons/react/outline";
+} from '@heroicons/react/outline'
 import {
   ThumbDownIcon as ThumbDownSolid,
   ThumbUpIcon as ThumbUpSolid,
-} from "@heroicons/react/solid";
-import { formatter } from "~/utils/postFormatter";
-import { Button } from "./Forms";
+} from '@heroicons/react/solid'
+import { formatter } from '~/utils/postFormatter'
+import { Button } from './Forms'
 
 export function Comment({
   comment_id,
@@ -28,17 +28,17 @@ export function Comment({
   score: number;
   created_at: string;
   updated_at: string;
-  current_user_voted: null | "up" | "down";
+  current_user_voted: null | 'up' | 'down';
   currentUser: null | { username: string; user_id: string };
 }) {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher()
   return (
     <div className="flex flex-row">
       <fetcher.Form method="post" action="/vote" className="mr-2 flex flex-col text-center">
         <input type="hidden" name="id" value={comment_id} />
         <input type="hidden" name="type" value="comment" />
 
-        {current_user_voted === "up" ? (
+        {current_user_voted === 'up' ? (
           <button name="vote" value="null" type="submit">
             <ThumbUpSolid className="h-5 w-5 text-blue-700" />
           </button>
@@ -48,7 +48,7 @@ export function Comment({
           </button>
         )}
         {score}
-        {current_user_voted === "down" ? (
+        {current_user_voted === 'down' ? (
           <button name="vote" value="null" type="submit">
             <ThumbDownSolid className="h-5 w-5 text-red-700" />
           </button>
@@ -85,5 +85,5 @@ export function Comment({
         )}
       </div>
     </div>
-  );
+  )
 }

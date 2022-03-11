@@ -1,20 +1,20 @@
-import type { ActionFunction, LoaderFunction } from "remix";
-import { redirect, useLoaderData } from "remix";
-import { Layout } from "~/components/Layout";
-import { getUser, logout } from "~/utils/session.server";
+import type { ActionFunction, LoaderFunction } from 'remix'
+import { redirect, useLoaderData } from 'remix'
+import { Layout } from '~/components/Layout'
+import { getUser, logout } from '~/utils/session.server'
 
 export const action: ActionFunction = async ({ request }) => {
-  return logout(request);
-};
+  return logout(request)
+}
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await getUser(request);
-  if (!user) return redirect("/");
-  return { user };
-};
+  const user = await getUser(request)
+  if (!user) return redirect('/')
+  return { user }
+}
 
 export default function Logout() {
-  const { user } = useLoaderData();
+  const { user } = useLoaderData()
   return (
     <Layout user={user}>
       <div className="mx-auto max-w-md rounded-lg px-4 py-5 text-center shadow-xl dark:bg-gray-800 sm:p-6">
@@ -32,5 +32,5 @@ export default function Logout() {
         </form>
       </div>
     </Layout>
-  );
+  )
 }

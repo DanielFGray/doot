@@ -1,8 +1,8 @@
-import { useFetcher } from "remix";
-import React from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/outline";
-import { Button, Input } from "./Forms";
+import { useFetcher } from 'remix'
+import React from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import { XIcon } from '@heroicons/react/outline'
+import { Button, Input } from './Forms'
 
 export function CreatePostSlider({
   open,
@@ -11,7 +11,7 @@ export function CreatePostSlider({
   open: boolean;
   setOpen: (b: boolean) => void;
 }): JSX.Element {
-  const postFetcher = useFetcher();
+  const postFetcher = useFetcher()
   return (
     <Transition.Root show={open} as={React.Fragment}>
       <Dialog as="div" className="fixed inset-0 overflow-hidden" onClose={setOpen}>
@@ -89,7 +89,7 @@ export function CreatePostSlider({
                                 name="body"
                                 rows={4}
                                 className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 sm:text-sm"
-                                defaultValue={""}
+                                defaultValue={''}
                               />
                             </div>
                           </div>
@@ -119,7 +119,7 @@ export function CreatePostSlider({
                     </div>
                   </div>
                   <div className="flex flex-shrink-0 justify-end gap-2 px-4 py-4">
-                    <Button type="submit" disabled={postFetcher.state === "submitting"}>
+                    <Button type="submit" disabled={postFetcher.state === 'submitting'}>
                       Save
                     </Button>
                     <Button type="button" primary={false} onClick={() => setOpen(false)}>
@@ -133,5 +133,5 @@ export function CreatePostSlider({
         </div>
       </Dialog>
     </Transition.Root>
-  );
+  )
 }
