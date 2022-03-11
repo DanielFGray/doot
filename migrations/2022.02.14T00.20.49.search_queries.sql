@@ -257,3 +257,22 @@ create function users_posts(v_username text, v_current_user uuid default null) r
   order by
     p.created_at desc
 $$ language sql stable;
+
+create type tag_count as (
+  tag tag,
+  count bigint
+);
+
+create function top_tags() returns setof tag_count as $$
+  with tag_list as (
+    select
+      unnest(tags) as tags
+    from posts
+  )
+  select
+    tags,
+    count(1)
+  from tag_list
+  group by tags
+  order by count desc
+$$ language sql stable;
