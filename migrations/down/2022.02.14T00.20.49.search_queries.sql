@@ -1,3 +1,4 @@
+drop function top_tags;
 drop function users_posts;
 drop function get_post_with_comments;
 drop type post_with_comments;
