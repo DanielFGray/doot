@@ -2,7 +2,7 @@ create table users (
   user_id uuid primary key default gen_random_uuid(),
   username citext unique not null check (length(username) between 3 and 64),
   password text not null,
-  email citext unique not null,
+  email citext unique,
   last_login_at timestamptz not null default now(),
   failed_password_attempts int not null default 0,
   first_failed_password_attempt timestamptz,

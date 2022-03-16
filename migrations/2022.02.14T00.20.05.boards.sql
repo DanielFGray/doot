@@ -5,14 +5,12 @@ create table posts (
   title text check (length(title) between 1 and 140),
   body text check (length (body) between 1 and 2000),
   tags tag[] not null check(array_length(tags, 1) between 1 and 5),
-  search tsvector not null
-    generated always as (
-        setweight(to_tsvector('english', coalesce(title, '')), 'A') ||
-        setweight(to_tsvector('english', coalesce(body, '')), 'B')
-      ) stored,
+  search tsvector not null generated always as (
+    setweight(to_tsvector('english', coalesce(title, '')), 'A') ||
+    setweight(to_tsvector('english', coalesce(body, '')), 'B')
+  ) stored,
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  constraint either_title_or_body check (title is not null or body is not null)
+  updated_at timestamptz not null default now()
 );
 
 create index on posts (user_id);
@@ -48,4 +46,3 @@ create table comments_votes (
   created_at timestamptz not null default now(),
   primary key (comment_id, user_id)
 );
-create index on comments_votes (user_id);

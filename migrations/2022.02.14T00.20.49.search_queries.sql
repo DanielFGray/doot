@@ -53,7 +53,7 @@ create type tag_listing as (
   post_id uuid,
   title text,
   username citext,
-  tags citext[],
+  tags tag[],
   score int,
   comment_count int,
   created_at timestamptz,
@@ -79,7 +79,7 @@ create function new_posts(v_current_user uuid default null) returns setof tag_li
       join users u using (user_id)
       left join posts_votes v on (p.post_id = v.post_id and v.user_id = v_current_user),
     lateral score_post(p.post_id) as score,
-    lateral comment_count(p.post_id) as comment_count
+    lateral comment_count(p.post_id)
   order by
     p.created_at
 $$ language sql stable;
@@ -101,7 +101,7 @@ create function top_posts(v_current_user uuid default null) returns setof tag_li
       join users u using (user_id)
       left join posts_votes v on (p.post_id = v.post_id and v.user_id = v_current_user),
     lateral score_post(p.post_id) as score,
-    lateral comment_count(p.post_id) as comment_count
+    lateral comment_count(p.post_id)
   order by
     popularity desc
 $$ language sql stable;
@@ -123,7 +123,7 @@ create function tag_listing(v_tags tag[], v_current_user uuid default null) retu
       join users u using (user_id)
       left join posts_votes v on (p.post_id = v.post_id and v.user_id = v_current_user),
     lateral score_post(p.post_id) as score,
-    lateral comment_count(p.post_id) as comment_count
+    lateral comment_count(p.post_id)
   where
     tags && v_tags
 $$ language sql stable;
@@ -133,7 +133,7 @@ create type search_results as (
   title text,
   body text,
   username citext,
-  tags citext[],
+  tags tag[],
   score int,
   comment_count int,
   created_at timestamptz,
@@ -161,16 +161,16 @@ create function search_posts(query text, v_current_user uuid default null) retur
     posts p
       join users u using (user_id)
       left join posts_votes v on (p.post_id = v.post_id and v.user_id = v_current_user),
-    to_tsquery(query) q,
+    websearch_to_tsquery(query) q,
     lateral score_post(p.post_id) as points,
-    lateral comment_count(p.post_id) as comment_count
+    lateral comment_count(p.post_id)
   where
     search @@ q
 $$ language sql;
 
 create type post_with_comments as (
   post_id uuid,
-  tags citext[],
+  tags tag[],
   title text,
   body text,
   username citext,
@@ -200,7 +200,7 @@ create function get_post_with_comments(v_post_id uuid, v_current_user uuid defau
       join users u using (user_id)
       left join posts_votes pv on (pv.post_id = p.post_id and pv.user_id = v_current_user),
     lateral score_post(p.post_id) as score,
-    lateral comment_count(p.post_id) as comment_count,
+    lateral comment_count(p.post_id),
     lateral (
       select
         coalesce(jsonb_agg(comments), '[]') as comments
@@ -266,13 +266,13 @@ create type tag_count as (
 create function top_tags() returns setof tag_count as $$
   with tag_list as (
     select
-      unnest(tags) as tags
+      unnest(tags) as tag
     from posts
   )
   select
-    tags,
+    tag,
     count(1)
   from tag_list
-  group by tags
+  group by tag
   order by count desc
 $$ language sql stable;
