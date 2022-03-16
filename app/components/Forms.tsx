@@ -11,8 +11,8 @@ export const Button = ({
   size,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  primary?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  primary?: boolean
+  size?: 'sm' | 'md' | 'lg'
 }) => {
   return (
     <button
@@ -38,8 +38,8 @@ export const Input = ({
   className,
   ...props
 }: Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name'> & {
-  name: string;
-  hasError?: undefined | boolean;
+  name: string
+  hasError?: undefined | boolean
 }) => {
   return (
     <>
@@ -69,9 +69,9 @@ export function PostInput({
   defaultValue = '',
   name,
 }: {
-  placeholder?: string;
-  defaultValue?: string;
-  name: string;
+  placeholder?: string
+  defaultValue?: string
+  name: string
 }) {
   const [textinput, changeTextinput] = useState(defaultValue)
   return (

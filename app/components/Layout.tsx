@@ -1,14 +1,7 @@
 import React from 'react'
 import { Form, Link, NavLink } from 'remix'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import {
-  PlusIcon,
-  BellIcon,
-  MenuIcon,
-  XIcon,
-  UserIcon,
-  SearchIcon,
-} from '@heroicons/react/outline'
+import { PlusIcon, BellIcon, MenuIcon, XIcon, UserIcon, SearchIcon } from '@heroicons/react/outline'
 import { classNames } from '~/utils/classNames'
 import { CreatePostSlider } from './CreatePost'
 
@@ -246,8 +239,8 @@ export function Layout({
   children,
   user,
 }: {
-  user: { username: string } | null;
-  children: React.ReactNode;
+  user: { username: string } | null
+  children: React.ReactNode
 }): React.ReactElement {
   return (
     <>
