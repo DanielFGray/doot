@@ -90,7 +90,7 @@ export function Post({
                   type="submit"
                   size="sm"
                   primary={false}
-                  className="bg-red-100 text-red-700 hover:bg-red-200 hover:bg-opacity-100"
+                  className="bg-red-100 text-red-700 hover:bg-opacity-100 bg-opacity-100 hover:bg-red-300"
                 >
                   Delete
                 </Button>

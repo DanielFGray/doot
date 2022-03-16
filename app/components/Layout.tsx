@@ -66,7 +66,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                       <input
                         id="search"
                         name="q"
-                        className="block w-full rounded-md border border-brand-300 bg-white bg-opacity-80 py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-brand-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50 sm:text-sm"
+                        className="block w-full rounded-md border border-brand-300 bg-white bg-opacity-75 py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-brand-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50 sm:text-sm"
                         placeholder="Search"
                         type="search"
                       />
@@ -162,7 +162,7 @@ export function Header({ user }: { user: { username: string } | null }) {
               </div>
             </div>
 
-            <Disclosure.Panel className="bg-white bg-opacity-75 dark:bg-opacity-10 sm:hidden">
+            <Disclosure.Panel className="bg-white bg-opacity-75 dark:bg-gray-800 dark:bg-opacity-50 sm:hidden">
               <div className="space-y-1 pt-2 pb-3">
                 {navigation.map(item => (
                   <Disclosure.Button
@@ -173,7 +173,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                       classNames(
                         isActive
                           ? 'border-brand-500 bg-brand-50 text-brand-700'
-                          : 'border-transparent bg-opacity-25 text-gray-800 hover:border-gray-300 hover:text-gray-800 dark:hover:border-gray-700 dark:hover:text-gray-300',
+                          : 'border-transparent bg-opacity-25 text-gray-800 hover:border-gray-300 hover:text-gray-800 dark:text-gray-300 dark:hover:border-gray-700 dark:hover:text-gray-300',
                         'block border-l-4 py-2 pl-3 pr-4 text-base font-medium',
                       )
                     }

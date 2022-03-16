@@ -21,7 +21,7 @@ export const Button = ({
         'dark:bg-gray-800 dark:text-gray-200',
         primary
           ? 'bg-brand-600 text-white hover:bg-brand-700'
-          : 'text-primary bg-transparent bg-opacity-20 hover:bg-white',
+          : 'text-primary bg-transparent hover:bg-white',
         size === 'sm' ? 'px-2 py-1 text-sm' : size === 'lg' ? 'px-6 py-3 text-lg' : 'px-4 py-2',
         'inline-flex items-center rounded-md border border-transparent text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2',
         className,
@@ -137,7 +137,7 @@ export function PostInput({
                 <textarea
                   rows={5}
                   name={name}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 sm:text-sm"
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 sm:text-sm"
                   value={textinput}
                   onChange={e => changeTextinput(e.target.value)}
                   placeholder={placeholder}
