@@ -7,7 +7,7 @@ import { formatter } from '~/utils/postFormatter'
 export const Button = ({
   children,
   className,
-  primary = true,
+  primary = false,
   size,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {

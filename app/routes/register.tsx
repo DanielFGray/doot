@@ -118,8 +118,7 @@ export default function Register() {
 
         <div className="pt-5">
           <div className="flex justify-end">
-            <Button type="submit">Submit</Button>
-
+            <Button type="submit" primary>Submit</Button>
             <input
               type="hidden"
               name="redirectTo"

@@ -119,10 +119,10 @@ export function CreatePostSlider({
                     </div>
                   </div>
                   <div className="flex flex-shrink-0 justify-end gap-2 px-4 py-4">
-                    <Button type="submit" disabled={postFetcher.state === 'submitting'}>
+                    <Button type="submit" primary disabled={postFetcher.state === 'submitting'}>
                       Save
                     </Button>
-                    <Button type="button" primary={false} onClick={() => setOpen(false)}>
+                    <Button type="button" onClick={() => setOpen(false)}>
                       Cancel
                     </Button>
                   </div>

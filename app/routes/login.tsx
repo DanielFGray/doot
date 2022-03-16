@@ -99,7 +99,7 @@ export default function Login() {
             ) : null}
           </div>{' '}
           <div className="flex justify-end">
-            <Button type="submit">Submit</Button>
+            <Button type="submit" primary>Submit</Button>
             <input
               type="hidden"
               name="redirectTo"

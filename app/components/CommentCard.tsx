@@ -75,7 +75,6 @@ export function Comment({
               <Button
                 type="submit"
                 size="sm"
-                primary={false}
                 className="bg-red-100 text-red-700 hover:bg-red-200 hover:bg-opacity-100"
               >
                 Delete
