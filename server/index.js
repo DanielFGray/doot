@@ -1,37 +1,37 @@
-const path = require("path");
-const express = require("express");
-const compression = require("compression");
-const morgan = require("morgan");
-const { createRequestHandler } = require("@remix-run/express");
+const path = require('path')
+const express = require('express')
+const compression = require('compression')
+const morgan = require('morgan')
+const { createRequestHandler } = require('@remix-run/express')
 
-const port = process.env.PORT;
-const MODE = process.env.NODE_ENV;
-const BUILD_DIR = path.join(process.cwd(), "server", "build");
+const port = process.env.PORT
+const MODE = process.env.NODE_ENV
+const BUILD_DIR = path.join(process.cwd(), 'server', 'build')
 
-const app = express();
-app.use(compression());
+const app = express()
+app.use(compression())
 
 // You may want to be more aggressive with this caching
-app.use(express.static("public", { maxAge: "1h" }));
+app.use(express.static('public', { maxAge: '1h' }))
 
 // Remix fingerprints its assets so we can cache forever
-app.use(express.static("public/build", { immutable: true, maxAge: "1y" }));
+app.use(express.static('public/build', { immutable: true, maxAge: '1y' }))
 
-app.use(morgan(MODE === "development" ? "dev" : "combined"));
+app.use(morgan(MODE === 'development' ? 'dev' : 'combined'))
 app.all(
-  "*",
-  MODE === "production"
-    ? createRequestHandler({ build: require("./build") })
+  '*',
+  MODE === 'production'
+    ? createRequestHandler({ build: require('./build') })
     : (req, res, next) => {
-        purgeRequireCache();
-        const build = require("./build");
-        return createRequestHandler({ build, mode: MODE })(req, res, next);
+        purgeRequireCache()
+        const build = require('./build')
+        return createRequestHandler({ build, mode: MODE })(req, res, next)
       },
-);
+)
 
 app.listen(port, () => {
-  console.log(`Express server listening on port ${port}`);
-});
+  console.log(`Express server listening on port ${port}`)
+})
 
 ////////////////////////////////////////////////////////////////////////////////
 function purgeRequireCache() {
@@ -42,7 +42,7 @@ function purgeRequireCache() {
   // for you by default
   for (const key in require.cache) {
     if (key.startsWith(BUILD_DIR)) {
-      delete require.cache[key];
+      delete require.cache[key]
     }
   }
 }

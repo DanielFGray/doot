@@ -21,15 +21,15 @@ export function Comment({
   current_user_voted,
   currentUser,
 }: {
-  comment_id: string;
-  body: string;
-  username: string;
-  user_id: string;
-  score: number;
-  created_at: string;
-  updated_at: string;
-  current_user_voted: null | 'up' | 'down';
-  currentUser: null | { username: string; user_id: string };
+  comment_id: string
+  body: string
+  username: string
+  user_id: string
+  score: number
+  created_at: string
+  updated_at: string
+  current_user_voted: null | 'up' | 'down'
+  currentUser: null | { username: string; user_id: string }
 }) {
   const fetcher = useFetcher()
   return (

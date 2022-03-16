@@ -12,12 +12,12 @@ export async function register({
   email,
   password,
 }: {
-  username: string;
-  email: string;
-  password: string;
+  username: string
+  email: string
+  password: string
 }): Promise<{
-  user_id: string;
-  username: string;
+  user_id: string
+  username: string
 }> {
   const passwordHash = await argon.hash(password)
   try {
@@ -37,9 +37,9 @@ export async function register({
 
 export async function login({ username, password }: { username: string; password: string }) {
   const user = await db.maybeOne<{
-    user_id: string;
-    password: string;
-    username: string;
+    user_id: string
+    password: string
+    username: string
   }>(
     username.includes('@')
       ? sql`select user_id, username, password from users where email = ${username}`

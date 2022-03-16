@@ -17,16 +17,16 @@ function validatePassword(password: unknown) {
 }
 
 type ActionData = {
-  formError?: string;
+  formError?: string
   fieldErrors?: {
-    username: string | undefined;
-    password: string | undefined;
-  };
+    username: string | undefined
+    password: string | undefined
+  }
   fields?: {
-    username: string;
-    password: string;
-  };
-};
+    username: string
+    password: string
+  }
+}
 
 const badRequest = (data: ActionData) => json(data, { status: 400 })
 
@@ -99,7 +99,9 @@ export default function Login() {
             ) : null}
           </div>{' '}
           <div className="flex justify-end">
-            <Button type="submit" primary>Submit</Button>
+            <Button type="submit" primary>
+              Submit
+            </Button>
             <input
               type="hidden"
               name="redirectTo"

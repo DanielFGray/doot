@@ -5,19 +5,19 @@ import { db, sql } from '~/utils/db.server'
 import { Post } from '~/components/PostCard'
 
 type Result = {
-  post_id: string;
-  title: string;
-  body: string;
-  username: string;
-  tags: string[];
-  score: number;
-  comment_count: number;
-  created_at: string;
-  updated_at: string;
-  rank: number;
-  popularity: number;
-  current_user_voted: null | 'up' | 'down';
-};
+  post_id: string
+  title: string
+  body: string
+  username: string
+  tags: string[]
+  score: number
+  comment_count: number
+  created_at: string
+  updated_at: string
+  rank: number
+  popularity: number
+  current_user_voted: null | 'up' | 'down'
+}
 export const loader = async ({ request }) => {
   const user = await getUser(request)
   return { user }

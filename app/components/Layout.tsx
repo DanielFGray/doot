@@ -8,12 +8,15 @@ import { CreatePostSlider } from './CreatePost'
 export function Header({ user }: { user: { username: string } | null }) {
   const [createBoardModalVisible, setCreatePostModalVisible] = React.useState(false)
   const navigation = React.useMemo(() => [{ name: 'Home', href: '/' }], [])
-  const userNavigation = React.useMemo(() => [
-    { name: 'Your Profile', as: NavLink, to: '/user' },
-    // { name: "Settings", href: "#" },
-    { name: 'Create Post', as: 'button', onClick: () => setCreatePostModalVisible(true) },
-    { name: 'Sign out', as: NavLink, to: '/logout' },
-  ], [],)
+  const userNavigation = React.useMemo(
+    () => [
+      { name: 'Your Profile', as: NavLink, to: '/user' },
+      // { name: "Settings", href: "#" },
+      { name: 'Create Post', as: 'button', onClick: () => setCreatePostModalVisible(true) },
+      { name: 'Sign out', as: NavLink, to: '/logout' },
+    ],
+    [],
+  )
   return (
     <div className="mb-4 min-h-full">
       <Disclosure

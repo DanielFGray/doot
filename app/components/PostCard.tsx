@@ -24,7 +24,7 @@ export function Post({
   current_user_voted,
   currentUser,
 }: BoardListing & {
-  currentUser: null | { username: string; user_id: string };
+  currentUser: null | { username: string; user_id: string }
 }) {
   const fetcher = useFetcher()
   return (
@@ -89,7 +89,7 @@ export function Post({
                 <Button
                   type="submit"
                   size="sm"
-                  className="bg-red-100 text-red-700 hover:bg-opacity-100 bg-opacity-100 hover:bg-red-300"
+                  className="bg-red-100 bg-opacity-100 text-red-700 hover:bg-red-300 hover:bg-opacity-100"
                 >
                   Delete
                 </Button>

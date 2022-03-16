@@ -8,16 +8,16 @@ import { Layout } from '~/components/Layout'
 import { PostInput, Button } from '~/components/Forms'
 
 type DbRequest = BoardListing & {
-  comments: CommentInfo[];
-};
+  comments: CommentInfo[]
+}
 
 type LoaderData = {
-  post: DbRequest;
+  post: DbRequest
   user: {
-    user_id: string;
-    username: string;
-  } | null;
-};
+    user_id: string
+    username: string
+  } | null
+}
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUser(request)

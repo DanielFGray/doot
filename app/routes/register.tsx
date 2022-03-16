@@ -6,18 +6,18 @@ import { Input, Button } from '~/components/Forms'
 import { createUserSession, register } from '~/utils/session.server'
 
 type ActionData = {
-  formError?: string;
+  formError?: string
   fieldErrors?: {
-    username: string | undefined;
-    password: string | undefined;
-    email: string | undefined;
-  };
+    username: string | undefined
+    password: string | undefined
+    email: string | undefined
+  }
   fields?: {
-    username: string;
-    password: string;
-    email: string;
-  };
-};
+    username: string
+    password: string
+    email: string
+  }
+}
 
 export default function Register() {
   const actionData = useActionData<ActionData>()
@@ -118,7 +118,9 @@ export default function Register() {
 
         <div className="pt-5">
           <div className="flex justify-end">
-            <Button type="submit" primary>Submit</Button>
+            <Button type="submit" primary>
+              Submit
+            </Button>
             <input
               type="hidden"
               name="redirectTo"

@@ -6,12 +6,12 @@ import { Post } from '~/components/PostCard'
 import { Layout } from '~/components/Layout'
 
 type LoaderData = {
-  posts: readonly BoardListing[];
+  posts: readonly BoardListing[]
   user: {
-    user_id: string;
-    username: string;
-  } | null;
-};
+    user_id: string
+    username: string
+  } | null
+}
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request)

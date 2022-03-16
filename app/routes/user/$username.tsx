@@ -5,24 +5,24 @@ import { Layout } from '~/components/Layout'
 import { Post } from '~/components/PostCard'
 
 type UserPost = {
-  post_id: string;
-  title: string;
-  username: string;
-  tags: string[];
-  score: number;
-  comment_count: number;
-  created_at: string;
-  updated_at: string;
-  current_user_voted: null | 'up' | 'down';
-};
+  post_id: string
+  title: string
+  username: string
+  tags: string[]
+  score: number
+  comment_count: number
+  created_at: string
+  updated_at: string
+  current_user_voted: null | 'up' | 'down'
+}
 
 type LoaderData = {
   user: {
-    user_id: string;
-    username: string;
-  } | null;
-  posts?: readonly UserPost[];
-};
+    user_id: string
+    username: string
+  } | null
+  posts?: readonly UserPost[]
+}
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUser(request)

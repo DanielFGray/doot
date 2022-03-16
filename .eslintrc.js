@@ -1,4 +1,4 @@
-const extensions = [".ts", ".tsx", ".js", ".jsx"];
+const extensions = ['.ts', '.tsx', '.js', '.jsx']
 module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: [
@@ -42,9 +42,9 @@ module.exports = {
   },
   ignorePatterns: ['./*/build/*', './node_modules/'],
   rules: {
-    'semi': ['error', 'never'],
-    'quotes': ['error', 'single'],
-    'indent': ['error', 2, { flatTernaryExpressions: true }],
+    semi: ['error', 'never'],
+    quotes: ['error', 'single'],
+    indent: ['error', 2, { flatTernaryExpressions: true }],
     'no-unexpected-multiline': 'error',
     'no-nested-ternary': 'off',
     'no-unused-vars': 'off',
@@ -83,4 +83,4 @@ module.exports = {
     //   },
     // ],
   },
-};
+}

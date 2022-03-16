@@ -8,8 +8,8 @@ export function CreatePostSlider({
   open,
   setOpen,
 }: {
-  open: boolean;
-  setOpen: (b: boolean) => void;
+  open: boolean
+  setOpen: (b: boolean) => void
 }): JSX.Element {
   const postFetcher = useFetcher()
   return (
