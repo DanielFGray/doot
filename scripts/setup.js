@@ -1,7 +1,7 @@
 const pg = require('pg')
 const inquirer = require('inquirer')
 
-const { DATABASE_OWNER, DATABASE_OWNER_PASSWORD, DATABASE_NAME, ROOT_DATABASE_URL } = process.env
+const { DATABASE_OWNER, DATABASE_OWNER_PASSWORD, DATABASE_NAME, ROOT_DATABASE_URL, DATABASE_URL } = process.env
 
 const RECONNECT_BASE_DELAY = 100
 const RECONNECT_MAX_DELAY = 30000
@@ -58,6 +58,12 @@ async function main() {
 
     await client.query(`grant all privileges on database ${DATABASE_NAME} to ${DATABASE_OWNER}`)
     console.log(`GRANT ${DATABASE_OWNER}`)
+
+    const appPool = new pg.Pool({ connectionString: DATABASE_URL })
+    const appClient = await appPool.connect()
+    await appClient.query('create schema migrations')
+    console.log('CREATE SCHEMA migrations')
+    appClient.release()
   } catch (e) {
     console.error(e)
   } finally {
