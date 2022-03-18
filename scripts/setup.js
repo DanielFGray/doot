@@ -9,6 +9,7 @@ const RECONNECT_MAX_DELAY = 30000
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 const pgPool = new pg.Pool({ connectionString: ROOT_DATABASE_URL })
+const appPool = new pg.Pool({ connectionString: DATABASE_URL })
 
 async function main() {
   let attempts = 0
@@ -59,15 +60,16 @@ async function main() {
     await client.query(`grant all privileges on database ${DATABASE_NAME} to ${DATABASE_OWNER}`)
     console.log(`GRANT ${DATABASE_OWNER}`)
 
-    const appPool = new pg.Pool({ connectionString: DATABASE_URL })
     const appClient = await appPool.connect()
     await appClient.query('create schema migrations')
     console.log('CREATE SCHEMA migrations')
     appClient.release()
+    appPool.end()
   } catch (e) {
     console.error(e)
   } finally {
     client.release()
+    pgPool.end()
   }
 }
-main().then(() => pgPool.end())
+main()
