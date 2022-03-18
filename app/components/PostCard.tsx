@@ -105,7 +105,7 @@ export function Post({
 function TagList({ tags }: { tags: string[] }) {
   return (
     <div className="inline-flex flex-row flex-wrap gap-0.5">
-      {tags.map(tag => (
+      {tags?.map(tag => (
         <Link
           key={tag}
           to={`/t/${tag}`}
