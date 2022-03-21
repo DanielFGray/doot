@@ -73,7 +73,10 @@ export function CreatePostSlider({
                               Post title
                             </label>
                             <div className="mt-1">
-                              <Input type="text" name="title" id="post-title"
+                              <Input
+                                type="text"
+                                name="title"
+                                id="post-title"
                                 hasError={Boolean(postFetcher.data?.fieldErrors?.title)}
                               />
                               {postFetcher.data?.fieldErrors?.title && (
