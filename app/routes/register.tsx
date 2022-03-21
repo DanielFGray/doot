@@ -133,20 +133,23 @@ export default function Register() {
   )
 }
 
-function validateUsername(username: unknown) {
-  if (typeof username !== 'string' || username.length < 3) {
+function validateUsername(username: string) {
+  if (username.length < 3) {
     return 'Usernames must be at least 3 characters long'
+  }
+  if (username.length > 64) {
+    return 'Usernames must be less than 64 characters long'
   }
 }
 
-function validatePassword(password: unknown) {
+function validatePassword(password: string) {
   if (typeof password !== 'string' || password.length < 6) {
     return 'Passwords must be at least 6 characters long'
   }
 }
 
-function validateEmail(email: unknown) {
-  if (typeof email !== 'string' || !email.includes('@')) {
+function validateEmail(email: string) {
+  if (email.length > 1 && ! email.includes('@')) {
     return 'Please enter a valid email address'
   }
 }
@@ -155,9 +158,9 @@ const badRequest = (data: ActionData) => json(data, { status: 400 })
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData()
-  const username = form.get('username') as string
-  const password = form.get('password') as string
-  const email = form.get('email') as string
+  const username = form.get('username')
+  const password = form.get('password')
+  const email = form.get('email')
   const redirectTo = (form.get('redirectTo') as string) || '/'
   if (typeof email !== 'string' || typeof username !== 'string' || typeof password !== 'string') {
     return badRequest({
@@ -171,7 +174,8 @@ export const action: ActionFunction = async ({ request }) => {
     password: validatePassword(password),
     email: validateEmail(email),
   }
-  if (Object.values(fieldErrors).some(Boolean)) return badRequest({ fieldErrors, fields })
+  const hasErrors = Object.values(fieldErrors).some(Boolean)
+  if (hasErrors) return badRequest({ fieldErrors, fields })
 
   const user = await register({ email, username, password })
   if (!user) {

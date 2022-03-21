@@ -73,7 +73,14 @@ export function CreatePostSlider({
                               Post title
                             </label>
                             <div className="mt-1">
-                              <Input type="text" name="title" id="post-title" />
+                              <Input type="text" name="title" id="post-title"
+                                hasError={Boolean(postFetcher.data?.fieldErrors?.title)}
+                              />
+                              {postFetcher.data?.fieldErrors?.title && (
+                                <p className="mt-2 text-sm text-red-600" id="title-error">
+                                  {postFetcher.data?.fieldErrors.title}
+                                </p>
+                              )}
                             </div>
                           </div>
                           <div>
@@ -91,6 +98,11 @@ export function CreatePostSlider({
                                 className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 sm:text-sm"
                                 defaultValue={''}
                               />
+                              {postFetcher.data?.fieldErrors?.body && (
+                                <p className="mt-2 text-sm text-red-600" id="body-error">
+                                  {postFetcher.data?.fieldErrors.body}
+                                </p>
+                              )}
                             </div>
                           </div>
                           <div>

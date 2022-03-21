@@ -5,6 +5,36 @@ import { getUser } from '~/utils/session.server'
 const badRequest = (data: { formError: string } | { message: string }) =>
   json(data, { status: 400 })
 
+function validateTitle(title: string) {
+  if (title.length < 1) {
+    return 'Title must not not empty'
+  }
+  if (title.length > 140) {
+    return 'Title must be less than 100 characters long'
+  }
+  return null
+}
+
+function validateBody(body: string) {
+  if (body.length < 1) {
+    return 'Body must not not empty'
+  }
+  if (body.length > 140) {
+    return 'Body must be less than 100 characters long'
+  }
+  return null
+}
+
+function validateTags(tags: string[]) {
+  if (tags.length > 5 || tags.length < 1) {
+    return 'Must have between 1 and 5 tags'
+  }
+  if (tags.some(tag => tag.length > 64)) {
+    return 'Tags must be less than 64 characters long'
+  }
+  return null
+}
+
 export const action: ActionFunction = async ({ request }) => {
   const user = await getUser(request)
 
@@ -18,26 +48,28 @@ export const action: ActionFunction = async ({ request }) => {
   const title = form.get('title')
   const body = form.get('body')
   if (typeof tags !== 'string' || typeof title !== 'string' || typeof body !== 'string') {
-    throw badRequest({
+    return badRequest({
       formError: 'Form not submitted correctly.',
     })
   }
 
-  const tagList = tags.split(/,\s*/)
-  if (tagList.length > 5 || tagList.length < 1) {
-    return json({
-      fieldErrors: { tags: 'post must have between 1 and 5 tags' },
-    })
-  }
+  const tagList = tags.split(/,\s*/).filter(Boolean)
 
-  // const fields = { title, body, user_id, tags };
+  const fields = { title, tags, body }
+  const fieldErrors = {
+    title: validateTitle(title),
+    body: validateBody(body),
+    tags: validateTags(tagList),
+  }
+  const hasError = Object.values(fieldErrors).some(Boolean)
+  if (hasError) return json({ fieldErrors, fields })
 
   try {
     const post = await db.maybeOne<{ post_id: string }>(sql`
       select * from create_post(
         ${title},
         ${body},
-        ${sql.array(tagList, sql`citext[]`)},
+        ${sql.array(tagList, sql`tag[]`)},
         ${user_id}
       ) as post_id
     `)
@@ -45,6 +77,6 @@ export const action: ActionFunction = async ({ request }) => {
     return redirect(`/p/${post.post_id}`)
   } catch (e) {
     console.log(e)
-    throw badRequest({ formError: 'Something went wrong.' })
+    return badRequest({ formError: 'Something went wrong.' })
   }
 }
