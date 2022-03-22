@@ -1,7 +1,7 @@
 import type React from 'react'
 import SimpleMarkdown from 'simple-markdown'
 
-const rules = {
+const rules: SimpleMarkdown.ParserRules = {
   ...SimpleMarkdown.defaultRules,
   paragraph: {
     ...SimpleMarkdown.defaultRules.paragraph,
