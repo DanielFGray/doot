@@ -137,7 +137,7 @@ export function PostInput({
                 <textarea
                   rows={5}
                   name={name}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 sm:text-sm"
+                  className="block w-full max-w-none leading-7 rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                   value={textinput}
                   onChange={e => changeTextinput(e.target.value)}
                   placeholder={placeholder}
@@ -145,10 +145,8 @@ export function PostInput({
               </div>
             </Tab.Panel>
             <Tab.Panel className="-m-0.5 rounded-lg p-0.5">
-              <div className="border-b">
-                <div className="prose mx-px mt-px px-3 pt-2 pb-12 leading-5 dark:prose-invert">
-                  {formatter(textinput)}
-                </div>
+              <div className="prose mx-px mt-px max-w-none px-3 pt-2 pb-12 dark:prose-invert">
+                {formatter(textinput)}
               </div>
             </Tab.Panel>
           </Tab.Panels>

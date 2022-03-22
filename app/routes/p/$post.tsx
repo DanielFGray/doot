@@ -46,7 +46,7 @@ export default function Index() {
             ))}
           </div>
           {user && (
-            <Form method="post" className="mt-4">
+            <Form method="post" className="mt-4 mx-2">
               <PostInput name="body" placeholder="Body" />
               <div className="mt-2 flex justify-end">
                 <Button type="submit">Post</Button>
