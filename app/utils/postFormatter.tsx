@@ -6,7 +6,17 @@ const rules: SimpleMarkdown.ParserRules = {
   link: {
     ...SimpleMarkdown.defaultRules.link,
     react: (node, output, state) => {
-      return <a key={state.key} href={SimpleMarkdown.sanitizeUrl(node.target)} title={node.title} target="_blank" rel="noopener noreferrer">{output(node.content, state)}</a>
+      return (
+        <a
+          key={state.key}
+          href={SimpleMarkdown.sanitizeUrl(node.target)}
+          title={node.title}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {output(node.content, state)}
+        </a>
+      )
     },
   },
   paragraph: {

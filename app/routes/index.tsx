@@ -1,4 +1,4 @@
-import { Link, useLoaderData, LoaderFunction, json } from 'remix'
+import { useLoaderData, LoaderFunction, json } from 'remix'
 import { db, sql } from '~/utils/db.server'
 import { getUser } from '~/utils/session.server'
 import type { BoardListing } from '~/types'

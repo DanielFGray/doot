@@ -1,10 +1,10 @@
 import argon from 'argon2'
-import { createSessionStorage, json, redirect, SessionData } from 'remix'
+import { createSessionStorage, redirect, SessionData } from 'remix'
 import { db, sql } from './db.server'
 
 const sessionSecret = process.env.SECRET
 if (!sessionSecret) {
-  throw new Error('environment variable SECRET must be set')
+  throw new Error('environment variable SECRET must be set\ndid you forget to run the setup script?')
 }
 
 export async function register({
@@ -15,7 +15,7 @@ export async function register({
   username: string
   email: string
   password: string
-}): Promise<{
+}): Promise<null | {
   user_id: string
   username: string
 }> {

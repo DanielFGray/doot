@@ -37,7 +37,9 @@ export default function Index() {
   } = useLoaderData<LoaderData>()
   return (
     <Layout user={user}>
-      {post ? (
+      {!post ? (
+        <div>post not found</div>
+      ) : (
         <>
           <Post {...post} currentUser={user} />
           <div className="mt-4 flex flex-col gap-4">
@@ -54,8 +56,6 @@ export default function Index() {
             </Form>
           )}
         </>
-      ) : (
-        <div>post not found</div>
       )}
     </Layout>
   )
