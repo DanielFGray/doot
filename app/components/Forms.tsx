@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { ExclamationCircleIcon, AtSymbolIcon, CodeIcon, LinkIcon } from '@heroicons/react/solid'
-import { classNames } from '~/utils/classNames'
-import { formatter } from '~/utils/postFormatter'
+import { classNames } from '../utils/classNames'
+import { formatter } from '../utils/postFormatter'
 
 export const Button = ({
   children,
@@ -95,7 +95,7 @@ export function PostInput({
             ))}
 
             {/* These buttons are here simply as examples and don't actually do anything. */}
-            {selectedIndex === 0 ? (
+            {selectedIndex !== 0 ? null : (
               <div className="ml-auto flex items-center space-x-5">
                 <div className="flex items-center">
                   <button
@@ -125,7 +125,7 @@ export function PostInput({
                   </button>
                 </div>
               </div>
-            ) : null}
+            )}
           </Tab.List>
           <Tab.Panels className="mt-2">
             <Tab.Panel className="-m-0.5 rounded-lg p-0.5">
@@ -146,6 +146,7 @@ export function PostInput({
             <Tab.Panel className="-m-0.5 rounded-lg p-0.5">
               <div className="prose mx-px mt-px max-w-none px-3 pt-2 pb-12 dark:prose-invert">
                 {formatter(textinput)}
+                <input type="hidden" name={name} value={textinput} />
               </div>
             </Tab.Panel>
           </Tab.Panels>

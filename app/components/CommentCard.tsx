@@ -32,6 +32,7 @@ export function Comment({
   currentUser: null | { username: string; user_id: string }
 }) {
   const fetcher = useFetcher()
+  const createdDate = new Date(created_at)
   return (
     <div className="flex flex-row">
       <fetcher.Form method="post" action="/vote" className="mr-2 flex flex-col text-center">
@@ -60,7 +61,7 @@ export function Comment({
       </fetcher.Form>
       <div>
         <span className="text-sm">
-          {ago(new Date(created_at))}
+          <a title={createdDate.toLocaleString()} className="cursor-help">{ago(createdDate)}</a>
           {updated_at !== created_at && (
             <span className="text-sm text-gray-500">(updated {ago(new Date(updated_at))})</span>
           )}
@@ -75,7 +76,7 @@ export function Comment({
               <Button
                 type="submit"
                 size="sm"
-                className="bg-red-100 text-red-700 hover:bg-red-200 hover:bg-opacity-100"
+                className="bg-red-100 bg-opacity-100 text-red-700 hover:text-red-700 hover:bg-red-300 hover:bg-opacity-100 dark:hover:text-red-800"
               >
                 Delete
               </Button>

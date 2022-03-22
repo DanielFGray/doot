@@ -29,7 +29,7 @@ export async function register({
     return user
   } catch (err) {
     if (err.originalError?.code === '23505') {
-      throw new Response({ formError: 'username or email already exists' }, { status: 409 })
+      return null
     }
     throw err
   }

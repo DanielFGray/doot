@@ -10,7 +10,7 @@ export function Header({ user }: { user: { username: string } | null }) {
   const navigation = React.useMemo(() => [{ name: 'Home', href: '/' }], [])
   const userNavigation = React.useMemo(
     () => [
-      { name: 'Your Profile', as: NavLink, to: '/user' },
+      { name: 'Your Profile', as: NavLink, to: `/u/${user?.username ?? ''}` },
       // { name: "Settings", href: "#" },
       { name: 'Create Post', as: 'button', onClick: () => setCreatePostModalVisible(true) },
       { name: 'Sign out', as: NavLink, to: '/logout' },
@@ -186,9 +186,9 @@ export function Header({ user }: { user: { username: string } | null }) {
                         <UserIcon className="h-10 w-10 text-gray-500" aria-hidden="true" />
                       </div>
                       <div className="ml-3">
-                        <div className="text-base font-medium text-gray-800 dark:text-gray-200">
+                        <Link to={`/u/${user.username}`} className="text-base font-medium text-gray-800 dark:text-gray-200">
                           {user.username}
-                        </div>
+                        </Link>
                       </div>
                       <button
                         type="button"

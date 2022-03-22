@@ -12,6 +12,7 @@
     "setup:db": "node -r dotenv/config scripts/setup.js",
     "setup:env": "node -r dotenv/config scripts/generateEnvFile.js",
     "migrate": "node -r dotenv/config migrate.js",
+    "db:dump": "docker-compose exec db pg_dump -U doot -d doot -a --inserts --rows-per-insert=100 > db.sql",
     "start": "run-p watch:*",
     "watch:build": "remix watch",
     "watch:server": "node -r dotenv/config server/index.js",

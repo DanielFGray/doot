@@ -1,8 +1,11 @@
-version: "3.8"
+version: '3.8'
 
 services:
   db:
-    image: postgres:alpine
+    # image: postgres:alpine
+    build: postgres/
+    command:
+      postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all
     environment:
       - POSTGRES_USER=${ROOT_DATABASE_USER}
       - POSTGRES_PASSWORD=${ROOT_DATABASE_PASSWORD}

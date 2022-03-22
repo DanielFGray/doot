@@ -1,9 +1,10 @@
-import { Link, useLoaderData, LoaderFunction, Form, ActionFunction, json } from 'remix'
+import { useLoaderData, LoaderFunction, useFetcher, json } from 'remix'
+import { useRef, useEffect } from 'react'
 import { Comment } from '~/components/CommentCard'
 import { Post } from '~/components/PostCard'
 import { db, sql } from '~/utils/db.server'
 import { getUser } from '~/utils/session.server'
-import type { BoardInfo, BoardListing, CommentInfo } from '~/types'
+import type { BoardListing, CommentInfo } from '~/types'
 import { Layout } from '~/components/Layout'
 import { PostInput, Button } from '~/components/Forms'
 
@@ -12,29 +13,45 @@ type DbRequest = BoardListing & {
 }
 
 type LoaderData = {
-  post: DbRequest
+  post: null | DbRequest
   user: {
     user_id: string
     username: string
   } | null
 }
 
+type CommentFetcher = {
+  fieldError?: { body?: string };
+  formError?: string;
+  comment_id?: string
+}
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUser(request)
-  const post = await db.one<DbRequest>(
-    sql`select * from get_post_with_comments(
-      ${params.post!},
-      ${user?.user_id ?? null}
-    )`,
-  )
-  return json<LoaderData>({ user, post })
+  try {
+    const post = await db.one<DbRequest>(
+      sql`select * from get_post_with_comments(
+        ${params.post!},
+        ${user?.user_id ?? null}
+      )`,
+    )
+    return json<LoaderData>({ user, post })
+  } catch (e) {
+    return json<LoaderData>({ user, post: null })
+  }
 }
 
 export default function Index() {
-  const {
-    user,
-    post: { comments, ...post },
-  } = useLoaderData<LoaderData>()
+  const { user, post } = useLoaderData<LoaderData>()
+  const commentFetcher = useFetcher<CommentFetcher>()
+  const formRef = useRef<HTMLFormElement>(null)
+  useEffect(() => {
+    if (commentFetcher.data?.comment_id) {
+      console.log('created comment', commentFetcher.data?.comment_id)
+      formRef.current?.reset()
+    }
+  }, [commentFetcher])
+
   return (
     <Layout user={user}>
       {!post ? (
@@ -43,39 +60,41 @@ export default function Index() {
         <>
           <Post {...post} currentUser={user} />
           <div className="mt-4 flex flex-col gap-4">
-            {comments?.map(c => (
+            {post.comments?.map(c => (
               <Comment key={c.comment_id} {...c} currentUser={user} />
             ))}
           </div>
           {user && (
-            <Form method="post" className="mt-4 mx-2">
-              <PostInput name="body" placeholder="Body" />
-              <div className="mt-2 flex justify-end">
-                <Button type="submit">Post</Button>
+            <commentFetcher.Form
+              ref={formRef}
+              method="post"
+              action="/create-comment"
+              className="mx-2 mt-4"
+            >
+              <PostInput name="body" placeholder="say something nice!" />
+              <div className="mt-2 flex justify-between">
+                <div
+                  className={
+                    commentFetcher.data?.formError || commentFetcher.data?.fieldError
+                      ? 'text-red-500'
+                      : ''
+                  }
+                >
+                  {commentFetcher.data?.formError
+                    ? commentFetcher.data?.formError
+                    : commentFetcher.data?.fieldError?.body
+                      ? commentFetcher.data.fieldError.body
+                      : null}
+                </div>
+                <Button type="submit" primary className="">
+                  Post
+                </Button>
               </div>
-            </Form>
+              <input type="hidden" name="post_id" value={post.post_id} />
+            </commentFetcher.Form>
           )}
         </>
       )}
     </Layout>
   )
-}
-
-export const action: ActionFunction = async ({ request, params }) => {
-  const user = await getUser(request)
-
-  if (!user) {
-    throw json({ message: 'you must be logged in to do that' }, { status: 401 })
-  }
-  const formData = await request.formData()
-  const body = formData.get('body')
-
-  if (typeof body !== 'string') {
-    return json({ message: 'invalid body type' }, { status: 400 })
-  }
-
-  const comment = await db.one<{ comment_id: string }>(sql`
-    select * from create_comment(${params.post!}, ${body}, ${user.user_id})
-  `)
-  return json(comment)
 }

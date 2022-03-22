@@ -36,7 +36,7 @@ $$ language sql stable;
 
 create function post_popularity(comments bigint, score int, created_at timestamptz) returns float as $$
   select
-    (1.2 * comments + score - 1) /
+    (1.2 * comments + score) /
     pow((extract(days from created_at) * 24 + extract(hours from created_at) + 2), 1.8) as weight
 $$ language sql;
 
