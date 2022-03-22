@@ -81,7 +81,7 @@ export function Post({
               </Link>
             </span>
           </div>
-          {body && <div className="prose prose-lg dark:prose-invert">{formatter(body)}</div>}
+          {body && <div className="prose prose-lg max-w-none dark:prose-invert">{formatter(body)}</div>}
           {body && currentUser && currentUser.username === username && (
             <div className="pt-1">
               <fetcher.Form method="post" action="/delete-post" className="inline">

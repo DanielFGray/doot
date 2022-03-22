@@ -67,7 +67,7 @@ export function Comment({
           <span className="text-gray-500"> by </span>
           <Link to={`/user/${username}`}>{username}</Link>
         </span>
-        <div className="prose dark:prose-invert">{formatter(body)}</div>
+        <div className="prose max-w-none dark:prose-invert">{formatter(body)}</div>
         {currentUser && currentUser.username === username && (
           <div className="text-sm">
             <fetcher.Form method="post" action="/delete-comment" className="inline">
