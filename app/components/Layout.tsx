@@ -39,7 +39,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                         className={({ isActive }) =>
                           classNames(
                             isActive
-                              ? 'border-brand-500 text-gray-900 dark:text-gray-300'
+                              ? 'border-brand-500 text-gray-900 dark:text-gray-300 bg-white bg-opacity-50 dark:bg-opacity-50 dark:bg-gray-800'
                               : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 hover:dark:text-gray-200',
                             'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium',
                           )
@@ -62,7 +62,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                       <input
                         id="search"
                         name="q"
-                        className="block w-full rounded-md border border-brand-300 bg-white bg-opacity-75 py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-brand-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50 sm:text-sm"
+                        className="block w-full rounded-md border border-brand-300 bg-white bg-opacity-75 py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-brand-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-opacity-75 dark:bg-gray-800 dark:text-gray-50 sm:text-sm"
                         placeholder="Search"
                         type="search"
                       />
@@ -202,7 +202,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                       {userNavigation.map(({ name, ...props }) => (
                         <Disclosure.Button
                           key={name}
-                          className="block w-full px-4 py-2 text-left text-base font-medium text-gray-400 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+                          className="block w-full px-4 py-2 text-left text-base font-medium text-gray-700 hover:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300"
                           {...props}
                         >
                           {name}

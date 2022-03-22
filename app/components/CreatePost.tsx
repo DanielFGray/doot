@@ -42,7 +42,7 @@ export function CreatePostSlider({
                 <postFetcher.Form
                   method="post"
                   action="/create-post"
-                  className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl dark:divide-gray-800 dark:bg-gray-900"
+                  className="flex h-full flex-col divide-y divide-gray-200 bg-gray-50 shadow-xl dark:divide-gray-700 dark:bg-gray-900"
                 >
                   <div className="h-0 flex-1 overflow-y-auto">
                     <div className="bg-brand-700 px-4 py-6 sm:px-6">
@@ -133,7 +133,7 @@ export function CreatePostSlider({
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-shrink-0 justify-end gap-2 px-4 py-4">
+                  <div className="flex flex-shrink-0 justify-end gap-2 px-4 py-4 bg-gray-50 dark:bg-gray-800">
                     <Button type="submit" primary disabled={postFetcher.state === 'submitting'}>
                       Save
                     </Button>

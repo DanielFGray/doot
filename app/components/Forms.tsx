@@ -18,13 +18,12 @@ export const Button = ({
     <button
       {...props}
       className={classNames(
-        'dark:bg-gray-800 dark:text-gray-200',
-        primary
-          ? 'bg-brand-600 text-white hover:bg-brand-700'
-          : 'text-primary bg-transparent hover:bg-white',
-        size === 'sm' ? 'px-2 py-1 text-sm' : size === 'lg' ? 'px-6 py-3 text-lg' : 'px-4 py-2',
-        'inline-flex items-center rounded-md border border-transparent text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2',
         className,
+        'inline-flex items-center rounded-md border border-transparent font-medium shadow focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2',
+        primary
+          ? 'bg-brand-600 text-white hover:bg-brand-700 dark:bg-brand-600 dark:hover:bg-brand-500'
+          : 'bg-white bg-opacity-25 text-brand-700 dark:bg-gray-700 dark:text-white',
+        size === 'sm' ? 'px-2 py-1 text-sm' : size === 'lg' ? 'px-6 py-3 text-lg' : 'px-4 py-2',
       )}
     >
       {children}
@@ -85,9 +84,9 @@ export function PostInput({
                 className={({ selected }) =>
                   classNames(
                     selected
-                      ? 'bg-gray-100 text-gray-900 hover:bg-gray-200 dark:text-gray-200'
-                      : 'bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-900',
-                    'rounded-md border border-transparent px-3 py-1.5 text-sm font-medium dark:bg-gray-800',
+                      ? 'text-gray-900 hover:bg-gray-200 dark:text-gray-50'
+                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900',
+                    'rounded-md border border-transparent px-3 py-1.5 text-sm font-medium',
                   )
                 }
               >
@@ -101,7 +100,7 @@ export function PostInput({
                 <div className="flex items-center">
                   <button
                     type="button"
-                    className="-m-2.5 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
+                    className="-m-2.5 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
                   >
                     <span className="sr-only">Insert link</span>
                     <LinkIcon className="h-5 w-5" aria-hidden="true" />
@@ -110,7 +109,7 @@ export function PostInput({
                 <div className="flex items-center">
                   <button
                     type="button"
-                    className="-m-2.5 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
+                    className="-m-2.5 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
                   >
                     <span className="sr-only">Insert code</span>
                     <CodeIcon className="h-5 w-5" aria-hidden="true" />
@@ -119,7 +118,7 @@ export function PostInput({
                 <div className="flex items-center">
                   <button
                     type="button"
-                    className="-m-2.5 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
+                    className="-m-2.5 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
                   >
                     <span className="sr-only">Mention someone</span>
                     <AtSymbolIcon className="h-5 w-5" aria-hidden="true" />
@@ -137,7 +136,7 @@ export function PostInput({
                 <textarea
                   rows={5}
                   name={name}
-                  className="block w-full max-w-none leading-7 rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                  className="block w-full max-w-none rounded-md border-gray-300 leading-7 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                   value={textinput}
                   onChange={e => changeTextinput(e.target.value)}
                   placeholder={placeholder}

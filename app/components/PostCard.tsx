@@ -28,7 +28,7 @@ export function Post({
 }) {
   const fetcher = useFetcher()
   return (
-    <div className="-mx-2 mb-4 overflow-clip rounded-lg bg-gray-50 p-2 p-4 shadow dark:bg-gray-800">
+    <div className="-mx-2 mb-4 text-clip rounded-lg bg-gray-50 p-2 p-4 shadow dark:bg-gray-800">
       <div className="flex flex-row dark:text-gray-50">
         <fetcher.Form
           method="post"
@@ -61,7 +61,7 @@ export function Post({
           <Link to={`/p/${post_id}`} className="text-bold text-xl text-gray-800 dark:text-gray-50">
             {title}
           </Link>
-          <div className="flex flex-row flex-wrap gap-1 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex flex-row flex-wrap gap-1 items-center text-sm text-gray-600 dark:text-gray-400">
             <span>
               {'by '}
               <Link to={`/user/${username}`} className="text-gray-900 dark:text-gray-50">
@@ -89,7 +89,7 @@ export function Post({
                 <Button
                   type="submit"
                   size="sm"
-                  className="bg-red-100 bg-opacity-100 text-red-700 hover:bg-red-300 hover:bg-opacity-100"
+                  className="bg-red-100 bg-opacity-100 text-red-700 hover:bg-red-300 hover:bg-opacity-100 dark:hover:text-red-800"
                 >
                   Delete
                 </Button>
