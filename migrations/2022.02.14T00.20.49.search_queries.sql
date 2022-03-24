@@ -1,4 +1,4 @@
-create function create_post(v_title text, v_body text, v_tags tag[], v_user_id uuid) returns uuid as $$
+create or replace function create_post(v_title text, v_body text, v_tags tag[], v_user_id uuid) returns uuid as $$
   with create_post as (
     insert into posts (title, body, tags, user_id)
     values (v_title, v_body, v_tags, v_user_id)
@@ -9,7 +9,7 @@ create function create_post(v_title text, v_body text, v_tags tag[], v_user_id u
   returning post_id
 $$ language sql volatile;
 
-create function create_comment(v_post_id uuid, v_body text, v_user_id uuid) returns uuid as $$
+create or replace function create_comment(v_post_id uuid, v_body text, v_user_id uuid, v_parent_id uuid) returns uuid as $$
   with create_comment as (
     insert into posts_comments (post_id, body, user_id)
     values (v_post_id, v_body, v_user_id)
@@ -20,7 +20,7 @@ create function create_comment(v_post_id uuid, v_body text, v_user_id uuid) retu
   returning comment_id
 $$ language sql volatile;
 
-create function score_post(v_post_id uuid) returns int as $$
+create or replace function score_post(v_post_id uuid) returns int as $$
   select
     coalesce(sum(
       case vote
@@ -34,13 +34,13 @@ create function score_post(v_post_id uuid) returns int as $$
     v.post_id = v_post_id
 $$ language sql stable;
 
-create function post_popularity(comments bigint, score int, created_at timestamptz) returns float as $$
+create or replace function post_popularity(comments bigint, score int, created_at timestamptz) returns float as $$
   select
     (1.2 * comments + score) /
     pow((extract(days from created_at) * 24 + extract(hours from created_at) + 2), 1.8) as weight
 $$ language sql;
 
-create function comment_count(v_post_id uuid) returns bigint as $$
+create or replace function comment_count(v_post_id uuid) returns bigint as $$
   select
     count(1)
   from
@@ -62,7 +62,7 @@ create type tag_listing as (
   current_user_voted vote_type
 );
 
-create function new_posts(v_current_user uuid default null) returns setof tag_listing as $$
+create or replace function new_posts(v_current_user uuid default null) returns setof tag_listing as $$
   select
     p.post_id,
     title,
@@ -84,7 +84,7 @@ create function new_posts(v_current_user uuid default null) returns setof tag_li
     p.created_at
 $$ language sql stable;
 
-create function top_posts(v_current_user uuid default null) returns setof tag_listing as $$
+create or replace function top_posts(v_current_user uuid default null) returns setof tag_listing as $$
   select
     p.post_id,
     title,
@@ -106,7 +106,7 @@ create function top_posts(v_current_user uuid default null) returns setof tag_li
     popularity desc
 $$ language sql stable;
 
-create function tag_listing(v_tags tag[], v_current_user uuid default null) returns setof tag_listing as $$
+create or replace function tag_listing(v_tags tag[], v_current_user uuid default null) returns setof tag_listing as $$
   select
     p.post_id,
     title,
@@ -143,7 +143,7 @@ create type search_results as (
   current_user_voted vote_type
 );
 
-create function search_posts(query text, v_current_user uuid default null) returns setof search_results as $$
+create or replace function search_posts(query text, v_current_user uuid default null) returns setof search_results as $$
   select
     p.post_id,
     ts_headline(title, q, 'StartSel = {{{, StopSel = }}}') as title,
@@ -182,7 +182,7 @@ create type post_with_comments as (
   comments jsonb
 );
 
-create function get_post_with_comments(v_post_id uuid, v_current_user uuid default null) returns setof post_with_comments as $$
+create or replace function get_post_with_comments(v_post_id uuid, v_current_user uuid default null) returns setof post_with_comments as $$
   select
     p.post_id,
     tags,
@@ -235,7 +235,7 @@ create function get_post_with_comments(v_post_id uuid, v_current_user uuid defau
     p.post_id = v_post_id
 $$ language sql stable;
 
-create function users_posts(v_username text, v_current_user uuid default null) returns setof tag_listing as $$
+create or replace function users_posts(v_username text, v_current_user uuid default null) returns setof tag_listing as $$
   select
     p.post_id,
     title,
@@ -263,7 +263,7 @@ create type tag_count as (
   count bigint
 );
 
-create function top_tags() returns setof tag_count as $$
+create or replace function top_tags() returns setof tag_count as $$
   with tag_list as (
     select
       unnest(tags) as tag
