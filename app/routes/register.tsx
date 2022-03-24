@@ -97,9 +97,7 @@ export default function Register() {
                 onChange={e => setPassword(e.target.value)}
                 defaultValue={actionData?.fields?.password}
                 hasError={Boolean(actionData?.fieldErrors?.password)}
-                className="rounded-md rounded-b-none"
               />
-              <meter className="block w-full rounded-md rounded-t-none border-gray-300 bg-white pr-10 focus:outline-none dark:border-gray-700 dark:bg-gray-800 sm:text-sm" />
             </div>
             {actionData?.fieldErrors?.password && (
               <p className="mt-2 text-sm text-red-600" id="password-error">
