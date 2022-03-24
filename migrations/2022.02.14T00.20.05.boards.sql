@@ -29,7 +29,8 @@ create table posts_votes (
 create table posts_comments (
   comment_id uuid primary key default gen_random_uuid(),
   post_id uuid not null references posts on delete cascade,
-  user_id uuid not null references users,
+  user_id uuid references users on delete set null,
+  parent_id uuid references posts_comments on delete restrict,
   body text not null,
   search tsvector not null generated always as (to_tsvector('english', body)) stored,
   created_at timestamptz not null default now(),

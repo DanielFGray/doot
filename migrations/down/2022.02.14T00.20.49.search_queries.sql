@@ -1,4 +1,5 @@
 drop function top_tags;
+drop function comment_tree;
 drop type tag_count;
 drop function users_posts;
 drop function get_post_with_comments;

@@ -11,8 +11,8 @@ $$ language sql volatile;
 
 create or replace function create_comment(v_post_id uuid, v_body text, v_user_id uuid, v_parent_id uuid) returns uuid as $$
   with create_comment as (
-    insert into posts_comments (post_id, body, user_id)
-    values (v_post_id, v_body, v_user_id)
+    insert into posts_comments (post_id, parent_id, body, user_id)
+    values (v_post_id, v_parent_id, v_body, v_user_id)
     returning comment_id
   )
   insert into comments_votes (vote, user_id, comment_id)
@@ -179,8 +179,38 @@ create type post_with_comments as (
   updated_at timestamptz,
   current_user_voted vote_type,
   comment_count bigint,
-  comments jsonb
+  comments json
 );
+
+create or replace function comment_tree(v_comment_id uuid, v_current_user uuid default null) returns json as $$
+  select json_build_object(
+    'comment_id', c.comment_id,
+    'post_id', c.post_id,
+    'body', body,
+    'username', u.username,
+    'score', (
+      select
+        coalesce(sum(case vote
+          when 'up' then 1
+          when 'down' then -1
+        end), 0) as score
+      from comments_votes cv
+      where cv.comment_id = c.comment_id
+    ),
+    'created_at', c.created_at,
+    'updated_at', c.updated_at,
+    'current_user_voted', cv.vote,
+    'children', (
+      select coalesce(json_agg(comment_tree(comment_id, v_current_user)), '[]')
+      from posts_comments
+      where parent_id = c.comment_id
+    )
+  )
+  from posts_comments c
+    left join users u using(user_id)
+    left join comments_votes cv on cv.comment_id = c.comment_id and cv.user_id = v_current_user
+  where c.comment_id = v_comment_id
+$$ language sql stable;
 
 create or replace function get_post_with_comments(v_post_id uuid, v_current_user uuid default null) returns setof post_with_comments as $$
   select
@@ -197,40 +227,15 @@ create or replace function get_post_with_comments(v_post_id uuid, v_current_user
     comments
   from
     posts p
-      join users u using (user_id)
-      left join posts_votes pv on (pv.post_id = p.post_id and pv.user_id = v_current_user),
+      left join users u using (user_id)
+      left join posts_votes pv on pv.post_id = p.post_id and pv.user_id = v_current_user,
     lateral score_post(p.post_id) as score,
     lateral comment_count(p.post_id),
     lateral (
-      select
-        coalesce(jsonb_agg(comments), '[]') as comments
-      from (
-        select
-          jsonb_build_object(
-            'comment_id', pc.comment_id,
-            'body', pc.body,
-            'username', cu.username,
-            'score', (
-              select
-                coalesce(sum(case vote
-                  when 'up' then 1
-                  when 'down' then -1
-                end), 0) as score
-              from comments_votes cv
-              where cv.comment_id = pc.comment_id
-            ),
-            'created_at', pc.created_at,
-            'updated_at', pc.updated_at,
-            'current_user_voted', cv.vote
-          ) as comments
-        from
-          posts_comments pc
-            join users cu using (user_id)
-            left join comments_votes cv on (cv.comment_id = pc.comment_id and cv.user_id = v_current_user)
-        where
-          pc.post_id = p.post_id
-      ) as comments
-    ) as comments
+      select coalesce(json_agg(comment_tree(comment_id, v_current_user)), '[]') as comments
+      from posts_comments
+      where parent_id is null and post_id = v_post_id
+    ) as _
   where
     p.post_id = v_post_id
 $$ language sql stable;
