@@ -36,9 +36,9 @@ $$ language sql stable;
 
 create or replace function post_popularity(comments bigint, score int, created_at timestamptz) returns float as $$
   select
-    (1.2 * comments + score) /
-    pow((extract(days from created_at) * 24 + extract(hours from created_at) + 2), 1.8) as weight
-$$ language sql;
+    (1.2 * comments + score + 1) /
+    pow(extract(epoch from (now() - created_at)) / 3600 + 2), 1.8)
+$$ language sql stable;
 
 create or replace function comment_count(v_post_id uuid) returns bigint as $$
   select
