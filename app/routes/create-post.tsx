@@ -105,8 +105,8 @@ function validateBody(body: string) {
   if (body.length < 1) {
     return 'Body must not not empty'
   }
-  if (body.length > 140) {
-    return 'Body must be less than 100 characters long'
+  if (body.length > 2000) {
+    return 'Body must be less than 2000 characters long'
   }
   return null
 }
