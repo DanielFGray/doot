@@ -50,7 +50,10 @@ export function Post({
         <VoteControls type="post" voted={currentUserVoted} id={postId} score={score} />
         <div className="ml-2 flex w-full flex-col justify-center">
           <div className="flex flex-row">
-            <Link to={`/p/${postId}`} className="text-bold w-full text-xl text-gray-800 dark:text-gray-50">
+            <Link
+              to={`/p/${postId}`}
+              className="text-bold w-full text-xl text-gray-800 dark:text-gray-50"
+            >
               {title}
             </Link>
           </div>
@@ -78,7 +81,9 @@ export function Post({
               </Link>
             </span>
           </div>
-          {body && <div className="prose prose-lg max-w-none dark:prose-invert">{formatter(body)}</div>}
+          {body && (
+            <div className="prose prose-lg max-w-none dark:prose-invert">{formatter(body)}</div>
+          )}
         </div>
         <div className="flex flex-col justify-between">
           <PostMenu id={postId} isOwner={username === currentUser?.username} />
@@ -229,10 +234,10 @@ function PostMenu({
                   </button>
                 )}
               </Menu.Item>
-              <fetcher.Form method="post" action="/delete-post" className="inline">
-                <input type="hidden" name="id" value={id} />
-                <Menu.Item>
-                  {({ active }) => (
+              <Menu.Item>
+                {({ active }) => (
+                  <fetcher.Form method="post" action="/delete-post" className="inline">
+                    <input type="hidden" name="id" value={id} />
                     <button
                       type="submit"
                       className={classNames(
@@ -248,9 +253,9 @@ function PostMenu({
                       />
                       Delete
                     </button>
-                  )}
-                </Menu.Item>
-              </fetcher.Form>
+                  </fetcher.Form>
+                )}
+              </Menu.Item>
             </div>
           )}
         </Menu.Items>
