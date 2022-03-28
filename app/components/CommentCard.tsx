@@ -108,7 +108,7 @@ export function Comment({
 function CommentMenu({ commentId, isOwner }: { commentId: string; isOwner: boolean }) {
   const fetcher = useFetcher()
   return (
-    <Menu as="span" className="inline-block text-left">
+    <Menu as="span" className="relative inline-block text-left">
       <Menu.Button className="flex items-center rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
         <span className="sr-only">Open options</span>
         <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
