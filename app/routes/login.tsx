@@ -93,11 +93,11 @@ export default function Login() {
         <div className="pt-5">
           <div id="form-error-message">
             {actionData?.formError ? (
-              <p className="form-validation-error" role="alert">
+              <p className="text-red-600" role="alert">
                 {actionData?.formError}
               </p>
             ) : null}
-          </div>{' '}
+          </div>
           <div className="flex justify-end">
             <Button type="submit" primary>
               Submit
