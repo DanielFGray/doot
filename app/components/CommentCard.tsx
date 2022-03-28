@@ -1,89 +1,213 @@
-import { Link, useFetcher } from 'remix'
-import ago from 's-ago'
+import { Fragment, useState } from 'react'
+import { Link, useFetcher, useNavigate } from 'remix'
 import {
-  ThumbDownIcon as ThumbDownOutline,
-  ThumbUpIcon as ThumbUpOutline,
-} from '@heroicons/react/outline'
-import {
-  ThumbDownIcon as ThumbDownSolid,
-  ThumbUpIcon as ThumbUpSolid,
+  ReplyIcon,
+  DotsVerticalIcon,
+  HeartIcon,
+  PencilAltIcon,
+  TrashIcon,
+  UserAddIcon,
 } from '@heroicons/react/solid'
+import { Menu, Transition } from '@headlessui/react'
+import ago from 's-ago'
 import { formatter } from '~/utils/postFormatter'
-import { Button } from './Forms'
+import { classNames } from '~/utils/classNames'
+import { VoteControls } from './Vote'
+import { CreateComment } from './CreateComment'
+import type { CommentInfo } from '../types'
 
 export function Comment({
-  comment_id,
+  commentId,
+  postId,
   body,
   username,
   score,
-  created_at,
-  updated_at,
-  current_user_voted,
+  createdAt,
+  updatedAt,
+  currentUserVoted,
   currentUser,
-}: {
-  comment_id: string
-  body: string
-  username: string
-  user_id: string
-  score: number
-  created_at: string
-  updated_at: string
-  current_user_voted: null | 'up' | 'down'
-  currentUser: null | { username: string; user_id: string }
+  children,
+  depth = 0,
+  sortedBy,
+}: CommentInfo & {
+  currentUser: null | { username: string; userId: string }
+  depth?: number
+  sortedBy: 'popularity' | 'score' | 'createdAt'
 }) {
-  const fetcher = useFetcher()
-  const createdDate = new Date(created_at)
+  const [showCommentForm, setShowCommentForm] = useState(false)
+  const createdDate = new Date(createdAt)
+  const navigate = useNavigate()
+  console.log({createdAt})
   return (
-    <div className="flex flex-row">
-      <fetcher.Form method="post" action="/vote" className="mr-2 flex flex-col text-center">
-        <input type="hidden" name="id" value={comment_id} />
-        <input type="hidden" name="type" value="comment" />
-
-        {current_user_voted === 'up' ? (
-          <button name="vote" value="null" type="submit">
-            <ThumbUpSolid className="h-5 w-5 text-blue-700" />
-          </button>
-        ) : (
-          <button name="vote" value="up" type="submit">
-            <ThumbUpOutline className="h-5 w-5 text-gray-400" />
-          </button>
-        )}
-        {score}
-        {current_user_voted === 'down' ? (
-          <button name="vote" value="null" type="submit">
-            <ThumbDownSolid className="h-5 w-5 text-red-700" />
-          </button>
-        ) : (
-          <button name="vote" value="down" type="submit">
-            <ThumbDownOutline className="h-5 w-5 text-gray-400" />
-          </button>
-        )}
-      </fetcher.Form>
-      <div>
-        <span className="text-sm">
-          <a title={createdDate.toLocaleString()} className="cursor-help">{ago(createdDate)}</a>
-          {updated_at !== created_at && (
-            <span className="text-sm text-gray-500">(updated {ago(new Date(updated_at))})</span>
+    <div
+      className={classNames(
+        'mt-4 rounded-lg p-4 shadow',
+        depth === 0
+          ? ''
+          : depth % 2
+          ? 'bg-gray-50 dark:bg-gray-800'
+          : 'bg-gray-100 dark:bg-gray-700',
+      )}
+    >
+      <div className="flex flex-row">
+        <VoteControls type="comment" voted={currentUserVoted} id={commentId} score={score} />
+        <div className="w-full text-sm text-gray-600 dark:text-gray-400">
+          <span>
+            <a title={createdDate.toLocaleString()} className="cursor-help underline">
+              {ago(createdDate)}
+            </a>
+            {updatedAt !== createdAt && (
+              <span className="text-sm text-gray-500">(updated {ago(new Date(updatedAt))})</span>
+            )}
+          </span>
+          {username && (
+            <span>
+              {' by '}
+              <Link to={`/u/${username}`} className="text-gray-900 dark:text-gray-50">
+                {username}
+              </Link>
+            </span>
           )}
-          <span className="text-gray-500"> by </span>
-          <Link to={`/user/${username}`}>{username}</Link>
+          <div className="prose max-w-none dark:prose-invert">{formatter(body)}</div>
+        </div>
+        <span className="flex flex-col justify-between">
+          <CommentMenu commentId={commentId} isOwner={username == currentUser?.username} />
+          <button
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            onClick={() => {
+              if (currentUser) setShowCommentForm(s => !s)
+              else navigate(`/login?redirectTo=/p/${postId}`)
+            }}
+          >
+            <ReplyIcon className="h-5 w-5" />
+          </button>
         </span>
-        <div className="prose max-w-none dark:prose-invert">{formatter(body)}</div>
-        {currentUser && currentUser.username === username && (
-          <div className="text-sm">
-            <fetcher.Form method="post" action="/delete-comment" className="inline">
-              <input type="hidden" name="id" value={comment_id} />
-              <Button
-                type="submit"
-                size="sm"
-                className="bg-red-100 bg-opacity-100 text-red-700 hover:text-red-700 hover:bg-red-300 hover:bg-opacity-100 dark:hover:text-red-800"
-              >
-                Delete
-              </Button>
-            </fetcher.Form>
-          </div>
-        )}
       </div>
+      {showCommentForm && (
+        <CreateComment
+          postId={postId}
+          parentId={commentId}
+          isDone={() => setShowCommentForm(false)}
+        />
+      )}
+      {children
+        .slice(0)
+        .sort((a, b) => b[sortedBy] - a[sortedBy])
+        .map(props => (
+          <Comment
+            key={props.commentId}
+            currentUser={currentUser}
+            sortedBy={sortedBy}
+            depth={depth + 1}
+            {...props}
+          />
+        ))}
     </div>
+  )
+}
+
+function CommentMenu({ commentId, isOwner }: { commentId: string; isOwner: boolean }) {
+  const fetcher = useFetcher()
+  return (
+    <Menu as="span" className="inline-block text-left">
+      <Menu.Button className="flex items-center rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+        <span className="sr-only">Open options</span>
+        <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
+      </Menu.Button>
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-gray-700 dark:bg-gray-800">
+          <div className="py-1">
+            <Menu.Item>
+              {({ active }) => (
+                <a
+                  className={classNames(
+                    active
+                      ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-50'
+                      : 'text-gray-700 dark:text-gray-50',
+                    'group flex items-center px-4 py-2 text-sm',
+                  )}
+                >
+                  <UserAddIcon
+                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    aria-hidden="true"
+                  />
+                  Share
+                </a>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <a
+                  className={classNames(
+                    active
+                      ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-50'
+                      : 'text-gray-700 dark:text-gray-50',
+                    'group flex items-center px-4 py-2 text-sm',
+                  )}
+                >
+                  <HeartIcon
+                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    aria-hidden="true"
+                  />
+                  Add to favorites
+                </a>
+              )}
+            </Menu.Item>
+          </div>
+          {!isOwner ? null : (
+            <div className="py-1">
+              <Menu.Item>
+                {({ active }) => (
+                  <a
+                    className={classNames(
+                      active
+                        ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-50'
+                        : 'text-gray-700 dark:text-gray-50',
+                      'group flex items-center px-4 py-2 text-sm',
+                    )}
+                  >
+                    <PencilAltIcon
+                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                      aria-hidden="true"
+                    />
+                    Edit
+                  </a>
+                )}
+              </Menu.Item>
+              <fetcher.Form method="post" action="/delete-comment" className="inline">
+                <input type="hidden" name="id" value={commentId} />
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      type="submit"
+                      className={classNames(
+                        active
+                          ? 'bg-red-500 text-white text-gray-900 dark:bg-red-700 dark:text-gray-50'
+                          : 'text-gray-700 dark:text-gray-50',
+                        'group flex w-full items-center px-4 py-2 text-sm',
+                      )}
+                    >
+                      <TrashIcon
+                        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-red-100"
+                        aria-hidden="true"
+                      />
+                      Delete
+                    </button>
+                  )}
+                </Menu.Item>
+              </fetcher.Form>
+            </div>
+          )}
+        </Menu.Items>
+      </Transition>
+    </Menu>
   )
 }

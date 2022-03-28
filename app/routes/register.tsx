@@ -182,5 +182,5 @@ export const action: ActionFunction = async ({ request }) => {
       formError: 'Username or email already exists',
     })
   }
-  return createUserSession(user.user_id, redirectTo)
+  return createUserSession(user.userId, redirectTo)
 }

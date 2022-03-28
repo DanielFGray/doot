@@ -1,6 +1,92 @@
-import { ActionFunction, redirect, json } from 'remix'
+import { Form, useLoaderData, useActionData, ActionFunction, LoaderFunction, redirect, json } from 'remix'
+import { Input, Button, PostInput } from '~/components/Forms'
+import { Layout } from '~/components/Layout'
 import { db, sql } from '~/utils/db.server'
 import { getUser } from '~/utils/session.server'
+
+export const loader: LoaderFunction = ({ request }) => {
+  const user = getUser(request)
+  if (!user) {
+    return redirect('/login?redirectTo=/create-post')
+  }
+  return { user }
+}
+
+export default function CreatePostPage() {
+  const { user } = useLoaderData<{ userId: string, username: string }>()
+  const actionData = useActionData()
+  return (
+    <Layout user={user}>
+      <Form
+        method="post"
+        action="/create-post"
+        className="flex h-full flex-col divide-gray-200 dark:divide-gray-700"
+      >
+        <div className="flex flex-1 flex-col justify-between">
+          <div className="divide-y divide-gray-200 px-4 sm:px-6">
+            <div className="space-y-6 pt-6 pb-5">
+              <div>
+                <label
+                  htmlFor="post-title"
+                  className="block text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Post title
+                </label>
+                <div className="mt-1">
+                  <Input
+                    type="text"
+                    name="title"
+                    id="post-title"
+                    hasError={Boolean(actionData?.fieldErrors?.title)}
+                  />
+                  {actionData?.fieldErrors?.title && (
+                    <p className="mt-2 text-sm text-red-600" id="title-error">
+                      {actionData?.fieldErrors.title}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="mt-1">
+                <PostInput name="body" />
+                {actionData?.fieldErrors?.body && (
+                  <p className="mt-2 text-sm text-red-600" id="body-error">
+                    {actionData?.fieldErrors.body}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="tags"
+                  className="block text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Tags
+                </label>
+                <div className="mt-1">
+                  <Input
+                    type="text"
+                    name="tags"
+                    id="tags"
+                    hasError={Boolean(actionData?.fieldErrors?.tags)}
+                  />
+                  {actionData?.fieldErrors?.tags && (
+                    <p className="mt-2 text-sm text-red-600" id="tags-error">
+                      {actionData?.fieldErrors.tags}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="justify-end gap-2 px-4 py-4">
+          <Button type="submit" primary>
+            Create Post
+          </Button>
+        </div>
+      </Form>
+    </Layout>
+  )
+}
 
 const badRequest = (data: { formError: string } | { message: string }) =>
   json(data, { status: 400 })
@@ -42,7 +128,7 @@ export const action: ActionFunction = async ({ request }) => {
     throw badRequest({
       message: 'You must be logged in to create a new post',
     })
-  const { user_id } = user
+  const { userId } = user
   const form = await request.formData()
   const tags = form.get('tags')
   const title = form.get('title')
@@ -53,7 +139,7 @@ export const action: ActionFunction = async ({ request }) => {
     })
   }
 
-  const tagList = tags.split(/,\s*/).filter(Boolean)
+  const tagList = Array.from(new Set(tags.split(/,\s*/).filter(Boolean)))
 
   const fields = { title, tags, body }
   const fieldErrors = {
@@ -65,16 +151,16 @@ export const action: ActionFunction = async ({ request }) => {
   if (hasError) return json({ fieldErrors, fields })
 
   try {
-    const post = await db.maybeOne<{ post_id: string }>(sql`
+    const post = await db.maybeOne<{ postId: string }>(sql`
       select * from create_post(
         ${title},
         ${body},
         ${sql.array(tagList, sql`tag[]`)},
-        ${user_id}
+        ${userId}
       ) as post_id
     `)
     if (!post) throw badRequest({ formError: 'Something went wrong.' })
-    return redirect(`/p/${post.post_id}`)
+    return redirect(`/p/${post.postId}`)
   } catch (e) {
     console.log(e)
     return badRequest({ formError: 'Something went wrong.' })

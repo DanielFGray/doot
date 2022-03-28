@@ -3,22 +3,20 @@ import { Form, Link, NavLink } from 'remix'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { PlusIcon, BellIcon, MenuIcon, XIcon, UserIcon, SearchIcon } from '@heroicons/react/outline'
 import { classNames } from '~/utils/classNames'
-import { CreatePostSlider } from './CreatePost'
 
 export function Header({ user }: { user: { username: string } | null }) {
-  const [createBoardModalVisible, setCreatePostModalVisible] = React.useState(false)
   const navigation = React.useMemo(() => [{ name: 'Home', href: '/' }], [])
   const userNavigation = React.useMemo(
     () => [
       { name: 'Your Profile', as: NavLink, to: `/u/${user?.username ?? ''}` },
       // { name: "Settings", href: "#" },
-      { name: 'Create Post', as: 'button', onClick: () => setCreatePostModalVisible(true) },
+      { name: 'Create Post', as: NavLink, to: '/create-post' },
       { name: 'Sign out', as: NavLink, to: '/logout' },
     ],
     [],
   )
   return (
-    <div className="mb-4 min-h-full">
+    <div className="min-h-full">
       <Disclosure
         as="nav"
         className="bg-white shadow-sm bgp-topography-[brand.700,.5] dark:bg-gray-800"
@@ -29,7 +27,9 @@ export function Header({ user }: { user: { username: string } | null }) {
               <div className="flex h-16 justify-between">
                 <div className="flex">
                   <div className="flex flex-shrink-0 items-center">
-                    <h1 className="text-3xl font-bold text-brand-600">doot</h1>
+                    <Link to="/">
+                      <h1 className="text-3xl font-bold text-brand-600">doot</h1>
+                    </Link>
                   </div>
                   <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                     {navigation.map(item => (
@@ -72,14 +72,13 @@ export function Header({ user }: { user: { username: string } | null }) {
                 <div className="hidden sm:ml-6 sm:flex sm:items-center">
                   {user ? (
                     <>
-                      <button
-                        type="button"
-                        onClick={() => setCreatePostModalVisible(true)}
+                      <Link
+                        to="/create-post"
                         className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:text-gray-300"
                       >
                         <span className="sr-only">Create post</span>
                         <PlusIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
+                      </Link>
                       <button
                         type="button"
                         className="ml-3 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-gray-800 dark:hover:text-gray-300"
@@ -202,7 +201,7 @@ export function Header({ user }: { user: { username: string } | null }) {
                       {userNavigation.map(({ name, ...props }) => (
                         <Disclosure.Button
                           key={name}
-                          className="block w-full px-4 py-2 text-left text-base font-medium text-gray-700 hover:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+                          className="block w-full px-4 py-2 text-left text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-50"
                           {...props}
                         >
                           {name}
@@ -233,7 +232,6 @@ export function Header({ user }: { user: { username: string } | null }) {
           </>
         )}
       </Disclosure>
-      <CreatePostSlider open={createBoardModalVisible} setOpen={setCreatePostModalVisible} />
     </div>
   )
 }

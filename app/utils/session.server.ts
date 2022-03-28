@@ -16,12 +16,12 @@ export async function register({
   email: string
   password: string
 }): Promise<null | {
-  user_id: string
+  userId: string
   username: string
 }> {
   const passwordHash = await argon.hash(password)
   try {
-    const user = await db.one<{ user_id: string; username: string }>(sql`
+    const user = await db.one<{ userId: string; username: string }>(sql`
       insert into users (username, email, password)
       values (${username}, ${email}, ${passwordHash})
       returning user_id, username
@@ -37,7 +37,7 @@ export async function register({
 
 export async function login({ username, password }: { username: string; password: string }) {
   const user = await db.maybeOne<{
-    user_id: string
+    userId: string
     password: string
     username: string
   }>(
@@ -47,17 +47,17 @@ export async function login({ username, password }: { username: string; password
   )
   if (!user) return null
   if (!(await argon.verify(user.password, password))) return null
-  return { id: user.user_id, username }
+  return { id: user.userId, username }
 }
 
 const storage = createSessionStorage({
   async createData(data, expires) {
-    const { session_id } = await db.one<{ session_id: string }>(sql`
+    const { sessionId } = await db.one<{ sessionId: string }>(sql`
       insert into sessions (data, expires)
       values (${JSON.stringify(data)}, ${expires?.toJSON() ?? null})
       returning session_id
     `)
-    return session_id
+    return sessionId
   },
   async readData(sessionId) {
     const data = await db.maybeOne<{ data: SessionData }>(sql`
@@ -112,7 +112,7 @@ export async function getUser(request: Request) {
   if (typeof userId !== 'string') {
     return null
   }
-  const user = await db.maybeOne<{ user_id: string; username: string }>(sql`
+  const user = await db.maybeOne<{ userId: string; username: string }>(sql`
     select
       user_id,
       username
@@ -127,11 +127,11 @@ export async function requireUserId(
   redirectTo: string = new URL(request.url).pathname,
 ) {
   const session = await getUser(request)
-  if (!session?.user_id || typeof session.user_id !== 'string') {
+  if (!session?.userId || typeof session.userId !== 'string') {
     const searchParams = new URLSearchParams([['redirectTo', redirectTo]])
     throw redirect(`/login?${searchParams}`)
   }
-  return session.user_id
+  return session.userId
 }
 
 export async function createUserSession(userId: string, redirectTo: string) {

@@ -1,4 +1,6 @@
 create domain tag as citext check(length(value) between 1 and 64);
+create type vote_type as enum ('down', 'up');
+
 create table posts (
   post_id uuid primary key default gen_random_uuid(),
   user_id uuid not null references users,
@@ -17,7 +19,6 @@ create index on posts (user_id);
 create index on posts using gin (tags);
 create index on posts (created_at desc);
 
-create type vote_type as enum ('down', 'up');
 create table posts_votes (
   post_id uuid not null references posts on delete cascade,
   user_id uuid not null references users,
@@ -30,7 +31,7 @@ create table posts_comments (
   comment_id uuid primary key default gen_random_uuid(),
   post_id uuid not null references posts on delete cascade,
   user_id uuid references users on delete set null,
-  parent_id uuid references posts_comments on delete restrict,
+  parent_id uuid references posts_comments on delete cascade,
   body text not null,
   search tsvector not null generated always as (to_tsvector('english', body)) stored,
   created_at timestamptz not null default now(),
@@ -38,6 +39,7 @@ create table posts_comments (
 );
 create index on posts_comments (post_id);
 create index on posts_comments (user_id);
+create index on posts_comments (parent_id);
 create index on posts_comments (created_at desc);
 
 create table comments_votes (

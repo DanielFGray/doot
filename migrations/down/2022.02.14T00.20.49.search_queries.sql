@@ -1,6 +1,5 @@
-drop function top_tags;
+drop view top_tags;
 drop function comment_tree;
-drop type tag_count;
 drop function users_posts;
 drop function get_post_with_comments;
 drop type post_with_comments;
@@ -9,7 +8,7 @@ drop type search_results;
 drop function tag_listing;
 drop function top_posts;
 drop function new_posts;
-drop type tag_listing;
+drop type post_info;
 drop function post_popularity;
 drop function score_post;
 drop function comment_count;

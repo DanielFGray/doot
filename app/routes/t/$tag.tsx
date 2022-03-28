@@ -1,4 +1,4 @@
-import { useLoaderData, LoaderFunction, json } from 'remix'
+import { Link, useLoaderData, LoaderFunction, json } from 'remix'
 import { Post } from '~/components/PostCard'
 import { db, sql } from '~/utils/db.server'
 import { getUser } from '~/utils/session.server'
@@ -8,7 +8,7 @@ import { Layout } from '~/components/Layout'
 type LoaderData = {
   posts: readonly BoardListing[]
   user: {
-    user_id: string
+    userId: string
     username: string
   } | null
 }
@@ -20,7 +20,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     const posts = await db.any<BoardListing>(sql`
        select *
        from
-         tag_listing(${sql.array(tags, sql`citext[]`)}, ${user?.user_id ?? null})
+         tag_listing(${sql.array(tags, sql`citext[]`)}, ${user?.userId ?? null})
        order by
          popularity desc
     `)
@@ -37,7 +37,9 @@ export default function Index() {
       {posts?.length ? (
         <>
           {posts.map(p => (
-            <Post key={p.post_id} currentUser={user} {...p} />
+            <Link key={p.postId} to={`/p/${p.postId}`}>
+              <Post currentUser={user} {...p} />
+            </Link>
           ))}
         </>
       ) : (

@@ -1,23 +1,28 @@
-export type BoardListing = {
-  post_id: string
-  title: string
-  body?: string
+export interface BaseInfo {
   username: string
-  tags: string[]
+  body?: string
   score: number
-  comment_count: number
-  created_at: string
-  updated_at: string
-  current_user_voted: null | 'up' | 'down'
+  currentUserVoted: null | 'up' | 'down'
+  popularity: number
+  commentCount: number
+  createdAt: number
 }
 
-export type CommentInfo = {
+export interface PostInfo extends BaseInfo {
+  postId: string
+  title: string
+  tags: string[]
+  updatedAt: number
+}
+
+export interface CommentInfo extends BaseInfo {
+  commentId: string
   body: string
-  score: number
-  user_id: string
-  username: string
-  comment_id: string
-  current_user_voted: null | 'up' | 'down'
-  created_at: string
-  updated_at: string
+  postId: string
+  updatedAt: number
+  children: CommentInfo[]
+}
+
+export interface SearchInfo extends PostInfo {
+  rank: number
 }

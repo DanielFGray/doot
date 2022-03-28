@@ -9,10 +9,17 @@ export const action: ActionFunction = async ({ request }) => {
 
   const formData = await request.formData()
   const body = formData.get('body')
-  const post_id = formData.get('post_id')
+  const postId = formData.get('postId')
+  const parentId = formData.get('parentId')
 
-  if (typeof body !== 'string' || typeof post_id !== 'string') {
+  console.log({ parentId, postId })
+
+  if (typeof body !== 'string' || typeof postId !== 'string') {
     return json({ formError: 'invalid body type' }, { status: 400 })
+  }
+
+  if (parentId !== null && typeof parentId !== 'string') {
+    return json({ formError: 'invalid parent id' }, { status: 400 })
   }
 
   if (body.length < 1) {
@@ -20,8 +27,9 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   const comment_id = await db.one<{ comment_id: string }>(sql`
-    select create_comment(${post_id}, ${body}, ${user.user_id}) as comment_id
+    select * from create_comment(${postId}, ${body}, ${user.userId}, ${parentId}) as comment_id
   `)
+  console.log({ createdComment: comment_id })
   return json(comment_id)
 }
 
