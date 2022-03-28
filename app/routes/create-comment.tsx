@@ -12,8 +12,6 @@ export const action: ActionFunction = async ({ request }) => {
   const postId = formData.get('postId')
   const parentId = formData.get('parentId')
 
-  console.log({ parentId, postId })
-
   if (typeof body !== 'string' || typeof postId !== 'string') {
     return json({ formError: 'invalid body type' }, { status: 400 })
   }
@@ -29,7 +27,6 @@ export const action: ActionFunction = async ({ request }) => {
   const comment_id = await db.one<{ comment_id: string }>(sql`
     select * from create_comment(${postId}, ${body}, ${user.userId}, ${parentId}) as comment_id
   `)
-  console.log({ createdComment: comment_id })
   return json(comment_id)
 }
 

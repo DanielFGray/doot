@@ -37,7 +37,6 @@ export function Comment({
   const [showCommentForm, setShowCommentForm] = useState(false)
   const createdDate = new Date(createdAt)
   const navigate = useNavigate()
-  console.log({createdAt})
   return (
     <div
       className={classNames(
