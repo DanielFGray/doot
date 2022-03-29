@@ -65,14 +65,17 @@ export const Input = ({
     </>
   )
 }
+
 export function PostInput({
   placeholder = '',
   defaultValue = '',
   name,
+  classes = {},
 }: {
   placeholder?: string
   defaultValue?: string
   name: string
+  classes?: Partial<Record<'textarea' | 'actions', string>>
 }) {
   const [textinput, changeTextinput] = useState(defaultValue)
   return (
@@ -98,10 +101,9 @@ export function PostInput({
                 </Tab>
               ),
             )}
-
             {/* These buttons are here simply as examples and don't actually do anything. */}
             {selectedIndex !== 0 ? null : (
-              <div className="ml-auto flex items-center space-x-5">
+              <div className={classNames('ml-auto flex items-center space-x-5',classes.actions)}>
                 <div className="flex items-center">
                   <button
                     type="button"
@@ -141,7 +143,10 @@ export function PostInput({
                 <textarea
                   rows={5}
                   name={name}
-                  className="block w-full bg-transparent max-w-none rounded-md border-gray-300 leading-7 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-500 dark:text-gray-200"
+                  className={classNames(
+                    'block w-full max-w-none rounded-md border-gray-300 bg-white leading-7 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800',
+                    classes.textarea,
+                  )}
                   value={textinput}
                   onChange={e => changeTextinput(e.target.value)}
                   placeholder={placeholder}
