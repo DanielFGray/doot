@@ -47,7 +47,7 @@ export default function CreatePostPage() {
                 </div>
               </div>
               <div className="mt-1">
-                <PostInput name="body" />
+                <PostInput name="body" classes={{ textarea: "dark:border-gray-700 dark:bg-gray-800" }} />
                 {actionData?.fieldErrors?.body && (
                   <p className="mt-2 text-sm text-red-600" id="body-error">
                     {actionData?.fieldErrors.body}
