@@ -1,88 +1,66 @@
-import { Form, useLoaderData, useActionData, ActionFunction, LoaderFunction, redirect, json } from 'remix'
-import { Input, Button, PostInput } from '~/components/Forms'
+import { useState } from 'react'
+import {
+  Form,
+  useLoaderData,
+  useActionData,
+  ActionFunction,
+  LoaderFunction,
+  redirect,
+  json,
+} from 'remix'
+import { CreatePostForm } from '~/components/CreatePost'
 import { Layout } from '~/components/Layout'
 import { db, sql } from '~/utils/db.server'
-import { getUser } from '~/utils/session.server'
+import { UserSession, getUser } from '~/utils/session.server'
 
-export const loader: LoaderFunction = ({ request }) => {
-  const user = getUser(request)
-  if (!user) {
-    return redirect('/login?redirectTo=/create-post')
-  }
-  return { user }
+type LoaderData = {
+  user: UserSession
 }
 
+export const loader: LoaderFunction = async ({ request }) => {
+  const user = await getUser(request)
+  if (!user) {
+    return redirect('/login?redirectTo=/')
+  }
+  return json<LoaderData>({ user })
+}
+
+type Fields = { title?: string; body?: string; tags?: string }
+
 export default function CreatePostPage() {
-  const { user } = useLoaderData<{ userId: string, username: string }>()
+  const { user } = useLoaderData<LoaderData>()
   const actionData = useActionData()
+  const [stateErrors, setFieldErrors] = useState<Fields>(actionData)
+  const fieldErrors = { ...(actionData?.fieldErrors ?? {}), ...stateErrors }
   return (
     <Layout user={user}>
       <Form
         method="post"
         action="/create-post"
-        className="flex h-full flex-col divide-gray-200 dark:divide-gray-700"
+        className="mx-auto flex h-full max-w-7xl flex-col divide-y divide-gray-200 divide-gray-200 px-4 dark:divide-gray-700 sm:px-6"
+        onSubmit={ev => {
+          const form = Object.fromEntries(new FormData(ev.currentTarget).entries())
+          const title = form['title']
+          const body = form['body']
+          const tags = form['tags']
+          if (typeof title !== 'string' || typeof body !== 'string' || typeof tags !== 'string')
+            return badRequest({ formError: 'Form not submitted correctly.' })
+
+          const tagList = normalizeTags(tags)
+
+          const fieldErrors = {
+            title: validateTitle(title),
+            body: validateBody(body),
+            tags: validateTags(tagList),
+          }
+          const hasError = Object.values(fieldErrors).some(Boolean)
+          if (hasError) {
+            ev.preventDefault()
+            setFieldErrors(fieldErrors)
+          }
+        }}
       >
-        <div className="flex flex-1 flex-col justify-between">
-          <div className="divide-y divide-gray-200 px-4 sm:px-6">
-            <div className="space-y-6 pt-6 pb-5">
-              <div>
-                <label
-                  htmlFor="post-title"
-                  className="block text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Post title
-                </label>
-                <div className="mt-1">
-                  <Input
-                    type="text"
-                    name="title"
-                    id="post-title"
-                    hasError={Boolean(actionData?.fieldErrors?.title)}
-                  />
-                  {actionData?.fieldErrors?.title && (
-                    <p className="mt-2 text-sm text-red-600" id="title-error">
-                      {actionData?.fieldErrors.title}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="mt-1">
-                <PostInput name="body" classes={{ textarea: "dark:border-gray-700 dark:bg-gray-800" }} />
-                {actionData?.fieldErrors?.body && (
-                  <p className="mt-2 text-sm text-red-600" id="body-error">
-                    {actionData?.fieldErrors.body}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="tags"
-                  className="block text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Tags
-                </label>
-                <div className="mt-1">
-                  <Input
-                    type="text"
-                    name="tags"
-                    id="tags"
-                    hasError={Boolean(actionData?.fieldErrors?.tags)}
-                  />
-                  {actionData?.fieldErrors?.tags && (
-                    <p className="mt-2 text-sm text-red-600" id="tags-error">
-                      {actionData?.fieldErrors.tags}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="justify-end gap-2 px-4 py-4">
-          <Button type="submit" primary>
-            Create Post
-          </Button>
-        </div>
+        <CreatePostForm fieldErrors={fieldErrors} />
       </Form>
     </Layout>
   )
@@ -98,7 +76,6 @@ function validateTitle(title: string) {
   if (title.length > 140) {
     return 'Title must be less than 100 characters long'
   }
-  return null
 }
 
 function validateBody(body: string) {
@@ -108,7 +85,6 @@ function validateBody(body: string) {
   if (body.length > 2000) {
     return 'Body must be less than 2000 characters long'
   }
-  return null
 }
 
 function validateTags(tags: string[]) {
@@ -118,30 +94,29 @@ function validateTags(tags: string[]) {
   if (tags.some(tag => tag.length > 64)) {
     return 'Tags must be less than 64 characters long'
   }
-  return null
+}
+
+export const normalizeTags = (tagList: string) => Array.from(new Set(tagList.split(/,\s*/).filter(Boolean)))
+export const validator = {
+  title: validateTitle,
+  body: validateBody,
+  tags: validateTags,
 }
 
 export const action: ActionFunction = async ({ request }) => {
   const user = await getUser(request)
 
-  if (!user)
-    throw badRequest({
-      message: 'You must be logged in to create a new post',
-    })
+  if (!user) throw badRequest({ message: 'You must be logged in to create a new post' })
   const { userId } = user
   const form = await request.formData()
-  const tags = form.get('tags')
   const title = form.get('title')
   const body = form.get('body')
-  if (typeof tags !== 'string' || typeof title !== 'string' || typeof body !== 'string') {
-    return badRequest({
-      formError: 'Form not submitted correctly.',
-    })
-  }
+  const tags = form.get('tags')
+  if (typeof title !== 'string' || typeof body !== 'string' || typeof tags !== 'string')
+    return badRequest({ formError: 'Form not submitted correctly.' })
 
-  const tagList = Array.from(new Set(tags.split(/,\s*/).filter(Boolean)))
-
-  const fields = { title, tags, body }
+  const tagList = normalizeTags(tags)
+  const fields = { title, body, tags }
   const fieldErrors = {
     title: validateTitle(title),
     body: validateBody(body),

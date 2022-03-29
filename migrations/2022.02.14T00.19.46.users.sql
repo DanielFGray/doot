@@ -21,3 +21,8 @@ create table sessions (
   data jsonb not null,
   expires timestamptz not null
 );
+
+create trigger _100_timestamps
+  before insert or update on users
+  for each row
+  execute procedure tg__update_timestamps();

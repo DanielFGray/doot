@@ -1,26 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useFetcher, useNavigate } from 'remix'
-import {
-  DotsVerticalIcon,
-  HeartIcon,
-  PencilAltIcon,
-  ReplyIcon,
-  TrashIcon,
-  UserAddIcon,
-} from '@heroicons/react/solid'
-import { Menu, Transition } from '@headlessui/react'
+import React, { useState } from 'react'
+import { Link, useNavigate, useFetcher } from 'remix'
+import { ReplyIcon } from '@heroicons/react/solid'
 import ago from 's-ago'
 import type { PostInfo } from '~/types'
 import { formatter } from '~/utils/postFormatter'
 import { classNames } from '~/utils/classNames'
 import { VoteControls } from './Vote'
-import { CreateComment } from './CreateComment'
-
-type CommentFetcher = {
-  fieldError?: { body?: string }
-  formError?: string
-  commentId?: string
-}
+import { DropdownControls } from './Dropdown'
+import { CreateCommentForm } from './CreateComment'
+import {ExclamationIcon} from '@heroicons/react/outline'
+import {Modal} from './Modal'
 
 export function Post({
   postId,
@@ -37,12 +26,9 @@ export function Post({
   currentUser: null | { username: string; userId: string }
 }) {
   const [showCommentForm, setShowCommentForm] = useState(false)
-  const fetcher = useFetcher<CommentFetcher>()
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (fetcher.type === 'done') setShowCommentForm(false)
-  }, [fetcher])
+  const fetcher = useFetcher()
   const createdDate = new Date(createdAt)
   return (
     <>
@@ -86,10 +72,19 @@ export function Post({
           )}
         </div>
         <div className="flex flex-col justify-between">
-          <PostMenu id={postId} isOwner={username === currentUser?.username} />
+          <DropdownControls
+            id={postId}
+            isOwner={username === currentUser?.username}
+            delete={() => setShowDeleteModal(true)}
+            edit={() => navigate(`/edit-post?id=${postId}`)}
+          />
           {body && (
             <button
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              className={classNames(
+                'text-gray-400 rounded-full hover:text-gray-600 dark:hover:text-gray-300',
+                showCommentForm &&
+                  'bg-gray-200 text-gray-700 outline outline-8 outline-gray-200 dark:bg-gray-600 dark:text-gray-400 dark:outline-gray-600',
+              )}
               onClick={() => {
                 if (currentUser) setShowCommentForm(s => !s)
                 else navigate(`/login?redirectTo=/p/${postId}`)
@@ -101,8 +96,21 @@ export function Post({
         </div>
       </div>
       {showCommentForm && (
-        <CreateComment postId={postId} isDone={() => setShowCommentForm(false)} />
+        <CreateCommentForm postId={postId} isDone={() => setShowCommentForm(false)} />
       )}
+      <Modal
+        open={showDeleteModal}
+        title="Delete post?"
+        close={() => setShowDeleteModal(false)}
+        confirmed={() => {
+          fetcher.submit({ id: postId }, { action: '/delete-post', method: 'post' })
+          setShowDeleteModal(false)
+        }}
+        danger
+        icon={ExclamationIcon}
+      >
+        Are you sure you want to delete your post?
+      </Modal>
     </>
   )
 }
@@ -134,132 +142,5 @@ function Tag<E extends React.ElementType>({
         className,
       )}
     />
-  )
-}
-
-function PostMenu({
-  id,
-  isOwner = false,
-  ...actions
-}:
-  | {
-      isOwner: false
-      id: string
-      share?: () => void
-      favorite?: () => void
-    }
-  | {
-      isOwner: true
-      id: string
-      delete?: () => void
-      edit?: () => void
-      share?: () => void
-      favorite?: () => void
-    }) {
-  const fetcher = useFetcher()
-  return (
-    <Menu as="span" className="relative inline-block text-left">
-      <Menu.Button className="flex items-center rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-        <span className="sr-only">Open options</span>
-        <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
-      </Menu.Button>
-      <Transition
-        as={React.Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute z-10 right-0 mt-2 w-56 origin-top-right origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-gray-700 dark:bg-gray-800">
-          <div className="py-1">
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  onClick={actions.share}
-                  className={classNames(
-                    active
-                      ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-50'
-                      : 'text-gray-700 dark:text-gray-50',
-                    'group flex items-center px-4 py-2 text-sm',
-                  )}
-                >
-                  <UserAddIcon
-                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                  Share
-                </button>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  onClick={actions.favorite}
-                  className={classNames(
-                    active
-                      ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-50'
-                      : 'text-gray-700 dark:text-gray-50',
-                    'group flex w-full items-center px-4 py-2 text-sm',
-                  )}
-                >
-                  <HeartIcon
-                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                  Add to favorites
-                </button>
-              )}
-            </Menu.Item>
-          </div>
-          {!isOwner ? null : (
-            <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={actions.edit}
-                    className={classNames(
-                      active
-                        ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-50'
-                        : 'text-gray-700 dark:text-gray-50',
-                      'group flex w-full items-center px-4 py-2 text-sm',
-                    )}
-                  >
-                    <PencilAltIcon
-                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true"
-                    />
-                    Edit
-                  </button>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <fetcher.Form method="post" action="/delete-post" className="inline">
-                    <input type="hidden" name="id" value={id} />
-                    <button
-                      type="submit"
-                      className={classNames(
-                        active
-                          ? 'bg-red-500 text-white text-gray-900 dark:bg-red-700 dark:text-gray-50'
-                          : 'text-gray-700 dark:text-gray-50',
-                        'group flex w-full items-center px-4 py-2 text-sm',
-                      )}
-                    >
-                      <TrashIcon
-                        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-red-100"
-                        aria-hidden="true"
-                      />
-                      Delete
-                    </button>
-                  </fetcher.Form>
-                )}
-              </Menu.Item>
-            </div>
-          )}
-        </Menu.Items>
-      </Transition>
-    </Menu>
   )
 }

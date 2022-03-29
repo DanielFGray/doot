@@ -175,8 +175,8 @@ create or replace function search_posts(
 ) returns setof search_results as $$
   select
     p.post_id,
-    ts_headline(title, q, 'StartSel = <dootHighlight>, StopSel = </dootHighlight>') as title,
-    ts_headline(body, q, 'StartSel = <dootHighlight>, StopSel = </dootHighlight>') as body,
+    ts_headline(title, q, 'StartSel = *, StopSel = *') as title,
+    ts_headline(body, q, 'StartSel = *, StopSel = *') as body,
     username,
     tags,
     points,

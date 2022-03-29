@@ -1,9 +1,7 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { ExclamationCircleIcon, AtSymbolIcon, CodeIcon, LinkIcon } from '@heroicons/react/solid'
 import { classNames } from '../utils/classNames'
-import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { formatter } from '../utils/postFormatter'
 
 export const Button = ({
@@ -33,20 +31,24 @@ export const Button = ({
   )
 }
 
-export const Input = ({
-  name,
-  hasError,
-  className,
-  ...props
-}: Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name'> & {
-  name: string
-  hasError?: undefined | boolean
-}) => {
+export const Input = React.forwardRef(function Input(
+  {
+    name,
+    hasError,
+    className,
+    ...props
+  }: Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name'> & {
+    name: string
+    hasError?: undefined | boolean
+  },
+  ref,
+) {
   return (
     <>
       <input
         name={name}
         {...props}
+        ref={ref}
         className={classNames(
           hasError
             ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500'
@@ -64,22 +66,22 @@ export const Input = ({
       )}
     </>
   )
-}
+})
 
-export function PostInput({
-  placeholder = '',
-  defaultValue = '',
-  name,
-  classes = {},
-}: {
-  placeholder?: string
-  defaultValue?: string
-  name: string
-  classes?: Partial<Record<'textarea' | 'actions', string>>
-}) {
-  const [textinput, changeTextinput] = useState(defaultValue)
+export const PostInput = React.forwardRef(function PostInput(
+  {
+    name,
+    classes = {},
+    ...textareaprops
+  }: Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, 'name'> & {
+    name: string
+    classes?: Partial<Record<'textarea' | 'actions', string>>
+  },
+  ref,
+) {
+  const [textinput, changeTextinput] = useState(textareaprops.defaultValue)
   return (
-    <Tab.Group>
+    <Tab.Group defaultIndex={0}>
       {({ selectedIndex }) => (
         <>
           <Tab.List className="flex items-center gap-2">
@@ -103,7 +105,7 @@ export function PostInput({
             )}
             {/* These buttons are here simply as examples and don't actually do anything. */}
             {selectedIndex !== 0 ? null : (
-              <div className={classNames('ml-auto flex items-center space-x-5',classes.actions)}>
+              <div className={classNames('ml-auto flex items-center space-x-5', classes.actions)}>
                 <div className="flex items-center">
                   <button
                     type="button"
@@ -136,25 +138,21 @@ export function PostInput({
           </Tab.List>
           <Tab.Panels className="mt-2">
             <Tab.Panel className="-m-0.5 rounded-lg p-0.5">
-              <label htmlFor="comment" className="sr-only">
-                Comment
-              </label>
-              <div>
-                <textarea
-                  rows={5}
-                  name={name}
-                  className={classNames(
-                    'block w-full max-w-none rounded-md border-gray-300 bg-white leading-7 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800',
-                    classes.textarea,
-                  )}
-                  value={textinput}
-                  onChange={e => changeTextinput(e.target.value)}
-                  placeholder={placeholder}
-                />
-              </div>
+              <textarea
+                rows={5}
+                ref={ref}
+                {...textareaprops}
+                name={name}
+                className={classNames(
+                  'block w-full max-w-none rounded-md border-gray-300 bg-white leading-7 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800',
+                  classes.textarea,
+                )}
+                value={textinput}
+                onChange={e => changeTextinput(e.target.value)}
+              />
             </Tab.Panel>
             <Tab.Panel className="-m-0.5 p-0.5">
-              <div className="border-1 prose mx-px mt-px max-w-none rounded border-gray-100 px-3 pt-2 pb-12 dark:prose-invert">
+              <div className="prose mx-px mt-px max-w-none rounded border-gray-100 px-3 pt-2 pb-12 shadow-lg outline outline-2 outline-brand-500 dark:prose-invert">
                 {formatter(textinput)}
                 <input type="hidden" name={name} value={textinput} />
               </div>
@@ -164,95 +162,34 @@ export function PostInput({
       )}
     </Tab.Group>
   )
-}
+})
 
 export function SelectMenu<T extends string>({
   items,
   selected,
   setSelected,
+  name,
+  id,
 }: {
+  name?: string
+  id?: string
   selected: T
   setSelected(value: T): void
-  items: Array<{ label: string; value: T }>
+  items: Array<{ value: T; label: string }>
 }) {
   return (
-    <Fragment>
-      <select
-        id="location"
-        name="location"
-        className="mt-1 block text-sm rounded-md border-gray-300 bg-gray-50 py-2 pl-3 pr-10 focus:border-brand-500 focus:outline-none focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 sm:hidden"
-        defaultValue={selected}
-        onChange={e => setSelected(e.target.value as T)}
-      >
-        {items.map(({ label, value }) => (
-          <option key={label} value={value} selected={value === selected}>
-            {label}
-          </option>
-        ))}
-      </select>
-      <div className="hidden sm:block">
-        <Listbox value={selected} onChange={setSelected}>
-          {({ open }) => (
-            <div className="relative mt-1">
-              <Listbox.Button className="relative cursor-default rounded-md border border-gray-300 bg-gray-50 py-2 pl-3 pr-10 text-left shadow-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 sm:text-sm">
-                <span className="block truncate">
-                  {items.find(({ value }) => value === selected)?.label}
-                </span>
-                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                  <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                </span>
-              </Listbox.Button>
-
-              <Transition
-                show={open}
-                as={Fragment}
-                leave="transition ease-in duration-100"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  {items.map(({ label, value }) => (
-                    <Listbox.Option
-                      key={label}
-                      className={({ active }) =>
-                        classNames(
-                          active ? 'bg-brand-600 text-white' : 'dark:text-gray-50 text-gray-900',
-                          'relative cursor-default select-none py-2 pl-3 pr-9',
-                        )
-                      }
-                      value={value}
-                    >
-                      {({ selected, active }) => (
-                        <>
-                          <span
-                            className={classNames(
-                              selected ? 'font-semibold' : 'font-normal',
-                              'block truncate',
-                            )}
-                          >
-                            {label}
-                          </span>
-
-                          {selected ? (
-                            <span
-                              className={classNames(
-                                active ? 'text-white' : 'text-brand-600',
-                                'absolute inset-y-0 right-0 flex items-center pr-4',
-                              )}
-                            >
-                              <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                            </span>
-                          ) : null}
-                        </>
-                      )}
-                    </Listbox.Option>
-                  ))}
-                </Listbox.Options>
-              </Transition>
-            </div>
-          )}
-        </Listbox>
-      </div>
-    </Fragment>
+    <select
+      name={name}
+      id={id}
+      className="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 py-2 pl-3 pr-10 text-sm focus:border-brand-500 focus:outline-none focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900"
+      defaultValue={selected}
+      onChange={e => setSelected(e.target.value as T)}
+    >
+      {items.map(({ label, value }) => (
+        <option key={label} value={value} selected={value === selected}>
+          {label}
+        </option>
+      ))}
+    </select>
   )
 }

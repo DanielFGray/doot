@@ -7,6 +7,11 @@ if (!sessionSecret) {
   throw new Error('environment variable SECRET must be set\ndid you forget to run the setup script?')
 }
 
+export type UserSession = null | {
+  userId: string
+  username: string
+}
+
 export async function register({
   username,
   email,
@@ -15,10 +20,7 @@ export async function register({
   username: string
   email: string
   password: string
-}): Promise<null | {
-  userId: string
-  username: string
-}> {
+}): Promise<UserSession> {
   const passwordHash = await argon.hash(password)
   try {
     const user = await db.one<{ userId: string; username: string }>(sql`
@@ -53,33 +55,41 @@ export async function login({ username, password }: { username: string; password
 const storage = createSessionStorage({
   async createData(data, expires) {
     const { sessionId } = await db.one<{ sessionId: string }>(sql`
-      insert into sessions (data, expires)
-      values (${JSON.stringify(data)}, ${expires?.toJSON() ?? null})
+      insert into
+        sessions (data, expires)
+      values
+        (${JSON.stringify(data)}, ${expires?.toJSON() ?? null})
       returning session_id
     `)
     return sessionId
   },
   async readData(sessionId) {
     const data = await db.maybeOne<{ data: SessionData }>(sql`
-      select data
-      from sessions
-      where session_id = ${sessionId}
-        and expires > now()
+      select
+        data
+      from
+        sessions
+      where
+        session_id = ${sessionId}
+          and expires > now()
     `)
     return data?.data ?? null
   },
   async updateData(id, data, expires) {
     await db.query(sql`
       update sessions
-        set data = ${JSON.stringify(data)},
-        expires = ${expires?.toJSON() ?? null}
-      where session_id = ${id}
+        set
+          data    = ${JSON.stringify(data)},
+          expires = ${expires?.toJSON() ?? null}
+      where
+        session_id = ${id}
     `)
   },
   async deleteData(id) {
     await db.query(sql`
       delete from sessions
-      where session_id = ${id}
+      where
+        session_id = ${id}
     `)
   },
   cookie: {
@@ -112,9 +122,10 @@ export async function getUser(request: Request) {
   if (typeof userId !== 'string') {
     return null
   }
-  const user = await db.maybeOne<{ userId: string; username: string }>(sql`
+  const user = await db.maybeOne<UserSession>(sql`
     select
       user_id,
+      -- avatarUrl,
       username
     from users
     where user_id = ${userId}

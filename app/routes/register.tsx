@@ -151,15 +151,15 @@ function validateEmail(email: string) {
   }
 }
 
-const badRequest = (data: ActionData) => json(data, { status: 400 })
+const badRequest = (data: ActionData, status = 400) => json(data, { status })
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData()
   const username = form.get('username')
   const password = form.get('password')
   const email = form.get('email')
-  const redirectTo = (form.get('redirectTo') as string) || '/'
-  if (typeof email !== 'string' || typeof username !== 'string' || typeof password !== 'string') {
+  const redirectTo = form.get('redirectTo') || '/'
+  if (typeof email !== 'string' || typeof username !== 'string' || typeof redirectTo !== 'string' || typeof password !== 'string') {
     return badRequest({
       formError: 'Form not submitted correctly.',
     })
@@ -179,7 +179,7 @@ export const action: ActionFunction = async ({ request }) => {
     return badRequest({
       fields,
       formError: 'Username or email already exists',
-    })
+    }, 409)
   }
   return createUserSession(user.userId, redirectTo)
 }

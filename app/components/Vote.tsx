@@ -17,7 +17,7 @@ export function VoteControls({
   id: string
   voted: 'up' | 'down' | null
   score: number
-  type: 'post'| 'comment'
+  type: 'post' | 'comment'
 }) {
   const fetcher = useFetcher()
   return (

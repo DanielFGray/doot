@@ -18,6 +18,10 @@ create table posts (
 create index on posts (user_id);
 create index on posts using gin (tags);
 create index on posts (created_at desc);
+create trigger _100_timestamps
+  before insert or update on posts
+  for each row
+  execute procedure tg__update_timestamps();
 
 create table posts_votes (
   post_id uuid not null references posts on delete cascade,
@@ -41,6 +45,11 @@ create index on posts_comments (post_id);
 create index on posts_comments (user_id);
 create index on posts_comments (parent_id);
 create index on posts_comments (created_at desc);
+
+create trigger _100_timestamps
+  before insert or update on posts_comments
+  for each row
+  execute procedure tg__update_timestamps();
 
 create table comments_votes (
   comment_id uuid not null references posts_comments on delete cascade,

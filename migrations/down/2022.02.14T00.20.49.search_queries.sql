@@ -2,6 +2,7 @@ drop view top_tags;
 drop function comment_tree;
 drop function users_posts;
 drop function get_post_with_comments;
+drop type comment_info;
 drop type post_with_comments;
 drop function search_posts;
 drop type search_results;
