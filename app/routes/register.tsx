@@ -106,15 +106,14 @@ export default function Register() {
             )}
           </div>
         </div>
-        {actionData?.formError ? (
-          <div id="form-error-message">
-            <p className="form-validation-error" role="alert">
-              {actionData?.formError}
-            </p>
-          </div>
-        ) : null}
-
         <div className="pt-5">
+          {actionData?.formError ? (
+            <div id="form-error-message">
+              <p className="text-red-600" role="alert">
+                {actionData?.formError}
+              </p>
+            </div>
+          ) : null}
           <div className="flex justify-end">
             <Button type="submit" primary>
               Submit
