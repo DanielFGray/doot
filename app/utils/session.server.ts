@@ -25,7 +25,7 @@ export async function register({
   try {
     const user = await db.one<{ userId: string; username: string }>(sql`
       insert into users (username, email, password)
-      values (${username}, ${email}, ${passwordHash})
+      values (${username}, ${email || null}, ${passwordHash})
       returning user_id, username
     `)
     return user
