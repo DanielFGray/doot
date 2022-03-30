@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import {
   Form,
@@ -10,6 +9,7 @@ import {
   json,
 } from 'remix'
 import { CreatePostForm } from '~/components/CreatePost'
+import { Button } from '~/components/Forms'
 import { Layout } from '~/components/Layout'
 import { db, sql } from '~/utils/db.server'
 import { getUser, UserSession } from '~/utils/session.server'
@@ -81,6 +81,11 @@ export default function CreatePostPage() {
         }}
       >
         <CreatePostForm defaultValues={post} fieldErrors={fieldErrors} />
+        <div className="justify-end gap-2 py-4">
+          <Button type="submit" primary>
+            Update Post
+          </Button>
+        </div>
         <input type="hidden" name="id" value={post?.postId} />
       </Form>
     </Layout>
