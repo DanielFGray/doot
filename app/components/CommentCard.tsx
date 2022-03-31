@@ -10,7 +10,7 @@ import { VoteControls } from './Vote'
 import { DropdownControls } from './Dropdown'
 import type { CommentInfo } from '../types'
 import { Modal } from './Modal'
-import {ExclamationIcon} from '@heroicons/react/outline'
+import { ExclamationIcon } from '@heroicons/react/outline'
 
 export function Comment({
   commentId,
@@ -77,19 +77,25 @@ export function Comment({
             <editFetcher.Form method="post" action="/edit-comment">
               <PostInput name="body" defaultValue={body} />
               <div className="mt-2 flex justify-between">
-                <div className={editFetcher.data?.formError || editFetcher.data?.fieldError ? 'text-red-500' : ''}>
+                <div
+                  className={
+                    editFetcher.data?.formError || editFetcher.data?.fieldError
+                      ? 'text-red-500'
+                      : ''
+                  }
+                >
                   {editFetcher.data?.formError
                     ? editFetcher.data?.formError
                     : editFetcher.data?.fieldError?.body
-                      ? editFetcher.data.fieldError.body
-                      : null}
+                    ? editFetcher.data.fieldError.body
+                    : null}
                 </div>
                 <div>
                   <Button type="submit" onClick={() => setShowEditForm(false)}>
-                  Cancel
+                    Cancel
                   </Button>
                   <Button type="submit" primary>
-                  Post
+                    Post
                   </Button>
                 </div>
               </div>

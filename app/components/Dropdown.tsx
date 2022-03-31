@@ -47,7 +47,7 @@ export function DropdownControls({
                       active
                         ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-50'
                         : 'text-gray-700 dark:text-gray-200',
-                        'group flex w-full items-center px-4 py-2 text-sm',
+                      'group flex w-full items-center px-4 py-2 text-sm',
                     )}
                   >
                     <UserAddIcon
@@ -66,7 +66,7 @@ export function DropdownControls({
                       active
                         ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-50'
                         : 'text-gray-700 dark:text-gray-200',
-                        'group flex w-full items-center px-4 py-2 text-sm',
+                      'group flex w-full items-center px-4 py-2 text-sm',
                     )}
                   >
                     <HeartIcon
@@ -88,7 +88,7 @@ export function DropdownControls({
                         active
                           ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-50'
                           : 'text-gray-700 dark:text-gray-200',
-                          'group flex w-full items-center px-4 py-2 text-sm',
+                        'group flex w-full items-center px-4 py-2 text-sm',
                       )}
                     >
                       <PencilAltIcon
@@ -108,7 +108,7 @@ export function DropdownControls({
                         active
                           ? 'bg-red-500 text-white text-gray-900 dark:bg-red-700 dark:text-gray-50'
                           : 'text-gray-700 dark:text-gray-200',
-                          'group flex w-full items-center px-4 py-2 text-sm',
+                        'group flex w-full items-center px-4 py-2 text-sm',
                       )}
                     >
                       <TrashIcon

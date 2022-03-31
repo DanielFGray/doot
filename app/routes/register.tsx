@@ -146,7 +146,7 @@ function validatePassword(password: string) {
 }
 
 function validateEmail(email: string) {
-  if (email.length > 1 && ! email.includes('@')) {
+  if (email.length > 1 && !email.includes('@')) {
     return 'Please enter a valid email address'
   }
 }
@@ -159,7 +159,12 @@ export const action: ActionFunction = async ({ request }) => {
   const password = form.get('password')
   const email = form.get('email')
   const redirectTo = form.get('redirectTo') || '/'
-  if (typeof email !== 'string' || typeof username !== 'string' || typeof redirectTo !== 'string' || typeof password !== 'string') {
+  if (
+    typeof email !== 'string' ||
+    typeof username !== 'string' ||
+    typeof redirectTo !== 'string' ||
+    typeof password !== 'string'
+  ) {
     return badRequest({
       formError: 'Form not submitted correctly.',
     })
@@ -176,10 +181,13 @@ export const action: ActionFunction = async ({ request }) => {
 
   const user = await register({ email, username, password })
   if (!user) {
-    return badRequest({
-      fields,
-      formError: 'Username or email already exists',
-    }, 409)
+    return badRequest(
+      {
+        fields,
+        formError: 'Username or email already exists',
+      },
+      409,
+    )
   }
   return createUserSession(user.userId, redirectTo)
 }

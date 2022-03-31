@@ -26,4 +26,3 @@ export const action: ActionFunction = async ({ request }) => {
   `)
   return json(comment_id)
 }
-

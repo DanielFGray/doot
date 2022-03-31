@@ -41,6 +41,7 @@ const SortNames = {
   score: 'Score',
   createdAt: 'Newest',
 }
+
 const sortItems = Object.entries(SortNames).map(([value, label]) => ({ label, value })) as Array<{
   label: string
   value: keyof typeof SortNames

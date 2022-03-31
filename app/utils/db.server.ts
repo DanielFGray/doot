@@ -2,7 +2,7 @@ import { createPool, createTypeParserPreset } from 'slonik'
 import { createInterceptors } from 'slonik-interceptor-preset'
 export { sql } from 'slonik'
 
-if(!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set')
+if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set')
 
 export const db = createPool(process.env.DATABASE_URL, {
   type: 'postgres',
@@ -11,7 +11,7 @@ export const db = createPool(process.env.DATABASE_URL, {
   log: true,
   interceptors: [
     ...createInterceptors({
-      transformFieldNames: true
+      transformFieldNames: true,
     }),
   ],
   typeParsers: [

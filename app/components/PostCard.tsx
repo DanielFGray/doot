@@ -8,8 +8,8 @@ import { classNames } from '~/utils/classNames'
 import { VoteControls } from './Vote'
 import { DropdownControls } from './Dropdown'
 import { CreateCommentForm } from './CreateComment'
-import {ExclamationIcon} from '@heroicons/react/outline'
-import {Modal} from './Modal'
+import { ExclamationIcon } from '@heroicons/react/outline'
+import { Modal } from './Modal'
 
 export function Post({
   postId,
@@ -81,7 +81,7 @@ export function Post({
           {body && (
             <button
               className={classNames(
-                'text-gray-400 rounded-full hover:text-gray-600 dark:hover:text-gray-300',
+                'rounded-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-300',
                 showCommentForm &&
                   'bg-gray-200 text-gray-700 outline outline-8 outline-gray-200 dark:bg-gray-600 dark:text-gray-400 dark:outline-gray-600',
               )}

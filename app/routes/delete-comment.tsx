@@ -6,8 +6,7 @@ export const action: ActionFunction = async ({ request }) => {
   const data = await request.formData()
   const userId = await requireUserId(request)
   const id = data.get('id')
-  if (typeof id !== 'string')
-    return json({ error: 'id is not a string' })
+  if (typeof id !== 'string') return json({ error: 'id is not a string' })
   try {
     await db.query(sql`
       delete from posts_comments

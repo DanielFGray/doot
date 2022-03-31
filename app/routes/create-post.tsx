@@ -102,7 +102,8 @@ function validateTags(tags: string[]) {
   }
 }
 
-export const normalizeTags = (tagList: string) => Array.from(new Set(tagList.split(/,\s*/).filter(Boolean)))
+export const normalizeTags = (tagList: string) =>
+  Array.from(new Set(tagList.split(/,\s*/).filter(Boolean)))
 export const validator = {
   title: validateTitle,
   body: validateBody,

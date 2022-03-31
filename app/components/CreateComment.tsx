@@ -25,8 +25,8 @@ export function CreateCommentForm({
           {fetcher.data?.formError
             ? fetcher.data?.formError
             : fetcher.data?.fieldError?.body
-              ? fetcher.data.fieldError.body
-              : null}
+            ? fetcher.data.fieldError.body
+            : null}
         </div>
         <Button type="submit" primary>
           Post

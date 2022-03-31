@@ -4,7 +4,9 @@ import { db, sql } from './db.server'
 
 const sessionSecret = process.env.SECRET
 if (!sessionSecret) {
-  throw new Error('environment variable SECRET must be set\ndid you forget to run the setup script?')
+  throw new Error(
+    'environment variable SECRET must be set\ndid you forget to run the setup script?',
+  )
 }
 
 export type UserSession = null | {

@@ -18,7 +18,7 @@ import { normalizeTags, validator } from './create-post'
 
 type LoaderData = {
   user: UserSession
-  post?: null | { postId: string; title: string; body: string, tags: string }
+  post?: null | { postId: string; title: string; body: string; tags: string }
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -41,12 +41,10 @@ export const loader: LoaderFunction = async ({ request }) => {
       `)
       return json<LoaderData>({ user, post })
     } catch (e) {
-      console.error(e)
+      return json<LoaderData>({ user })
     }
   }
-  return json<LoaderData>({ user })
 }
-
 
 export default function CreatePostPage() {
   const { user, post } = useLoaderData<LoaderData>()
@@ -101,7 +99,12 @@ export const action: ActionFunction = async ({ request }) => {
   const title = form.get('title')
   const body = form.get('body')
   const tags = form.get('tags')
-  if (typeof id !== 'string' ||typeof title !== 'string' || typeof body !== 'string' || typeof tags !== 'string')
+  if (
+    typeof id !== 'string' ||
+    typeof title !== 'string' ||
+    typeof body !== 'string' ||
+    typeof tags !== 'string'
+  )
     return json({ formError: 'Form not submitted correctly.' })
 
   const tagList = normalizeTags(tags)
