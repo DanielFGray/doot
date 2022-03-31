@@ -1,11 +1,11 @@
-import { ActionFunction, json, useActionData, useLoaderData } from 'remix'
+import { ActionFunction, LoaderFunction, json, useActionData, useLoaderData } from 'remix'
 import { Layout } from '~/components/Layout'
 import { getUser } from '~/utils/session.server'
 import { db, sql } from '~/utils/db.server'
 import { Post } from '~/components/PostCard'
 import type { SearchInfo } from '~/types'
 
-export const loader = async ({ request }) => {
+export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request)
   return { user }
 }

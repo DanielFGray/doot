@@ -1,16 +1,13 @@
 import { useLoaderData, LoaderFunction, json } from 'remix'
 import { db, sql } from '~/utils/db.server'
-import { getUser } from '~/utils/session.server'
+import { getUser, UserSession } from '~/utils/session.server'
 import type { PostInfo } from '~/types'
 import { Post } from '~/components/PostCard'
 import { Layout } from '~/components/Layout'
 
 type LoaderData = {
   posts: readonly PostInfo[]
-  user: {
-    userId: string
-    username: string
-  } | null
+  user: UserSession
 }
 
 export const loader: LoaderFunction = async ({ request }) => {

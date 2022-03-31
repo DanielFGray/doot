@@ -1,15 +1,12 @@
 import { useLoaderData, LoaderFunction, json, useParams } from 'remix'
 import { db, sql } from '~/utils/db.server'
-import { getUser } from '~/utils/session.server'
+import { getUser, UserSession } from '~/utils/session.server'
 import { Layout } from '~/components/Layout'
 import { Post } from '~/components/PostCard'
 import { PostInfo } from '~/types'
 
 type LoaderData = {
-  user: {
-    userId: string
-    username: string
-  } | null
+  user: UserSession
   posts?: readonly PostInfo[]
 }
 
