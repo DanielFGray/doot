@@ -55,7 +55,7 @@ export default function PostPage() {
       {!post ? (
         <div>post not found</div>
       ) : (
-        <>
+        <div className="flex flex-col gap-2">
           <Post {...post} currentUser={user} />
           {post.comments.length < 1 ? null : (
             <>
@@ -67,7 +67,7 @@ export default function PostPage() {
                   setSelected={sort => setCommentSort(sort)}
                 />
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
                 {post.comments
                   .slice(0)
                   .sort((a, b) => b[commentSort] - a[commentSort])
@@ -77,7 +77,7 @@ export default function PostPage() {
               </div>
             </>
           )}
-        </>
+        </div>
       )}
     </Layout>
   )
