@@ -50,7 +50,7 @@ export function Comment({
   return (
     <div
       className={classNames(
-        'rounded-l-xl pt-1 pl-2 shadow-md sm:rounded-r-xl',
+        'rounded-l-xl pt-1 pl-2 sm:rounded-r-xl',
         depth % 2 ? 'bg-gray-50 dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-700',
       )}
     >
