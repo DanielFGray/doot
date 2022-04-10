@@ -50,11 +50,11 @@ export function Comment({
   return (
     <div
       className={classNames(
-        'mt-4 rounded-lg p-4 shadow',
+        'rounded-l-xl pt-1 pl-2 shadow-md sm:rounded-r-xl',
         depth % 2 ? 'bg-gray-50 dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-700',
       )}
     >
-      <div className="flex flex-row">
+      <div className="flex flex-row p-1">
         <VoteControls type="comment" voted={currentUserVoted} id={commentId} score={score} />
         <div className="w-full text-sm text-gray-600 dark:text-gray-400">
           <span>
@@ -134,18 +134,20 @@ export function Comment({
           isDone={() => setShowCommentForm(false)}
         />
       )}
-      {children
-        .slice(0)
-        .sort((a, b) => b[sortedBy] - a[sortedBy])
-        .map(props => (
-          <Comment
-            key={props.commentId}
-            currentUser={currentUser}
-            sortedBy={sortedBy}
-            depth={depth + 1}
-            {...props}
-          />
-        ))}
+      <div className="flex flex-col pt-1 gap-2">
+        {children
+          .slice(0)
+          .sort((a, b) => b[sortedBy] - a[sortedBy])
+          .map(props => (
+            <Comment
+              key={props.commentId}
+              currentUser={currentUser}
+              sortedBy={sortedBy}
+              depth={depth + 1}
+              {...props}
+            />
+          ))}
+      </div>
       <Modal
         open={showDeleteModal}
         title="Delete comment?"
