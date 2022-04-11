@@ -26,7 +26,7 @@ export function VoteControls({
       <input type="hidden" name="type" value={type} />
       {voted === 'up' ? (
         <button name="vote" value="null" type="submit">
-          <ThumbUpSolid className="h-5 w-5 text-blue-700 dark:text-blue-500" />
+          <ThumbUpSolid className="h-5 w-5 text-brand-700 dark:text-brand-500" />
         </button>
       ) : (
         <button name="vote" value="up" type="submit">
